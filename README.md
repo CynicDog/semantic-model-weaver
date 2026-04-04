@@ -104,10 +104,28 @@ The hackathon Marketplace datasets are the test subjects — not the domain:
 ```bash
 # 1. Fill in credentials
 cp .env.example .env
-
-# 2. Run the forge against a dataset
-uv run python -m forge --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN
+# Edit .env — set FORGE_SNOWFLAKE_* and FORGE_ALLOWED_IP (your outbound IP)
+# Find your IP with: curl -s https://checkip.amazonaws.com
 ```
+
+## Usage
+
+```bash
+# First time — create workspace database, schema, and network policy
+uv run python -m forge --setup
+
+# Run the pipeline against a dataset
+uv run python -m forge --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN
+
+# Run with custom iteration count and version tag
+uv run python -m forge --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN --iterations 5 --version v2
+
+# Clear all evaluation records and start fresh
+uv run python -m forge --reset-workspace
+uv run python -m forge --reset-workspace --yes   # skip confirmation prompt
+```
+
+View results in **Snowsight → AI & ML → Evaluations** after a run completes.
 
 ## Testing
 

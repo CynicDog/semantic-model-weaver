@@ -5,15 +5,18 @@ All TruLens and Snowflake I/O is mocked via pytest-mock. What is tested:
 
   CortexAnalystApp  — ask() delegation and answer extraction
   build_session     — SnowflakeConnector + TruSession wiring
-  build_feedbacks   — Cortex provider init, feedback count, feedback names
-  build_tru_app     — TruApp construction with correct app_name / version
-  run_evaluation    — one TruApp context per question, correct ask() calls
+  build_metrics     — Cortex provider init, metric count, metric names
+  build_tru_app     — TruApp construction with correct app_name, version, main_method_name
+  run_evaluation    — live_run context, per-question input(), ingestion wait, compute_metrics
   get_results       — delegates to tru_session.get_records_and_feedback
 """
 
-from unittest.mock import MagicMock, call
+import time
+from unittest.mock import MagicMock, call, patch
 
 import pytest
+
+from trulens.core.run import RunStatus
 
 
 class TestCortexAnalystApp:
@@ -54,13 +57,11 @@ class TestCortexAnalystApp:
         probe.query.return_value = {"answer": "OK"}
 
         app = CortexAnalystApp(probe)
-        question = "월별 평균 거래대금은?"
-        app.ask(question)
+        app.ask("월별 평균 거래대금은?")
 
-        probe.query.assert_called_once_with(question)
+        probe.query.assert_called_once_with("월별 평균 거래대금은?")
 
     def test_probe_protocol_satisfied_by_any_class_with_query(self):
-        """Any object with a .query() method satisfies the Probe Protocol."""
         from forge.evaluator import Probe
 
         class FakeProbe:
@@ -91,76 +92,72 @@ class TestBuildSession:
 
         build_session(snowpark_session)
 
-        mock_session_cls.assert_called_once_with(
-            connector=mock_connector_cls.return_value
-        )
+        mock_session_cls.assert_called_once_with(connector=mock_connector_cls.return_value)
 
     def test_returns_tru_session(self, mocker):
         mocker.patch("forge.evaluator.SnowflakeConnector")
         mock_session_cls = mocker.patch("forge.evaluator.TruSession")
-        snowpark_session = MagicMock()
 
         from forge.evaluator import build_session
 
-        result = build_session(snowpark_session)
+        result = build_session(MagicMock())
 
         assert result is mock_session_cls.return_value
 
 
-class TestBuildFeedbacks:
+class TestBuildMetrics:
     @pytest.fixture(autouse=True)
     def _mock_trulens(self, mocker):
         self.mock_cortex = mocker.patch("forge.evaluator.Cortex")
         self.mock_gt_cls = mocker.patch("forge.evaluator.GroundTruthAgreement")
-        self.mock_feedback_cls = mocker.patch("forge.evaluator.Feedback")
+        self.mock_metric_cls = mocker.patch("forge.evaluator.Metric")
 
-        mock_fb = MagicMock()
-        mock_fb.on_input_output.return_value = mock_fb
-        self.mock_feedback_cls.return_value = mock_fb
-        self.mock_fb = mock_fb
+        mock_m = MagicMock()
+        mock_m.on_input_output.return_value = mock_m
+        self.mock_metric_cls.return_value = mock_m
 
-    def test_returns_two_feedbacks(self):
-        from forge.evaluator import build_feedbacks
+    def test_returns_two_metrics(self):
+        from forge.evaluator import build_metrics
 
-        feedbacks = build_feedbacks(MagicMock(), [{"query": "q", "expected_response": "a"}])
+        result = build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
 
-        assert len(feedbacks) == 2
+        assert len(result) == 2
 
     def test_uses_cortex_provider_with_correct_model(self):
-        from forge.evaluator import build_feedbacks
+        from forge.evaluator import build_metrics
 
         snowpark_session = MagicMock()
-        build_feedbacks(snowpark_session, [])
+        build_metrics(snowpark_session, [])
 
         self.mock_cortex.assert_called_once_with(
             snowpark_session=snowpark_session,
             model_engine="llama3.1-8b",
         )
 
-    def test_feedback_names_include_answer_relevance(self):
-        from forge.evaluator import build_feedbacks
+    def test_metric_names_include_answer_relevance(self):
+        from forge.evaluator import build_metrics
 
-        build_feedbacks(MagicMock(), [{"query": "q", "expected_response": "a"}])
+        build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
 
-        names = [c.kwargs["name"] for c in self.mock_feedback_cls.call_args_list]
+        names = [c.kwargs["name"] for c in self.mock_metric_cls.call_args_list]
         assert "answer_relevance" in names
 
-    def test_feedback_names_include_answer_correctness(self):
-        from forge.evaluator import build_feedbacks
+    def test_metric_names_include_answer_correctness(self):
+        from forge.evaluator import build_metrics
 
-        build_feedbacks(MagicMock(), [{"query": "q", "expected_response": "a"}])
+        build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
 
-        names = [c.kwargs["name"] for c in self.mock_feedback_cls.call_args_list]
+        names = [c.kwargs["name"] for c in self.mock_metric_cls.call_args_list]
         assert "answer_correctness" in names
 
     def test_ground_truth_agreement_receives_golden_set(self):
-        from forge.evaluator import build_feedbacks
+        from forge.evaluator import build_metrics
 
         golden_set = [
             {"query": "종목 수는?", "expected_response": "900개"},
             {"query": "시장은?", "expected_response": "KOSPI"},
         ]
-        build_feedbacks(MagicMock(), golden_set)
+        build_metrics(MagicMock(), golden_set)
 
         self.mock_gt_cls.assert_called_once()
         args, _ = self.mock_gt_cls.call_args
@@ -170,86 +167,148 @@ class TestBuildFeedbacks:
 class TestBuildTruApp:
     def test_creates_tru_app_with_correct_app_name(self, mocker):
         mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
-        from forge.evaluator import APP_NAME, build_tru_app, CortexAnalystApp
+        from forge.evaluator import APP_NAME, CortexAnalystApp, build_tru_app
 
-        app = CortexAnalystApp(MagicMock())
-        build_tru_app(app, feedbacks=[], version="v1")
+        build_tru_app(CortexAnalystApp(MagicMock()))
 
         _, kwargs = mock_tru_app_cls.call_args
         assert kwargs["app_name"] == APP_NAME
 
     def test_creates_tru_app_with_given_version(self, mocker):
         mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
-        from forge.evaluator import build_tru_app, CortexAnalystApp
+        from forge.evaluator import CortexAnalystApp, build_tru_app
 
-        app = CortexAnalystApp(MagicMock())
-        build_tru_app(app, feedbacks=[], version="v2.iter3")
+        build_tru_app(CortexAnalystApp(MagicMock()), version="v2.iter3")
 
         _, kwargs = mock_tru_app_cls.call_args
         assert kwargs["app_version"] == "v2.iter3"
 
-    def test_passes_feedbacks_to_tru_app(self, mocker):
+    def test_sets_main_method_name_to_ask(self, mocker):
         mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
-        from forge.evaluator import build_tru_app, CortexAnalystApp
+        from forge.evaluator import CortexAnalystApp, build_tru_app
 
-        app = CortexAnalystApp(MagicMock())
-        feedbacks = [MagicMock(), MagicMock()]
-        build_tru_app(app, feedbacks=feedbacks)
+        build_tru_app(CortexAnalystApp(MagicMock()))
 
         _, kwargs = mock_tru_app_cls.call_args
-        assert kwargs["feedbacks"] is feedbacks
+        assert kwargs["main_method_name"] == "ask"
+
+    def test_does_not_pass_feedbacks(self, mocker):
+        mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
+        from forge.evaluator import CortexAnalystApp, build_tru_app
+
+        build_tru_app(CortexAnalystApp(MagicMock()))
+
+        _, kwargs = mock_tru_app_cls.call_args
+        assert "feedbacks" not in kwargs
 
 
 class TestRunEvaluation:
-    def _make_tru_app(self):
+    def _make_tru_app(self, run_status=RunStatus.INVOCATION_COMPLETED):
         tru_app = MagicMock()
-        tru_app.__enter__ = MagicMock(return_value=tru_app)
-        tru_app.__exit__ = MagicMock(return_value=False)
-        return tru_app
 
-    def test_opens_one_context_per_question(self):
+        live_run_ctx = MagicMock()
+        live_run_ctx.run.get_status.return_value = run_status
+
+        input_ctx = MagicMock()
+        input_ctx.__enter__ = MagicMock(return_value=None)
+        input_ctx.__exit__ = MagicMock(return_value=False)
+        live_run_ctx.input.return_value = input_ctx
+
+        live_run_mgr = MagicMock()
+        live_run_mgr.__enter__ = MagicMock(return_value=live_run_ctx)
+        live_run_mgr.__exit__ = MagicMock(return_value=False)
+        tru_app.live_run.return_value = live_run_mgr
+
+        return tru_app, live_run_ctx
+
+    def test_empty_questions_is_no_op(self):
         from forge.evaluator import run_evaluation
 
-        tru_app = self._make_tru_app()
+        tru_app, live_run_ctx = self._make_tru_app()
         app = MagicMock()
-        questions = ["q1", "q2", "q3"]
 
-        run_evaluation(tru_app, app, questions)
+        run_evaluation(tru_app, app, questions=[], metrics=[], version="v1")
 
-        assert tru_app.__enter__.call_count == 3
+        tru_app.live_run.assert_not_called()
+        app.ask.assert_not_called()
+
+    def test_opens_live_run_with_version_as_run_name(self):
+        from forge.evaluator import run_evaluation
+
+        tru_app, _ = self._make_tru_app()
+        app = MagicMock()
+
+        run_evaluation(tru_app, app, questions=["q1"], metrics=[], version="v1.iter2")
+
+        tru_app.live_run.assert_called_once_with(run_name="v1.iter2")
 
     def test_calls_ask_once_per_question(self):
         from forge.evaluator import run_evaluation
 
-        tru_app = self._make_tru_app()
+        tru_app, _ = self._make_tru_app()
         app = MagicMock()
-        questions = ["q1", "q2", "q3"]
 
-        run_evaluation(tru_app, app, questions)
+        run_evaluation(tru_app, app, ["q1", "q2", "q3"], metrics=[], version="v1")
 
         assert app.ask.call_count == 3
 
     def test_passes_each_question_to_ask(self):
         from forge.evaluator import run_evaluation
 
-        tru_app = self._make_tru_app()
+        tru_app, _ = self._make_tru_app()
         app = MagicMock()
-        questions = ["q1", "q2", "q3"]
 
-        run_evaluation(tru_app, app, questions)
+        run_evaluation(tru_app, app, ["q1", "q2", "q3"], metrics=[], version="v1")
 
         app.ask.assert_has_calls([call("q1"), call("q2"), call("q3")])
 
-    def test_empty_questions_list_is_no_op(self):
+    def test_opens_input_context_per_question(self):
         from forge.evaluator import run_evaluation
 
-        tru_app = self._make_tru_app()
+        tru_app, live_run_ctx = self._make_tru_app()
         app = MagicMock()
 
-        run_evaluation(tru_app, app, [])
+        run_evaluation(tru_app, app, ["q1", "q2", "q3"], metrics=[], version="v1")
 
-        app.ask.assert_not_called()
-        tru_app.__enter__.assert_not_called()
+        assert live_run_ctx.input.call_count == 3
+
+    def test_calls_compute_metrics_after_ingestion(self):
+        from forge.evaluator import run_evaluation
+
+        tru_app, live_run_ctx = self._make_tru_app(RunStatus.INVOCATION_COMPLETED)
+        app = MagicMock()
+        metrics = [MagicMock(), MagicMock()]
+
+        run_evaluation(tru_app, app, ["q1"], metrics=metrics, version="v1")
+
+        live_run_ctx.run.compute_metrics.assert_called_once_with(metrics=metrics)
+
+    def test_skips_compute_metrics_on_failed_run(self, caplog):
+        import logging
+        from forge.evaluator import run_evaluation
+
+        tru_app, live_run_ctx = self._make_tru_app(RunStatus.FAILED)
+        app = MagicMock()
+
+        with caplog.at_level(logging.WARNING, logger="forge.evaluator"):
+            run_evaluation(tru_app, app, ["q1"], metrics=[MagicMock()], version="v1")
+
+        live_run_ctx.run.compute_metrics.assert_not_called()
+        assert any("failed during ingestion" in r.message for r in caplog.records)
+
+    def test_polls_until_ingestion_completes(self, mocker):
+        from forge.evaluator import run_evaluation
+
+        tru_app, live_run_ctx = self._make_tru_app()
+        app = MagicMock()
+        mock_sleep = mocker.patch("forge.evaluator.time.sleep")
+
+        statuses = [RunStatus.INVOCATION_IN_PROGRESS, RunStatus.INVOCATION_IN_PROGRESS, RunStatus.INVOCATION_COMPLETED]
+        live_run_ctx.run.get_status.side_effect = statuses
+
+        run_evaluation(tru_app, app, ["q1"], metrics=[], version="v1")
+
+        assert mock_sleep.call_count == 2
 
 
 class TestGetResults:
@@ -268,6 +327,4 @@ class TestGetResults:
         expected = (MagicMock(), MagicMock())
         tru_session.get_records_and_feedback.return_value = expected
 
-        result = get_results(tru_session)
-
-        assert result is expected
+        assert get_results(tru_session) is expected

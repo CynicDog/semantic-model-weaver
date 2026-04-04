@@ -1,35 +1,34 @@
 """
 forge.evaluator — TruLens evaluation wrapper for CortexAnalystProbe.
 
-Each NL question fired at Cortex Analyst becomes a TruLens *record*. Feedback
-functions score the answer against the ground truth derived by ScenarioGenerator
-(direct SQL queries — never a hand-crafted YAML). All records and scores are
-logged to Snowflake and visible in Snowsight → AI & ML → Evaluations.
+Uses the OTEL / Snowflake event-table path:
 
-Public surface
---------------
-  CortexAnalystApp   — @instrument()-decorated wrapper; satisfies the Probe Protocol
-  build_session      — wires TruSession → SnowflakeConnector
-  build_feedbacks    — answer_relevance + answer_correctness (Cortex provider)
-  build_tru_app      — wraps CortexAnalystApp in TruApp
-  run_evaluation     — fires each question through the instrumented context
-  get_results        — returns (records_df, feedback_df) for the leaderboard
+  1. build_tru_app     — wraps CortexAnalystApp in TruApp (no feedbacks at construction)
+  2. build_metrics     — creates Metric objects for answer_relevance + answer_correctness
+  3. run_evaluation    — fires questions via live_run, waits for ingestion, computes metrics
+  4. get_results       — returns (records_df, feedback_df) for the leaderboard
+
+All records and scores are logged to the Snowflake event table and visible in
+Snowsight → AI & ML → Evaluations.
 """
 
 from __future__ import annotations
 
 import logging
+import time
 from typing import Any, Protocol, runtime_checkable
 
 from trulens.apps.app import TruApp, instrument
 from trulens.connectors.snowflake import SnowflakeConnector
-from trulens.core import Feedback, TruSession
+from trulens.core import Metric, TruSession
+from trulens.core.run import RunStatus
 from trulens.feedback import GroundTruthAgreement
 from trulens.providers.cortex import Cortex
 
 logger = logging.getLogger(__name__)
 
 APP_NAME = "CortexAnalystProbe"
+_POLL_INTERVAL = 3  # seconds between ingestion status checks
 
 
 @runtime_checkable
@@ -37,28 +36,18 @@ class Probe(Protocol):
     """
     Interface expected by CortexAnalystApp.
     CortexAnalystProbe (forge/probe.py) must satisfy this once implemented.
+
+    Returns a dict with at minimum:
+        answer  (str)       — answer text, or "" if unanswerable
+        sql     (str|None)  — generated SQL, or None on failure
+        success (bool)      — whether execution succeeded
     """
 
-    def query(self, question: str) -> dict:
-        """
-        Fire a natural-language question at Cortex Analyst.
-
-        Returns a dict with at minimum:
-            answer  (str)  — the answer text, or "" if unanswerable
-            sql     (str | None) — generated SQL, or None on failure
-            success (bool) — whether execution succeeded
-        """
-        ...
+    def query(self, question: str) -> dict: ...
 
 
 class CortexAnalystApp:
-    """
-    TruLens-instrumented wrapper around a Probe.
-
-    The @instrument() decorator marks ask() so TruApp records inputs/outputs.
-    Calling ask() on a bare CortexAnalystApp (not wrapped in TruApp) is a no-op
-    instrumentation-wise — it simply delegates to probe.query().
-    """
+    """TruLens-instrumented wrapper around a Probe."""
 
     def __init__(self, probe: Probe) -> None:
         self.probe = probe
@@ -71,55 +60,56 @@ class CortexAnalystApp:
 
 
 def build_session(snowpark_session: Any) -> TruSession:
-    """
-    Create a TruSession wired to Snowflake.
-    All subsequent TruApp recordings auto-log to TRULENS_RECORDS /
-    TRULENS_FEEDBACK_RESULTS in the connected Snowflake schema.
-    """
+    """Wire TruSession to Snowflake. All recordings auto-log to the event table."""
     connector = SnowflakeConnector(snowpark_session=snowpark_session)
     return TruSession(connector=connector)
 
 
-def build_feedbacks(snowpark_session: Any, golden_set: list[dict]) -> list[Feedback]:
+def build_metrics(snowpark_session: Any, golden_set: list[dict]) -> list[Metric]:
     """
-    Build feedback functions that score each Cortex Analyst answer.
+    Build Metric objects for the OTEL evaluation path.
+
+    Metrics are NOT attached to TruApp at construction — they are passed
+    explicitly to run.compute_metrics() after invocations complete.
 
     Args:
-        snowpark_session: active Snowpark session (Cortex provider uses it
-                          to call COMPLETE() inside Snowflake — no external API).
-        golden_set: list of {"query": str, "expected_response": str} dicts.
-                    Produced by ScenarioGenerator from direct SQL queries.
+        snowpark_session: active Snowpark session (Cortex provider uses COMPLETE()
+                          inside Snowflake — no external API key needed).
+        golden_set: [{"query": str, "expected_response": str}]
+                    produced by ScenarioGenerator from direct SQL queries.
 
     Returns:
-        [f_answer_relevance, f_answer_correctness]
+        [m_answer_relevance, m_answer_correctness]
     """
     provider = Cortex(snowpark_session=snowpark_session, model_engine="llama3.1-8b")
 
-    f_relevance = (
-        Feedback(provider.relevance_with_cot_reasons, name="answer_relevance")
+    m_relevance = (
+        Metric(implementation=provider.relevance_with_cot_reasons, name="answer_relevance")
         .on_input_output()
     )
 
     gt = GroundTruthAgreement(golden_set, provider=provider)
-    f_correctness = (
-        Feedback(gt.agreement_measure, name="answer_correctness")
+    m_correctness = (
+        Metric(implementation=gt.agreement_measure, name="answer_correctness")
         .on_input_output()
     )
 
-    return [f_relevance, f_correctness]
+    return [m_relevance, m_correctness]
 
 
-def build_tru_app(
-    app: CortexAnalystApp,
-    feedbacks: list[Feedback],
-    version: str = "v1",
-) -> TruApp:
-    """Wrap CortexAnalystApp in TruApp for instrumented recording."""
+def build_tru_app(app: CortexAnalystApp, version: str = "v1") -> TruApp:
+    """
+    Wrap CortexAnalystApp in TruApp.
+
+    No feedbacks at construction — this is the OTEL path where metrics are
+    computed explicitly via run.compute_metrics() after the run completes.
+    main_method_name tells TruApp which method is the app's entry point.
+    """
     return TruApp(
         app=app,
         app_name=APP_NAME,
         app_version=version,
-        feedbacks=feedbacks,
+        main_method_name="ask",
     )
 
 
@@ -127,25 +117,47 @@ def run_evaluation(
     tru_app: TruApp,
     app: CortexAnalystApp,
     questions: list[str],
+    metrics: list[Metric],
+    version: str = "v1",
 ) -> None:
     """
-    Fire each question through the instrumented app.
+    Fire questions through the instrumented app and score them.
 
-    Each `with tru_app` block is one TruLens record. The loop is intentionally
-    serial: Cortex Analyst and TruLens scoring are both network I/O; parallelism
-    would complicate record attribution without meaningful throughput gain.
+    Flow:
+      1. Open a live_run context — each question is one instrumented invocation.
+      2. After the context exits, TruLens flushes OTEL spans and starts Snowflake ingestion.
+      3. Poll until ingestion completes (INVOCATION_COMPLETED).
+      4. Trigger metric computation via run.compute_metrics().
     """
-    for question in questions:
-        with tru_app:
-            app.ask(question)
-        logger.debug("recorded: %s", question)
+    if not questions:
+        return
+
+    with tru_app.live_run(run_name=version) as live_run:
+        for i, question in enumerate(questions):
+            with live_run.input(str(i)):
+                app.ask(question)
+            logger.debug("invoked: %s", question)
+
+    run = live_run.run
+
+    terminal = {
+        RunStatus.INVOCATION_COMPLETED,
+        RunStatus.INVOCATION_PARTIALLY_COMPLETED,
+        RunStatus.FAILED,
+    }
+    status = run.get_status()
+    while status not in terminal:
+        time.sleep(_POLL_INTERVAL)
+        status = run.get_status()
+
+    if status == RunStatus.FAILED:
+        logger.warning("run %s failed during ingestion — skipping metric computation", version)
+        return
+
+    run.compute_metrics(metrics=metrics)
+    logger.info("metrics computation triggered for run %s", version)
 
 
 def get_results(tru_session: TruSession) -> tuple[Any, Any]:
-    """
-    Return (records_df, feedback_df) for the leaderboard.
-
-    records_df   — one row per probe call (input, output, timestamps)
-    feedback_df  — scores per record (answer_relevance, answer_correctness)
-    """
+    """Return (records_df, feedback_df) for the leaderboard."""
     return tru_session.get_records_and_feedback(app_name=APP_NAME)
