@@ -516,8 +516,8 @@ flowchart TD
     DB -->|direct SQL execution| scen
 
     writer -->|SemanticModel| probe["CortexAnalystProbe"]
-    scen -->|questions: list[str]| probe
-    scen -->|golden_set: list[dict]| eval["Evaluator"]
+    scen -->|questions| probe
+    scen -->|golden_set| eval["Evaluator"]
 
     probe -->|ProbeResult per question| eval
 
