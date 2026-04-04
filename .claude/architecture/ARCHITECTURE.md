@@ -14,17 +14,13 @@ quality converges or iteration budget is exhausted.
 
 ## System context
 
-```mermaid
-C4Context
-  Person(user, "Data Engineer", "Runs forge CLI against a Snowflake DB/schema")
-  System(forge, "Semantic Model Forge", "Agentic YAML generation + evaluation pipeline")
-  System_Ext(snowflake, "Snowflake", "Data platform: Snowpark, Cortex, Cortex Analyst, Event Tables")
-  System_Ext(snowsight, "Snowsight AI Observability", "TruLens evaluation dashboard (Snowflake-native UI)")
+**Who uses it:** A data engineer runs the forge CLI against a Snowflake database and schema.
 
-  Rel(user, forge, "uv run python -m forge --database X --schema Y")
-  Rel(forge, snowflake, "schema discovery, LLM calls, API probing, TruLens logging")
-  Rel(forge, snowsight, "evaluation results visible via Snowsight → AI & ML → Evaluations")
-```
+**What it talks to:**
+- **Snowflake** — all compute and storage. Snowpark for schema discovery and SQL execution, Cortex Arctic (`COMPLETE()`) for LLM generation, Cortex Analyst REST API for semantic model probing, and SnowflakeConnector for TruLens evaluation logging.
+- **Snowsight AI Observability** — the primary results UI. TruLens logs every probe record and feedback score to `TRULENS_RECORDS` / `TRULENS_FEEDBACK_RESULTS` in Snowflake; Snowsight surfaces them under AI & ML → Evaluations.
+
+The system has no external dependencies outside Snowflake. No OpenAI key, no separate vector store, no additional services.
 
 ---
 
@@ -51,43 +47,49 @@ C4Context
 ## Pipeline overview
 
 ```mermaid
-flowchart TD
-    CLI["forge CLI\n--database --schema --iterations"]
+sequenceDiagram
+    autonumber
+    participant CLI as forge CLI
+    participant D as SchemaDiscovery
+    participant W as YAMLWriter
+    participant S as ScenarioGenerator
+    participant P as CortexAnalystProbe
+    participant E as Evaluator + TruLens
+    participant R as RefinementAgent
+    participant SF as Snowflake Platform
 
-    subgraph pipeline["Pipeline (per iteration)"]
-        D["SchemaDiscovery\nforge/discovery.py"]
-        W["YAMLWriter\nforge/writer.py"]
-        S["ScenarioGenerator\nforge/scenarios.py"]
-        P["CortexAnalystProbe\nforge/probe.py"]
-        E["Evaluator + TruLens\nforge/evaluator.py"]
-        R["RefinementAgent\nforge/refiner.py"]
+    CLI->>D: --database, --schema
+    D->>SF: INFORMATION_SCHEMA (Snowpark)
+    SF-->>D: columns, types, row counts
+    D-->>CLI: SchemaProfile
+
+    CLI->>W: SchemaProfile
+    W->>SF: Cortex Arctic COMPLETE()
+    SF-->>W: draft YAML text
+    W-->>CLI: SemanticModel
+
+    CLI->>S: SchemaProfile
+    S->>SF: Cortex Arctic COMPLETE()
+    SF-->>S: NL questions + ground-truth SQL
+    S->>SF: execute ground-truth SQL (Snowpark)
+    SF-->>S: expected answers
+    S-->>CLI: golden_set, questions
+
+    loop each iteration
+        CLI->>P: SemanticModel + questions
+        P->>SF: Cortex Analyst REST API
+        SF-->>P: SQL + answer per question
+        P-->>E: ProbeResults
+
+        E->>SF: TruLens SnowflakeConnector
+        Note over E,SF: scores logged to TRULENS_RECORDS,<br/>TRULENS_FEEDBACK_RESULTS
+        E-->>CLI: feedback_df
+
+        CLI->>R: SemanticModel + feedback_df
+        R->>SF: Cortex Arctic COMPLETE()
+        SF-->>R: YAML patches
+        R-->>CLI: patched SemanticModel (or None if converged)
     end
-
-    subgraph sf["Snowflake Platform"]
-        IS["INFORMATION_SCHEMA"]
-        ARC["Cortex Arctic\nCOMPLETE()"]
-        CA["Cortex Analyst\nREST API"]
-        TL["TruLens tables\nTRULENS_RECORDS\nTRULENS_FEEDBACK_RESULTS"]
-    end
-
-    UI["Snowsight\nAI Observability"]
-
-    CLI --> D
-    D -- schema_profile --> W
-    D -- schema_profile --> S
-    W -- SemanticModel --> P
-    S -- golden_set + questions --> E
-    P -- ProbeResult per question --> E
-    E -- feedback_df --> R
-    R -- patched SemanticModel --> P
-
-    D --> IS
-    W --> ARC
-    S --> ARC
-    R --> ARC
-    P --> CA
-    E --> TL
-    TL --> UI
 ```
 
 ---
@@ -99,17 +101,28 @@ Each iteration produces a versioned TruLens run, so quality progression is track
 across versions in Snowsight.
 
 ```mermaid
-flowchart LR
-    draft["Draft YAML\n(SemanticModel v1)"]
-    probe["Probe\n~20 NL questions\nvia Cortex Analyst"]
-    score["Score\nTruLens + Cortex\nanswer_relevance\nanswer_correctness"]
-    decide{"mean_correctness\n≥ threshold\nor budget\nexhausted?"}
-    refine["RefinementAgent\npatch YAML\n(synonyms, joins,\nmeasures)"]
-    done["Final YAML\n+ scored run\nin Snowsight"]
+sequenceDiagram
+    autonumber
+    participant W as YAMLWriter
+    participant P as CortexAnalystProbe
+    participant E as Evaluator
+    participant R as RefinementAgent
+    participant SS as Snowsight
 
-    draft --> probe --> score --> decide
-    decide -- "No" --> refine --> probe
-    decide -- "Yes" --> done
+    W-->>P: SemanticModel v1
+    loop until converged or budget exhausted
+        P->>P: fire ~20 NL questions via Cortex Analyst
+        P-->>E: ProbeResults (answer, sql, success per question)
+        E->>E: score answer_relevance + answer_correctness
+        E-->>SS: log versioned run to TRULENS_FEEDBACK_RESULTS
+        E-->>R: feedback_df (scores + failing questions)
+        alt mean_correctness below threshold
+            R->>R: identify failure patterns (synonyms, joins, measures)
+            R-->>P: patched SemanticModel vN
+        else converged or budget exhausted
+            R-->>P: None — stop
+        end
+    end
 ```
 
 ---
