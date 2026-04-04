@@ -1,0 +1,33 @@
+[project]
+name = "semantic-model-forge"
+version = "0.1.0"
+description = "Agentic Cortex Analyst semantic model generator and evaluator"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.12.5",
+    "pyyaml>=6.0.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-mock>=3.15.1",
+    "requests>=2.33.1",
+    "ruff>=0.15.9",
+    "snowflake-connector-python>=4.4.0",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: requires live Snowflake connection (SNOWFLAKE_PASSWORD / SNOWSQL_PWD must be set)",
+]
+log_cli = true
+log_cli_level = "INFO"
