@@ -20,6 +20,7 @@ from pathlib import Path
 import pytest
 import requests
 import snowflake.connector
+from dotenv import load_dotenv
 
 from forge.dsl import (
     BaseTable,
@@ -31,13 +32,16 @@ from forge.dsl import (
     TimeDimension,
 )
 
+load_dotenv()
+
 log = logging.getLogger(__name__)
 
-ACCOUNT = "ZZTAALY-YA33727"
-USER = "EUNSANGLEE"
-ANALYST_URL = f"https://{ACCOUNT}.snowflakecomputing.com/api/v2/cortex/analyst/message"
-
 pytestmark = pytest.mark.integration
+
+
+def _analyst_url() -> str:
+    account = os.environ["FORGE_SNOWFLAKE_ACCOUNT"]
+    return f"https://{account}.snowflakecomputing.com/api/v2/cortex/analyst/message"
 
 
 def _log_response(resp: requests.Response) -> None:
@@ -46,7 +50,7 @@ def _log_response(resp: requests.Response) -> None:
 
 def _analyst_request(yaml_text: str, question: str, token: str) -> requests.Response:
     return requests.post(
-        ANALYST_URL,
+        _analyst_url(),
         headers={
             "Authorization": f'Snowflake Token="{token}"',
             "Content-Type": "application/json",
@@ -66,14 +70,17 @@ def snowflake_token():
     Yield a live session token for the duration of the module.
     The connection must stay open — closing it invalidates the token.
     """
-    pwd = os.environ.get("SNOWFLAKE_PASSWORD") or os.environ.get("SNOWSQL_PWD")
-    if not pwd:
-        pytest.skip("SNOWFLAKE_PASSWORD / SNOWSQL_PWD not set — skipping integration tests")
+    account = os.environ.get("FORGE_SNOWFLAKE_ACCOUNT")
+    user = os.environ.get("FORGE_SNOWFLAKE_USER")
+    pwd = os.environ.get("FORGE_SNOWFLAKE_PASSWORD")
+    role = os.environ.get("FORGE_SNOWFLAKE_ROLE", "ACCOUNTADMIN")
+    if not all([account, user, pwd]):
+        pytest.skip("FORGE_SNOWFLAKE_* env vars not set — skipping integration tests")
     conn = snowflake.connector.connect(
-        account=ACCOUNT,
-        user=USER,
+        account=account,
+        user=user,
         password=pwd,
-        role="ACCOUNTADMIN",
+        role=role,
     )
     try:
         yield conn._rest.token
