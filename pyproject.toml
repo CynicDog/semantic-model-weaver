@@ -8,6 +8,11 @@ dependencies = [
     "pydantic>=2.12.5",
     "python-dotenv>=1.2.2",
     "pyyaml>=6.0.3",
+    "snowflake-snowpark-python",
+    "trulens-connectors-snowflake",
+    "trulens-core",
+    "trulens-feedback",
+    "trulens-providers-cortex",
 ]
 
 [dependency-groups]
@@ -16,7 +21,7 @@ dev = [
     "pytest-mock>=3.15.1",
     "requests>=2.33.1",
     "ruff>=0.15.9",
-    "snowflake-connector-python>=4.4.0",
+    # snowflake-connector-python is brought in transitively by trulens packages
 ]
 
 [tool.ruff]
@@ -32,3 +37,9 @@ markers = [
 ]
 log_cli = true
 log_cli_level = "INFO"
+
+[tool.uv.sources]
+trulens-core = { path = "../trulens/src/core" }
+trulens-feedback = { path = "../trulens/src/feedback" }
+trulens-connectors-snowflake = { path = "../trulens/src/connectors/snowflake" }
+trulens-providers-cortex = { path = "../trulens/src/providers/cortex" }

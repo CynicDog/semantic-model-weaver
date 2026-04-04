@@ -53,9 +53,95 @@ Ground truth is computed by querying the actual Snowflake tables directly with k
 
 ## UI
 
-**TruLens dashboard** is the primary interface. TruLens is Snowflake-incubated OSS with a built-in experiment tracking UI, per-question scoring, and run comparison — no Streamlit needed for the core app.
+**Snowsight AI Observability** is the primary interface when using `SnowflakeConnector`. Navigate to `Snowsight → AI & ML → Evaluations`. The Streamlit TruLens dashboard (`run_dashboard()`) is **not supported** with `SnowflakeConnector` — it only works with the default SQLite backend.
+
+Results are also queryable directly from the auto-created Snowflake tables: `TRULENS_RECORDS` and `TRULENS_FEEDBACK_RESULTS`.
 
 A Streamlit in Snowflake wrapper is documented as a future example in `examples/streamlit-on-snowflake/README.md` but is out of scope until the core pipeline works.
+
+## TruLens Integration
+
+The TruLens OSS repo is cloned at `../trulens` (sibling of this repo). Install from the local clone:
+
+```bash
+uv add ../trulens/src/core \
+       ../trulens/src/feedback \
+       ../trulens/src/connectors/snowflake \
+       ../trulens/src/providers/cortex
+```
+
+Required additional dependency: `snowflake-ml-python>=1.7.1` (needed by the Cortex provider).
+
+### Package map
+
+| pip package | import root | purpose |
+|---|---|---|
+| `trulens-core` | `trulens.core` | `TruSession`, `Feedback`, `Select` |
+| `trulens-feedback` | `trulens.feedback` | `GroundTruthAgreement`, `LLMProvider` base |
+| `trulens-connectors-snowflake` | `trulens.connectors.snowflake` | `SnowflakeConnector` — logs to Snowflake |
+| `trulens-providers-cortex` | `trulens.providers.cortex` | `Cortex` — 100% Snowflake-native feedback LLM |
+
+### Wiring TruLens to Snowflake
+
+```python
+from snowflake.snowpark import Session
+from trulens.core import TruSession
+from trulens.connectors.snowflake import SnowflakeConnector
+
+connector = SnowflakeConnector(snowpark_session=snowpark_session)
+tru_session = TruSession(connector=connector)
+# All subsequent TruApp recordings auto-log to Snowflake
+```
+
+### Wrapping a custom app (`forge/evaluator.py` pattern)
+
+Use `TruApp` + `@instrument()` for any Python class that isn't LangChain/LlamaIndex.
+
+```python
+from trulens.apps.app import TruApp, instrument
+
+class CortexAnalystApp:
+    @instrument()
+    def ask(self, question: str) -> str:
+        return self.probe.query(question).get("answer", "")
+
+app = CortexAnalystApp(probe)
+tru_app = TruApp(app=app, app_name="CortexAnalystProbe", feedbacks=[...])
+
+with tru_app:
+    app.ask("이번 달 종목별 거래량 상위 5개는?")
+```
+
+### Feedback functions
+
+Use `Cortex` as the feedback provider (no OpenAI key needed, fully Snowflake-native):
+
+```python
+from trulens.providers.cortex import Cortex
+from trulens.core import Feedback
+from trulens.feedback import GroundTruthAgreement
+
+provider = Cortex(snowpark_session=session, model_engine="mistral-large2")
+
+# Answer relevance — does the answer address the question?
+f_relevance = Feedback(provider.relevance_with_cot_reasons, name="answer_relevance") \
+    .on_input_output()
+
+# Ground truth agreement — answer vs. SQL-derived expected value
+golden_set = [{"query": "...", "expected_response": "..."}]  # from ScenarioGenerator
+gt = GroundTruthAgreement(golden_set, provider=provider)
+f_correctness = Feedback(gt.agreement_measure, name="answer_correctness") \
+    .on_input_output()
+```
+
+`golden_set` entries must have keys `"query"` and `"expected_response"`. Expected responses are computed by `ScenarioGenerator` running known-correct SQL directly against Snowflake — not via Cortex Analyst.
+
+### Model engine guidance
+
+| Use case | model_engine |
+|---|---|
+| Iteration / cheap scoring | `"llama3.1-8b"` |
+| Final evaluation run | `"mistral-large2"` |
 
 ## Benchmark Datasets (Marketplace)
 
