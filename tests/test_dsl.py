@@ -1,5 +1,5 @@
 """
-Unit tests for forge.dsl — no Snowflake connection required.
+Unit tests for weaver.dsl — no Snowflake connection required.
 
 Covers:
   - Parsing a real-world Cortex Analyst YAML (nti_model.yaml)
@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from forge.dsl import (
+from weaver.dsl import (
     BaseTable,
     DataType,
     Dimension,
@@ -213,7 +213,7 @@ def test_verified_query_roundtrip():
                 name="total_volume",
                 question="What is the total volume?",
                 sql="SELECT SUM(x) FROM T",
-                verified_by="forge",
+                verified_by="weaver",
             )
         ],
     )

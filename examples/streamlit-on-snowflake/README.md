@@ -1,18 +1,18 @@
 # Example: Streamlit in Snowflake
 
-This folder is a placeholder for a Streamlit in Snowflake front-end that wraps the Semantic Model Forge pipeline as a Snowflake-native web app.
+This folder is a placeholder for a Streamlit in Snowflake front-end that wraps the Semantic Model Weaver pipeline as a Snowflake-native web app.
 
 ## Concept
 
-Once `forge` has generated and evaluated a semantic model, you could expose:
-- A database/schema picker (select what to forge)
+Once `weaver` has generated and evaluated a semantic model, you could expose:
+- A database/schema picker (select what to weave)
 - A live run log showing the pipeline steps
 - The generated YAML with diff vs. previous iteration
 - TruLens eval scores per question, per run
 
 ## Why it's deferred
 
-The primary UI for Semantic Model Forge is the **TruLens dashboard** — it provides experiment tracking, per-question scoring, and run comparison out of the box without extra code.
+The primary UI for Semantic Model Weaver is the **TruLens dashboard** — it provides experiment tracking, per-question scoring, and run comparison out of the box without extra code.
 
 Streamlit in Snowflake is a valid secondary surface for hackathon judges who want a polished in-platform demo, but it's scope that comes *after* the core pipeline works.
 

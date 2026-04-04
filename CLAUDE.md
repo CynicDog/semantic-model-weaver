@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working in this repository.
 
 ## Project
 
-**Semantic Model Forge** — Snowflake Hackathon 2026 Seoul
+**Semantic Model Weaver** — Snowflake Hackathon 2026 Seoul
 
 An agentic pipeline that reads a raw Snowflake database, auto-generates a Cortex Analyst-compliant semantic YAML, tests it with synthesized natural-language scenarios, scores quality via TruLens, and iteratively refines the model — all without human authoring.
 
@@ -93,7 +93,7 @@ tru_session = TruSession(connector=connector)
 # All subsequent TruApp recordings auto-log to Snowflake
 ```
 
-### Wrapping a custom app (`forge/evaluator.py` pattern)
+### Wrapping a custom app (`weaver/evaluator.py` pattern)
 
 Use `TruApp` + `@instrument()` for any Python class that isn't LangChain/LlamaIndex.
 
@@ -159,7 +159,7 @@ These are the test subjects, not the domain:
 - **Data platform**: Snowflake (Snowpark, Cortex, Arctic, Cortex Analyst)
 - **Evaluation**: TruLens (Snowflake-incubated, logs to Snowflake)
 - **Language**: Python (primary), SQL
-- **Package manager**: uv (`uv run python -m forge ...`)
+- **Package manager**: uv (`uv run python -m weaver ...`)
 
 ## Conventions
 

@@ -22,7 +22,7 @@ import requests
 import snowflake.connector
 from dotenv import load_dotenv
 
-from forge.dsl import (
+from weaver.dsl import (
     BaseTable,
     DataType,
     Dimension,
@@ -40,7 +40,7 @@ pytestmark = pytest.mark.integration
 
 
 def _analyst_url() -> str:
-    account = os.environ["FORGE_SNOWFLAKE_ACCOUNT"]
+    account = os.environ["WEAVER_SNOWFLAKE_ACCOUNT"]
     return f"https://{account}.snowflakecomputing.com/api/v2/cortex/analyst/message"
 
 
@@ -70,12 +70,12 @@ def snowflake_token():
     Yield a live session token for the duration of the module.
     The connection must stay open — closing it invalidates the token.
     """
-    account = os.environ.get("FORGE_SNOWFLAKE_ACCOUNT")
-    user = os.environ.get("FORGE_SNOWFLAKE_USER")
-    pwd = os.environ.get("FORGE_SNOWFLAKE_PASSWORD")
-    role = os.environ.get("FORGE_SNOWFLAKE_ROLE", "ACCOUNTADMIN")
+    account = os.environ.get("WEAVER_SNOWFLAKE_ACCOUNT")
+    user = os.environ.get("WEAVER_SNOWFLAKE_USER")
+    pwd = os.environ.get("WEAVER_SNOWFLAKE_PASSWORD")
+    role = os.environ.get("WEAVER_SNOWFLAKE_ROLE", "ACCOUNTADMIN")
     if not all([account, user, pwd]):
-        pytest.skip("FORGE_SNOWFLAKE_* env vars not set — skipping integration tests")
+        pytest.skip("WEAVER_SNOWFLAKE_* env vars not set — skipping integration tests")
     conn = snowflake.connector.connect(
         account=account,
         user=user,
@@ -92,7 +92,7 @@ def snowflake_token():
 def minimal_analyst_model():
     """Minimal single-table model over NEXTRADE_EQUITY_MARKET_DATA.FIN.NX_HT_BAT_REFER_A0."""
     return SemanticModel(
-        name="forge_integration_test",
+        name="weaver_integration_test",
         description="Minimal model for API acceptance testing",
         tables=[
             SemanticTable(
@@ -238,7 +238,7 @@ def test_api_rejects_invalid_yaml(snowflake_token):
 
 def test_nti_model_yaml_accepted_by_api(snowflake_token):
     """
-    nti_model.yaml must survive a forge.dsl round-trip and still be accepted by the API.
+    nti_model.yaml must survive a weaver.dsl round-trip and still be accepted by the API.
     Verifies the DSL does not corrupt a known-good model during serialisation.
     """
     nti_yaml_path = (

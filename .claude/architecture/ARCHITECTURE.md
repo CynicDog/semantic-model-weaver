@@ -1,8 +1,8 @@
-# Semantic Model Forge — Architecture
+# Semantic Model Weaver — Architecture
 
 ## What this system does
 
-Semantic Model Forge is an agentic pipeline that takes a raw Snowflake database and
+Semantic Model Weaver is an agentic pipeline that takes a raw Snowflake database and
 produces a verified, quality-scored Cortex Analyst semantic YAML — with no human authoring.
 
 The pipeline reads the schema, drafts the YAML via LLM, generates test scenarios with
@@ -14,7 +14,7 @@ quality converges or iteration budget is exhausted.
 
 ## System context
 
-**Who uses it:** A data engineer runs the forge CLI against a Snowflake database and schema.
+**Who uses it:** A data engineer runs the weaver CLI against a Snowflake database and schema.
 
 **What it talks to:**
 - **Snowflake** — all compute and storage. Snowpark for schema discovery and SQL execution, Cortex Arctic (`COMPLETE()`) for LLM generation, Cortex Analyst REST API for semantic model probing, and SnowflakeConnector for TruLens evaluation logging.
@@ -28,13 +28,13 @@ The system has no external dependencies outside Snowflake. No OpenAI key, no sep
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  CLI / Orchestration       forge/__main__.py                    │
+│  CLI / Orchestration       weaver/__main__.py                    │
 │  Parse args · build Snowpark session · drive pipeline loop      │
 ├─────────────────────────────────────────────────────────────────┤
-│  Pipeline Stages           forge/*.py                           │
+│  Pipeline Stages           weaver/*.py                           │
 │  discovery · writer · scenarios · probe · evaluator · refiner   │
 ├─────────────────────────────────────────────────────────────────┤
-│  DSL / Data Model          forge/dsl.py                         │
+│  DSL / Data Model          weaver/dsl.py                         │
 │  Pydantic models for SemanticModel ↔ Cortex Analyst YAML spec   │
 ├─────────────────────────────────────────────────────────────────┤
 │  Snowflake Platform                                             │
@@ -49,7 +49,7 @@ The system has no external dependencies outside Snowflake. No OpenAI key, no sep
 ```mermaid
 sequenceDiagram
     autonumber
-    participant CLI as forge CLI
+    participant CLI as weaver CLI
     participant D as SchemaDiscovery
     participant W as YAMLWriter
     participant S as ScenarioGenerator
@@ -129,7 +129,7 @@ sequenceDiagram
 
 ## Component reference
 
-### SchemaDiscovery — `forge/discovery.py` (TODO)
+### SchemaDiscovery — `weaver/discovery.py` (TODO)
 
 **Responsibility:** Read `INFORMATION_SCHEMA` via Snowpark and produce a `SchemaProfile` dict
 that every downstream stage uses as its source of truth.
@@ -186,7 +186,7 @@ flowchart LR
 
 ---
 
-### YAMLWriter — `forge/writer.py` (TODO)
+### YAMLWriter — `weaver/writer.py` (TODO)
 
 **Responsibility:** Translate a `SchemaProfile` into a `SemanticModel` (the DSL object)
 using Cortex Arctic as the generation LLM. The output is a first-draft semantic YAML
@@ -224,7 +224,7 @@ flowchart LR
 
 ---
 
-### ScenarioGenerator — `forge/scenarios.py` (TODO)
+### ScenarioGenerator — `weaver/scenarios.py` (TODO)
 
 **Responsibility:** Produce the `golden_set` and `questions` lists that drive evaluation.
 Questions are NL queries a user would realistically ask. Ground truth answers are derived
@@ -263,7 +263,7 @@ flowchart TD
 
 ---
 
-### CortexAnalystProbe — `forge/probe.py` (TODO)
+### CortexAnalystProbe — `weaver/probe.py` (TODO)
 
 **Responsibility:** Fire each NL question at the Cortex Analyst REST API with the current
 draft YAML and return a structured `ProbeResult`.
@@ -312,7 +312,7 @@ flowchart LR
 
 ---
 
-### Evaluator — `forge/evaluator.py` (implemented)
+### Evaluator — `weaver/evaluator.py` (implemented)
 
 **Responsibility:** Wrap `CortexAnalystProbe` as a TruLens `TruApp`, fire all questions,
 score results with Cortex-powered feedback functions, and log everything to Snowflake.
@@ -367,7 +367,7 @@ flowchart LR
 
 ---
 
-### RefinementAgent — `forge/refiner.py` (TODO)
+### RefinementAgent — `weaver/refiner.py` (TODO)
 
 **Responsibility:** Read `feedback_df` from the latest evaluation run, identify systematic
 failure patterns, and produce a patched `SemanticModel`.
@@ -409,7 +409,7 @@ flowchart TD
 
 ---
 
-## DSL — `forge/dsl.py` (implemented)
+## DSL — `weaver/dsl.py` (implemented)
 
 The DSL is the single source of truth for what a valid Cortex Analyst semantic model
 looks like in Python. Every pipeline stage exchanges `SemanticModel` objects — never
@@ -557,7 +557,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph forge["Semantic Model Forge (local Python)"]
+    subgraph weaver["Semantic Model Weaver (local Python)"]
         disc2["SchemaDiscovery"]
         writer2["YAMLWriter"]
         scen2["ScenarioGenerator"]
@@ -586,7 +586,7 @@ flowchart LR
 ```
 
 All Snowflake calls share a single `snowflake.snowpark.Session` created at startup
-from `FORGE_SNOWFLAKE_*` environment variables. The session token is reused for the
+from `WEAVER_SNOWFLAKE_*` environment variables. The session token is reused for the
 Cortex Analyst REST API (no separate auth).
 
 ---
@@ -594,8 +594,8 @@ Cortex Analyst REST API (no separate auth).
 ## File structure
 
 ```
-semantic-model-forge/
-├── forge/
+semantic-model-weaver/
+├── weaver/
 │   ├── __main__.py       CLI entry point + pipeline orchestrator
 │   ├── dsl.py            SemanticModel Pydantic DSL (implemented)
 │   ├── evaluator.py      TruLens wrapper: CortexAnalystApp, feedbacks, run loop (implemented)
@@ -626,16 +626,16 @@ semantic-model-forge/
 
 | Component | File | Status |
 |---|---|---|
-| `SemanticModel` DSL | `forge/dsl.py` | Done |
-| `Evaluator` + TruLens wiring | `forge/evaluator.py` | Done |
-| CLI + pipeline skeleton | `forge/__main__.py` | Done (stubs wired) |
+| `SemanticModel` DSL | `weaver/dsl.py` | Done |
+| `Evaluator` + TruLens wiring | `weaver/evaluator.py` | Done |
+| CLI + pipeline skeleton | `weaver/__main__.py` | Done (stubs wired) |
 | DSL unit tests | `tests/test_dsl.py` | Done (22 tests) |
 | Evaluator unit tests | `tests/test_evaluator.py` | Done (22 tests) |
 | Cortex Analyst API integration tests | `tests/test_cortex_analyst_api.py` | Done (4 tests) |
-| `SchemaDiscovery` | `forge/discovery.py` | TODO |
-| `YAMLWriter` | `forge/writer.py` | TODO |
-| `ScenarioGenerator` | `forge/scenarios.py` | TODO |
-| `CortexAnalystProbe` | `forge/probe.py` | TODO |
-| `RefinementAgent` | `forge/refiner.py` | TODO |
+| `SchemaDiscovery` | `weaver/discovery.py` | TODO |
+| `YAMLWriter` | `weaver/writer.py` | TODO |
+| `ScenarioGenerator` | `weaver/scenarios.py` | TODO |
+| `CortexAnalystProbe` | `weaver/probe.py` | TODO |
+| `RefinementAgent` | `weaver/refiner.py` | TODO |
 
 **Build order:** `scenarios.py` → `probe.py` → evaluator already done → `discovery.py` → `writer.py` → `refiner.py`

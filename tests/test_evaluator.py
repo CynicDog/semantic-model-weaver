@@ -1,5 +1,5 @@
 """
-Unit tests for forge.evaluator — no Snowflake connection required.
+Unit tests for weaver.evaluator — no Snowflake connection required.
 
 All TruLens and Snowflake I/O is mocked via pytest-mock. What is tested:
 
@@ -21,7 +21,7 @@ from trulens.core.run import RunStatus
 
 class TestCortexAnalystApp:
     def test_ask_returns_answer_from_probe(self):
-        from forge.evaluator import CortexAnalystApp
+        from weaver.evaluator import CortexAnalystApp
 
         probe = MagicMock()
         probe.query.return_value = {"answer": "삼성전자", "sql": "SELECT ...", "success": True}
@@ -33,7 +33,7 @@ class TestCortexAnalystApp:
         assert result == "삼성전자"
 
     def test_ask_returns_empty_string_when_answer_key_missing(self):
-        from forge.evaluator import CortexAnalystApp
+        from weaver.evaluator import CortexAnalystApp
 
         probe = MagicMock()
         probe.query.return_value = {"sql": None, "success": False}
@@ -42,7 +42,7 @@ class TestCortexAnalystApp:
         assert app.ask("unanswerable question") == ""
 
     def test_ask_returns_empty_string_when_answer_is_empty(self):
-        from forge.evaluator import CortexAnalystApp
+        from weaver.evaluator import CortexAnalystApp
 
         probe = MagicMock()
         probe.query.return_value = {"answer": "", "success": True}
@@ -51,7 +51,7 @@ class TestCortexAnalystApp:
         assert app.ask("question") == ""
 
     def test_ask_passes_question_to_probe_unchanged(self):
-        from forge.evaluator import CortexAnalystApp
+        from weaver.evaluator import CortexAnalystApp
 
         probe = MagicMock()
         probe.query.return_value = {"answer": "OK"}
@@ -62,7 +62,7 @@ class TestCortexAnalystApp:
         probe.query.assert_called_once_with("월별 평균 거래대금은?")
 
     def test_probe_protocol_satisfied_by_any_class_with_query(self):
-        from forge.evaluator import Probe
+        from weaver.evaluator import Probe
 
         class FakeProbe:
             def query(self, question: str) -> dict:
@@ -73,32 +73,32 @@ class TestCortexAnalystApp:
 
 class TestBuildSession:
     def test_creates_snowflake_connector_with_session(self, mocker):
-        mock_connector_cls = mocker.patch("forge.evaluator.SnowflakeConnector")
-        mocker.patch("forge.evaluator.TruSession")
+        mock_connector_cls = mocker.patch("weaver.evaluator.SnowflakeConnector")
+        mocker.patch("weaver.evaluator.TruSession")
         snowpark_session = MagicMock()
 
-        from forge.evaluator import build_session
+        from weaver.evaluator import build_session
 
         build_session(snowpark_session)
 
         mock_connector_cls.assert_called_once_with(snowpark_session=snowpark_session)
 
     def test_creates_tru_session_with_connector(self, mocker):
-        mock_connector_cls = mocker.patch("forge.evaluator.SnowflakeConnector")
-        mock_session_cls = mocker.patch("forge.evaluator.TruSession")
+        mock_connector_cls = mocker.patch("weaver.evaluator.SnowflakeConnector")
+        mock_session_cls = mocker.patch("weaver.evaluator.TruSession")
         snowpark_session = MagicMock()
 
-        from forge.evaluator import build_session
+        from weaver.evaluator import build_session
 
         build_session(snowpark_session)
 
         mock_session_cls.assert_called_once_with(connector=mock_connector_cls.return_value)
 
     def test_returns_tru_session(self, mocker):
-        mocker.patch("forge.evaluator.SnowflakeConnector")
-        mock_session_cls = mocker.patch("forge.evaluator.TruSession")
+        mocker.patch("weaver.evaluator.SnowflakeConnector")
+        mock_session_cls = mocker.patch("weaver.evaluator.TruSession")
 
-        from forge.evaluator import build_session
+        from weaver.evaluator import build_session
 
         result = build_session(MagicMock())
 
@@ -108,23 +108,23 @@ class TestBuildSession:
 class TestBuildMetrics:
     @pytest.fixture(autouse=True)
     def _mock_trulens(self, mocker):
-        self.mock_cortex = mocker.patch("forge.evaluator.Cortex")
-        self.mock_gt_cls = mocker.patch("forge.evaluator.GroundTruthAgreement")
-        self.mock_metric_cls = mocker.patch("forge.evaluator.Metric")
+        self.mock_cortex = mocker.patch("weaver.evaluator.Cortex")
+        self.mock_gt_cls = mocker.patch("weaver.evaluator.GroundTruthAgreement")
+        self.mock_metric_cls = mocker.patch("weaver.evaluator.Metric")
 
         mock_m = MagicMock()
         mock_m.on_input_output.return_value = mock_m
         self.mock_metric_cls.return_value = mock_m
 
     def test_returns_two_metrics(self):
-        from forge.evaluator import build_metrics
+        from weaver.evaluator import build_metrics
 
         result = build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
 
         assert len(result) == 2
 
     def test_uses_cortex_provider_with_correct_model(self):
-        from forge.evaluator import build_metrics
+        from weaver.evaluator import build_metrics
 
         snowpark_session = MagicMock()
         build_metrics(snowpark_session, [])
@@ -135,7 +135,7 @@ class TestBuildMetrics:
         )
 
     def test_metric_names_include_answer_relevance(self):
-        from forge.evaluator import build_metrics
+        from weaver.evaluator import build_metrics
 
         build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
 
@@ -143,7 +143,7 @@ class TestBuildMetrics:
         assert "answer_relevance" in names
 
     def test_metric_names_include_answer_correctness(self):
-        from forge.evaluator import build_metrics
+        from weaver.evaluator import build_metrics
 
         build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
 
@@ -151,7 +151,7 @@ class TestBuildMetrics:
         assert "answer_correctness" in names
 
     def test_ground_truth_agreement_receives_golden_set(self):
-        from forge.evaluator import build_metrics
+        from weaver.evaluator import build_metrics
 
         golden_set = [
             {"query": "종목 수는?", "expected_response": "900개"},
@@ -166,8 +166,8 @@ class TestBuildMetrics:
 
 class TestBuildTruApp:
     def test_creates_tru_app_with_correct_app_name(self, mocker):
-        mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
-        from forge.evaluator import APP_NAME, CortexAnalystApp, build_tru_app
+        mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
+        from weaver.evaluator import APP_NAME, CortexAnalystApp, build_tru_app
 
         build_tru_app(CortexAnalystApp(MagicMock()))
 
@@ -175,8 +175,8 @@ class TestBuildTruApp:
         assert kwargs["app_name"] == APP_NAME
 
     def test_creates_tru_app_with_given_version(self, mocker):
-        mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
-        from forge.evaluator import CortexAnalystApp, build_tru_app
+        mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
+        from weaver.evaluator import CortexAnalystApp, build_tru_app
 
         build_tru_app(CortexAnalystApp(MagicMock()), version="v2.iter3")
 
@@ -184,8 +184,8 @@ class TestBuildTruApp:
         assert kwargs["app_version"] == "v2.iter3"
 
     def test_sets_main_method_name_to_ask(self, mocker):
-        mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
-        from forge.evaluator import CortexAnalystApp, build_tru_app
+        mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
+        from weaver.evaluator import CortexAnalystApp, build_tru_app
 
         build_tru_app(CortexAnalystApp(MagicMock()))
 
@@ -193,8 +193,8 @@ class TestBuildTruApp:
         assert kwargs["main_method_name"] == "ask"
 
     def test_does_not_pass_feedbacks(self, mocker):
-        mock_tru_app_cls = mocker.patch("forge.evaluator.TruApp")
-        from forge.evaluator import CortexAnalystApp, build_tru_app
+        mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
+        from weaver.evaluator import CortexAnalystApp, build_tru_app
 
         build_tru_app(CortexAnalystApp(MagicMock()))
 
@@ -222,7 +222,7 @@ class TestRunEvaluation:
         return tru_app, live_run_ctx
 
     def test_empty_questions_is_no_op(self):
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, live_run_ctx = self._make_tru_app()
         app = MagicMock()
@@ -233,7 +233,7 @@ class TestRunEvaluation:
         app.ask.assert_not_called()
 
     def test_opens_live_run_with_version_as_run_name(self):
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, _ = self._make_tru_app()
         app = MagicMock()
@@ -243,7 +243,7 @@ class TestRunEvaluation:
         tru_app.live_run.assert_called_once_with(run_name="v1.iter2")
 
     def test_calls_ask_once_per_question(self):
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, _ = self._make_tru_app()
         app = MagicMock()
@@ -253,7 +253,7 @@ class TestRunEvaluation:
         assert app.ask.call_count == 3
 
     def test_passes_each_question_to_ask(self):
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, _ = self._make_tru_app()
         app = MagicMock()
@@ -263,7 +263,7 @@ class TestRunEvaluation:
         app.ask.assert_has_calls([call("q1"), call("q2"), call("q3")])
 
     def test_opens_input_context_per_question(self):
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, live_run_ctx = self._make_tru_app()
         app = MagicMock()
@@ -273,7 +273,7 @@ class TestRunEvaluation:
         assert live_run_ctx.input.call_count == 3
 
     def test_calls_compute_metrics_after_ingestion(self):
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, live_run_ctx = self._make_tru_app(RunStatus.INVOCATION_COMPLETED)
         app = MagicMock()
@@ -285,23 +285,23 @@ class TestRunEvaluation:
 
     def test_skips_compute_metrics_on_failed_run(self, caplog):
         import logging
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, live_run_ctx = self._make_tru_app(RunStatus.FAILED)
         app = MagicMock()
 
-        with caplog.at_level(logging.WARNING, logger="forge.evaluator"):
+        with caplog.at_level(logging.WARNING, logger="weaver.evaluator"):
             run_evaluation(tru_app, app, ["q1"], metrics=[MagicMock()], version="v1")
 
         live_run_ctx.run.compute_metrics.assert_not_called()
         assert any("failed during ingestion" in r.message for r in caplog.records)
 
     def test_polls_until_ingestion_completes(self, mocker):
-        from forge.evaluator import run_evaluation
+        from weaver.evaluator import run_evaluation
 
         tru_app, live_run_ctx = self._make_tru_app()
         app = MagicMock()
-        mock_sleep = mocker.patch("forge.evaluator.time.sleep")
+        mock_sleep = mocker.patch("weaver.evaluator.time.sleep")
 
         statuses = [RunStatus.INVOCATION_IN_PROGRESS, RunStatus.INVOCATION_IN_PROGRESS, RunStatus.INVOCATION_COMPLETED]
         live_run_ctx.run.get_status.side_effect = statuses
@@ -313,7 +313,7 @@ class TestRunEvaluation:
 
 class TestGetResults:
     def test_delegates_to_tru_session(self):
-        from forge.evaluator import APP_NAME, get_results
+        from weaver.evaluator import APP_NAME, get_results
 
         tru_session = MagicMock()
         get_results(tru_session)
@@ -321,7 +321,7 @@ class TestGetResults:
         tru_session.get_records_and_feedback.assert_called_once_with(app_name=APP_NAME)
 
     def test_returns_session_result_directly(self):
-        from forge.evaluator import get_results
+        from weaver.evaluator import get_results
 
         tru_session = MagicMock()
         expected = (MagicMock(), MagicMock())

@@ -1,4 +1,4 @@
-# Semantic Model Forge
+# Semantic Model Weaver
 
 > An agentic pipeline that reads a raw Snowflake database, auto-generates a Cortex Analyst semantic model, tests it against synthesized natural-language scenarios, scores quality via TruLens, and iteratively refines the model — without human authoring.
 >
@@ -11,7 +11,7 @@ Writing a Cortex Analyst semantic YAML by hand is:
 - **Blind** — there's no feedback loop; you don't know if the model answers real questions until someone asks them
 - **Unverifiable** — there's no metric for "how good is this model"
 
-Semantic Model Forge solves all three.
+Semantic Model Weaver solves all three.
 
 ## How It Works
 
@@ -83,8 +83,8 @@ The hackathon Marketplace datasets are the test subjects — not the domain:
 ├── pyproject.toml
 ├── CLAUDE.md
 ├── README.md
-├── forge/
-│   ├── __main__.py         # CLI entry: python -m forge --database ... --schema ...
+├── weaver/
+│   ├── __main__.py         # CLI entry: python -m weaver --database ... --schema ...
 │   ├── discovery.py        # SchemaDiscovery — Snowpark schema profiling
 │   ├── writer.py           # YAMLWriter — LLM-driven semantic YAML generation
 │   ├── scenarios.py        # ScenarioGenerator — NL question + ground truth synthesis
@@ -104,7 +104,7 @@ The hackathon Marketplace datasets are the test subjects — not the domain:
 ```bash
 # 1. Fill in credentials
 cp .env.example .env
-# Edit .env — set FORGE_SNOWFLAKE_* and FORGE_ALLOWED_IP (your outbound IP)
+# Edit .env — set WEAVER_SNOWFLAKE_* and WEAVER_ALLOWED_IP (your outbound IP)
 # Find your IP with: curl -s https://checkip.amazonaws.com
 ```
 
@@ -112,17 +112,17 @@ cp .env.example .env
 
 ```bash
 # First time — create workspace database, schema, and network policy
-uv run python -m forge --setup
+uv run python -m weaver --setup
 
 # Run the pipeline against a dataset
-uv run python -m forge --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN
+uv run python -m weaver --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN
 
 # Run with custom iteration count and version tag
-uv run python -m forge --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN --iterations 5 --version v2
+uv run python -m weaver --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN --iterations 5 --version v2
 
 # Clear all evaluation records and start fresh
-uv run python -m forge --reset-workspace
-uv run python -m forge --reset-workspace --yes   # skip confirmation prompt
+uv run python -m weaver --reset-workspace
+uv run python -m weaver --reset-workspace --yes   # skip confirmation prompt
 ```
 
 View results in **Snowsight → AI & ML → Evaluations** after a run completes.
@@ -154,7 +154,7 @@ uv run pytest tests/test_cortex_analyst_api.py -v -m integration
 ```
 
 Covers:
-- A forge-generated model is accepted by the API (200, no error content)
+- A weaver-generated model is accepted by the API (200, no error content)
 - A simple count question returns an `sql` response type
 - Deliberately malformed YAML triggers an API error — proving acceptance tests are meaningful
 - `nti_model.yaml` survives a DSL round-trip and is still accepted by the API
