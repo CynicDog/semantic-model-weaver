@@ -10,7 +10,6 @@ ground-truth answers from direct SQL, fires those scenarios at the real Cortex A
 API, scores results with TruLens, and patches the YAML based on failures. It loops until
 quality converges or iteration budget is exhausted.
 
----
 
 ## System context
 
@@ -22,7 +21,6 @@ quality converges or iteration budget is exhausted.
 
 The system has no external dependencies outside Snowflake. No OpenAI key, no separate vector store, no additional services.
 
----
 
 ## Layers
 
@@ -42,7 +40,6 @@ The system has no external dependencies outside Snowflake. No OpenAI key, no sep
 └─────────────────────────────────────────────────────────────────┘
 ```
 
----
 
 ## Pipeline overview
 
@@ -92,7 +89,6 @@ sequenceDiagram
     end
 ```
 
----
 
 ## Agentic refinement loop
 
@@ -125,7 +121,6 @@ sequenceDiagram
     end
 ```
 
----
 
 ## Component reference
 
@@ -184,7 +179,6 @@ flowchart LR
     ic & it & samp --> fk --> out
 ```
 
----
 
 ### YAMLWriter — `weaver/writer.py` (TODO)
 
@@ -222,7 +216,6 @@ flowchart LR
     ok -- "No" --> retry --> arctic
 ```
 
----
 
 ### ScenarioGenerator — `weaver/scenarios.py` (TODO)
 
@@ -261,7 +254,6 @@ flowchart TD
     gen --> exec --> fmt --> out2
 ```
 
----
 
 ### CortexAnalystProbe — `weaver/probe.py` (TODO)
 
@@ -310,7 +302,6 @@ flowchart LR
     parse -- "text / error" --> out
 ```
 
----
 
 ### Evaluator — `weaver/evaluator.py` (implemented)
 
@@ -365,7 +356,6 @@ flowchart LR
     rec --> fb --> conn --> tbls --> ui
 ```
 
----
 
 ### RefinementAgent — `weaver/refiner.py` (TODO)
 
@@ -407,7 +397,6 @@ flowchart TD
     validate -- "No patch needed" --> none
 ```
 
----
 
 ## DSL — `weaver/dsl.py` (implemented)
 
@@ -513,7 +502,6 @@ SemanticModel.to_yaml() ──► YAML string ──► POST to Cortex Analyst A
 SemanticModel.from_yaml() ◄── YAML string ◄── response / file / LLM output
 ```
 
----
 
 ## Data flows between stages
 
@@ -551,7 +539,6 @@ flowchart TD
 | `Evaluator` | `RefinementAgent` | `feedback_df` | `answer_relevance`, `answer_correctness`, `input`, `output` |
 | `RefinementAgent` | `CortexAnalystProbe` | `SemanticModel` | patched YAML for next iteration |
 
----
 
 ## Snowflake platform integration
 
@@ -589,7 +576,6 @@ All Snowflake calls share a single `snowflake.snowpark.Session` created at start
 from `WEAVER_SNOWFLAKE_*` environment variables. The session token is reused for the
 Cortex Analyst REST API (no separate auth).
 
----
 
 ## File structure
 
@@ -620,7 +606,6 @@ semantic-model-weaver/
 └── CLAUDE.md                         project guidance for Claude Code
 ```
 
----
 
 ## Implementation status
 

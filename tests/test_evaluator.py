@@ -94,74 +94,47 @@ class TestBuildSession:
 
         mock_session_cls.assert_called_once_with(connector=mock_connector_cls.return_value)
 
-    def test_returns_tru_session(self, mocker):
-        mocker.patch("weaver.evaluator.SnowflakeConnector")
+    def test_returns_tru_session_and_connector(self, mocker):
+        mock_connector_cls = mocker.patch("weaver.evaluator.SnowflakeConnector")
         mock_session_cls = mocker.patch("weaver.evaluator.TruSession")
 
         from weaver.evaluator import build_session
 
-        result = build_session(MagicMock())
+        tru_session, connector = build_session(MagicMock())
 
-        assert result is mock_session_cls.return_value
+        assert tru_session is mock_session_cls.return_value
+        assert connector is mock_connector_cls.return_value
 
 
 class TestBuildMetrics:
-    @pytest.fixture(autouse=True)
-    def _mock_trulens(self, mocker):
-        self.mock_cortex = mocker.patch("weaver.evaluator.Cortex")
-        self.mock_gt_cls = mocker.patch("weaver.evaluator.GroundTruthAgreement")
-        self.mock_metric_cls = mocker.patch("weaver.evaluator.Metric")
+    def test_returns_list_of_strings(self):
+        from weaver.evaluator import build_metrics
 
-        mock_m = MagicMock()
-        mock_m.on_input_output.return_value = mock_m
-        self.mock_metric_cls.return_value = mock_m
+        result = build_metrics(MagicMock(), [])
+
+        assert isinstance(result, list)
+        assert all(isinstance(m, str) for m in result)
 
     def test_returns_two_metrics(self):
         from weaver.evaluator import build_metrics
 
-        result = build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
+        result = build_metrics(MagicMock(), [])
 
         assert len(result) == 2
 
-    def test_uses_cortex_provider_with_correct_model(self):
+    def test_includes_answer_relevance(self):
         from weaver.evaluator import build_metrics
 
-        snowpark_session = MagicMock()
-        build_metrics(snowpark_session, [])
+        result = build_metrics(MagicMock(), [])
 
-        self.mock_cortex.assert_called_once_with(
-            snowpark_session=snowpark_session,
-            model_engine="llama3.1-8b",
-        )
+        assert "answer_relevance" in result
 
-    def test_metric_names_include_answer_relevance(self):
+    def test_includes_correctness(self):
         from weaver.evaluator import build_metrics
 
-        build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
+        result = build_metrics(MagicMock(), [])
 
-        names = [c.kwargs["name"] for c in self.mock_metric_cls.call_args_list]
-        assert "answer_relevance" in names
-
-    def test_metric_names_include_answer_correctness(self):
-        from weaver.evaluator import build_metrics
-
-        build_metrics(MagicMock(), [{"query": "q", "expected_response": "a"}])
-
-        names = [c.kwargs["name"] for c in self.mock_metric_cls.call_args_list]
-        assert "answer_correctness" in names
-
-    def test_ground_truth_agreement_receives_golden_set(self):
-        from weaver.evaluator import build_metrics
-
-        golden_set = [
-            {"query": "종목 수는?", "expected_response": "900개"},
-            {"query": "시장은?", "expected_response": "KOSPI"},
-        ]
-        build_metrics(MagicMock(), golden_set)
-
-        self.mock_gt_cls.assert_called_once()
-        args, _ = self.mock_gt_cls.call_args
-        assert args[0] == golden_set
+        assert "correctness" in result
 
 
 class TestBuildTruApp:
@@ -169,7 +142,7 @@ class TestBuildTruApp:
         mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
         from weaver.evaluator import APP_NAME, CortexAnalystApp, build_tru_app
 
-        build_tru_app(CortexAnalystApp(MagicMock()))
+        build_tru_app(CortexAnalystApp(MagicMock()), connector=MagicMock())
 
         _, kwargs = mock_tru_app_cls.call_args
         assert kwargs["app_name"] == APP_NAME
@@ -178,7 +151,7 @@ class TestBuildTruApp:
         mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
         from weaver.evaluator import CortexAnalystApp, build_tru_app
 
-        build_tru_app(CortexAnalystApp(MagicMock()), version="v2.iter3")
+        build_tru_app(CortexAnalystApp(MagicMock()), connector=MagicMock(), version="v2.iter3")
 
         _, kwargs = mock_tru_app_cls.call_args
         assert kwargs["app_version"] == "v2.iter3"
@@ -187,16 +160,26 @@ class TestBuildTruApp:
         mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
         from weaver.evaluator import CortexAnalystApp, build_tru_app
 
-        build_tru_app(CortexAnalystApp(MagicMock()))
+        build_tru_app(CortexAnalystApp(MagicMock()), connector=MagicMock())
 
         _, kwargs = mock_tru_app_cls.call_args
         assert kwargs["main_method_name"] == "ask"
+
+    def test_passes_connector_to_tru_app(self, mocker):
+        mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
+        from weaver.evaluator import CortexAnalystApp, build_tru_app
+
+        connector = MagicMock()
+        build_tru_app(CortexAnalystApp(MagicMock()), connector=connector)
+
+        _, kwargs = mock_tru_app_cls.call_args
+        assert kwargs["connector"] is connector
 
     def test_does_not_pass_feedbacks(self, mocker):
         mock_tru_app_cls = mocker.patch("weaver.evaluator.TruApp")
         from weaver.evaluator import CortexAnalystApp, build_tru_app
 
-        build_tru_app(CortexAnalystApp(MagicMock()))
+        build_tru_app(CortexAnalystApp(MagicMock()), connector=MagicMock())
 
         _, kwargs = mock_tru_app_cls.call_args
         assert "feedbacks" not in kwargs
@@ -277,7 +260,7 @@ class TestRunEvaluation:
 
         tru_app, live_run_ctx = self._make_tru_app(RunStatus.INVOCATION_COMPLETED)
         app = MagicMock()
-        metrics = [MagicMock(), MagicMock()]
+        metrics = ["answer_relevance", "correctness"]
 
         run_evaluation(tru_app, app, ["q1"], metrics=metrics, version="v1")
 
@@ -291,7 +274,7 @@ class TestRunEvaluation:
         app = MagicMock()
 
         with caplog.at_level(logging.WARNING, logger="weaver.evaluator"):
-            run_evaluation(tru_app, app, ["q1"], metrics=[MagicMock()], version="v1")
+            run_evaluation(tru_app, app, ["q1"], metrics=["answer_relevance"], version="v1")
 
         live_run_ctx.run.compute_metrics.assert_not_called()
         assert any("failed during ingestion" in r.message for r in caplog.records)
