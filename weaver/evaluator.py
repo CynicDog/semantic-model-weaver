@@ -177,38 +177,86 @@ def get_results(tru_session: TruSession, snowpark_session: Any = None, version: 
     """
     import pandas as pd
 
+    # Primary path: TruLens get_records_and_feedback (works once the null-record patch is applied)
     try:
-        return tru_session.get_records_and_feedback(app_name=APP_NAME)
+        records_df, feedback_cols = tru_session.get_records_and_feedback(
+            app_name=APP_NAME, run_name=version or None
+        )
+        if not records_df.empty and feedback_cols:
+            feedback_df = records_df[["input"] + list(feedback_cols)].copy()
+            if "answer_relevance" in feedback_df.columns and "correctness" not in feedback_df.columns:
+                feedback_df["correctness"] = feedback_df["answer_relevance"]
+            logger.info("get_results: %d questions scored via TruLens", len(feedback_df))
+            return records_df, feedback_df
     except Exception as exc:
         logger.warning("get_results via TruLens failed (%s) — falling back to direct SQL", exc)
 
     if snowpark_session is None:
         return pd.DataFrame(), pd.DataFrame()
 
+    # Fallback: query GET_AI_OBSERVABILITY_EVENTS directly using RECORD_ATTRIBUTES VARIANT keys.
+    # Handles both client-side (ai.observability.*) and server-side (snow.ai.observability.*) spans.
     try:
         db = snowpark_session.get_current_database().strip('"')
         schema = snowpark_session.get_current_schema().strip('"')
-        q = f"""
-            SELECT INPUT, METRIC_NAME, EVAL_SCORE
-            FROM TABLE(SNOWFLAKE.LOCAL.GET_AI_OBSERVABILITY_EVENTS_NORMALIZED(
-                '{db}', '{schema}', '{APP_NAME}', 'EXTERNAL AGENT'
-            ))
-            WHERE METRIC_NAME IS NOT NULL
-              AND EVAL_SCORE IS NOT NULL
+        q = """
+            WITH all_spans AS (
+                SELECT
+                    COALESCE(
+                        RECORD_ATTRIBUTES:"ai.observability.span_type"::STRING,
+                        RECORD_ATTRIBUTES:"snow.ai.observability.span_type"::STRING
+                    ) AS span_type,
+                    COALESCE(
+                        RECORD_ATTRIBUTES:"ai.observability.record_id"::STRING,
+                        RECORD_ATTRIBUTES:"snow.ai.observability.record_id"::STRING
+                    ) AS record_id,
+                    RECORD_ATTRIBUTES:"ai.observability.record_root.input"::STRING AS input,
+                    COALESCE(
+                        RECORD_ATTRIBUTES:"ai.observability.eval_root.metric_name"::STRING,
+                        RECORD_ATTRIBUTES:"snow.ai.observability.eval_root.metric_name"::STRING
+                    ) AS metric_name,
+                    COALESCE(
+                        RECORD_ATTRIBUTES:"ai.observability.eval_root.score"::FLOAT,
+                        RECORD_ATTRIBUTES:"snow.ai.observability.eval_root.score"::FLOAT
+                    ) AS score
+                FROM TABLE(SNOWFLAKE.LOCAL.GET_AI_OBSERVABILITY_EVENTS(?, ?, ?, ?))
+                WHERE RECORD_ATTRIBUTES:"ai.observability.run.name"::STRING = ?
+                   OR RECORD_ATTRIBUTES:"snow.ai.observability.run.name"::STRING = ?
+            ),
+            records AS (
+                SELECT record_id, MAX(input) AS input
+                FROM all_spans
+                WHERE span_type = 'record_root' AND input IS NOT NULL
+                GROUP BY record_id
+            ),
+            evals AS (
+                SELECT record_id, metric_name, AVG(score) AS score
+                FROM all_spans
+                WHERE span_type = 'eval_root'
+                  AND metric_name IS NOT NULL AND score IS NOT NULL
+                GROUP BY record_id, metric_name
+            )
+            SELECT r.input, e.metric_name, e.score
+            FROM records r
+            JOIN evals e ON e.record_id = r.record_id
         """
-        if version:
-            q += f" AND RUN_NAME = '{version}'"
-        rows = snowpark_session.sql(q).to_pandas()
+        rows = snowpark_session.sql(
+            q, params=[db, schema, APP_NAME, "EXTERNAL AGENT", version, version]
+        ).to_pandas()
         rows.columns = rows.columns.str.lower()
         if rows.empty:
+            logger.warning("get_results: no scored rows found for version '%s'", version)
             return pd.DataFrame(), pd.DataFrame()
 
         feedback_df = rows.pivot_table(
-            index="input", columns="metric_name", values="eval_score", aggfunc="mean"
+            index="input", columns="metric_name", values="score", aggfunc="mean"
         ).reset_index()
         feedback_df.columns.name = None
-        logger.info("get_results: fetched %d scored rows via direct SQL", len(rows))
-        return pd.DataFrame({"input": feedback_df["input"]}), feedback_df
+        if "answer_relevance" in feedback_df.columns and "correctness" not in feedback_df.columns:
+            feedback_df["correctness"] = feedback_df["answer_relevance"]
+
+        logger.info("get_results: %d questions scored via direct SQL", len(feedback_df))
+        return feedback_df[["input"]].copy(), feedback_df
     except Exception as exc:
         logger.warning("get_results direct SQL also failed (%s) — returning empty frames", exc)
         return pd.DataFrame(), pd.DataFrame()

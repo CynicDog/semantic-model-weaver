@@ -9,7 +9,8 @@ are filled in. If Cortex returns an unusable response for any table, that
 table is left as-is and a warning is logged.
 
 Usage:
-    enriched = SynonymEnricher(session).enrich(model)
+    query_terms = QueryHistoryMiner(session).mine(database, schema)
+    enriched = SynonymEnricher(session).enrich(model, query_terms=query_terms)
 """
 
 from __future__ import annotations
@@ -21,25 +22,54 @@ import re
 from snowflake.snowpark import Session
 
 from weaver.dsl import SemanticModel, SemanticTable
+from weaver.query_history import QueryTerms
 
 log = logging.getLogger(__name__)
 
 _MODEL = "mistral-large2"
 
+_KNOWN_DATA_TYPES = {
+    "VARCHAR", "NUMBER", "FLOAT", "DATE", "BOOLEAN",
+    "TIMESTAMP", "TIMESTAMP_NTZ", "TIMESTAMP_LTZ", "TIMESTAMP_TZ",
+    "VARIANT", "OBJECT", "ARRAY", "INT", "INTEGER", "TEXT", "STRING",
+    "CHAR", "BIGINT", "SMALLINT", "DECIMAL", "NUMERIC", "DOUBLE",
+}
+
 _SYSTEM_PROMPT = (
-    "You are a data dictionary assistant. "
+    "You are a data dictionary assistant for a financial analytics platform. "
     "Given a database table and its columns, output ONLY a JSON object. "
     "No prose, no markdown fences, no explanation — just the JSON."
 )
 
 
-def _build_prompt(table: SemanticTable) -> str:
-    lines = [f"Table: {table.name}"]
+def _build_prompt(table: SemanticTable, query_terms: QueryTerms) -> str:
+    table_terms = query_terms.get(table.name, {})
+
+    lines = [
+        f"Table: {table.name}",
+        "",
+        "For each column below, provide:",
+        "  - description: a concise business definition (1 sentence)",
+        "  - synonyms: 2-4 natural-language phrases an analyst would type to refer to this column",
+        "",
+        "RULES:",
+        "  - Synonyms MUST be human-readable business phrases (e.g. 'stock code', 'trade volume')",
+        "  - Do NOT use raw data values as synonyms (e.g. 'KR7225570001', 'A225570')",
+        "  - Do NOT use SQL identifiers or column names as synonyms",
+        "  - Do NOT use data type names as descriptions",
+        "  - If you cannot confidently infer synonyms, return an empty list for that column",
+        "",
+        "Columns:",
+    ]
+
     for col in [*table.dimensions, *table.time_dimensions, *table.measures]:
-        samples = ""
-        if hasattr(col, "sample_values") and col.sample_values:
-            samples = f"  sample values: {col.sample_values[:5]}"
-        lines.append(f"  column: {col.name} ({col.data_type}){samples}")
+        parts = [f"  {col.name} ({col.data_type})"]
+        if col.description and col.description.upper().strip() not in _KNOWN_DATA_TYPES:
+            parts.append(f"comment: {col.description!r}")
+        mined = table_terms.get(col.name, [])
+        if mined:
+            parts.append(f"query-history aliases: {mined}")
+        lines.append("  ".join(parts) if len(parts) > 1 else parts[0])
 
     schema = {
         "table_description": "string",
@@ -50,11 +80,8 @@ def _build_prompt(table: SemanticTable) -> str:
             }
         },
     }
-    return (
-        "\n".join(lines)
-        + "\n\nReturn JSON matching this shape:\n"
-        + json.dumps(schema, indent=2)
-    )
+    lines += ["", "Return JSON matching this shape:", json.dumps(schema, indent=2)]
+    return "\n".join(lines)
 
 
 def _call_cortex(session: Session, prompt: str) -> str:
@@ -87,19 +114,38 @@ def _parse_response(raw: str) -> dict:
     return json.loads(match.group())
 
 
+def _clean_description(desc: str) -> str:
+    """Reject descriptions that are just a data type token echoed back by the LLM."""
+    if not desc:
+        return ""
+    if desc.upper().strip() in _KNOWN_DATA_TYPES:
+        return ""
+    return desc
+
+
 def _apply_enrichment(table: SemanticTable, data: dict) -> SemanticTable:
     col_data: dict = data.get("columns", {})
-    table_desc: str = data.get("table_description", "")
+    table_desc: str = _clean_description(data.get("table_description", ""))
 
     def _enrich(col):
         info = col_data.get(col.name, {})
-        raw_synonyms = info.get("synonyms", col.synonyms) or col.synonyms
-        synonyms = [str(s) for s in raw_synonyms if s is not None and str(s).strip()]
-        updated = col.model_copy(update={
-            "description": info.get("description", col.description) or col.description,
-            "synonyms": synonyms,
+
+        raw_desc = _clean_description(info.get("description", ""))
+        new_desc = raw_desc or col.description
+
+        raw_synonyms = info.get("synonyms", []) or []
+        synonyms = [
+            str(s).strip() for s in raw_synonyms
+            if s is not None
+            and str(s).strip()
+            and str(s).upper().strip() not in _KNOWN_DATA_TYPES
+            and not _looks_like_raw_value(str(s))
+        ]
+
+        return col.model_copy(update={
+            "description": new_desc,
+            "synonyms": synonyms if synonyms else col.synonyms,
         })
-        return updated
 
     return table.model_copy(update={
         "description": table_desc or table.description,
@@ -109,24 +155,49 @@ def _apply_enrichment(table: SemanticTable, data: dict) -> SemanticTable:
     })
 
 
+def _looks_like_raw_value(s: str) -> bool:
+    """
+    Heuristic: reject strings that look like raw data values rather than
+    business phrases — e.g. ISIN codes, ticker codes, numeric strings.
+    """
+    s = s.strip()
+    if re.fullmatch(r"[A-Z]{2}[A-Z0-9]{10}", s):
+        return True
+    if re.fullmatch(r"[A-Z]\d{6}", s):
+        return True
+    if re.fullmatch(r"\d+", s):
+        return True
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+        return True
+    return False
+
+
 class SynonymEnricher:
     """
     Enriches a SemanticModel with descriptions and synonyms via Cortex.
 
+    Accepts optional query_terms from QueryHistoryMiner to ground synonyms in
+    real business vocabulary extracted from historical SQL.
+
     One Cortex call per table. Tables that fail enrichment are left unchanged.
 
     Usage:
-        enriched = SynonymEnricher(session).enrich(model)
+        enriched = SynonymEnricher(session).enrich(model, query_terms=terms)
     """
 
     def __init__(self, session: Session) -> None:
         self._session = session
 
-    def enrich(self, model: SemanticModel) -> SemanticModel:
+    def enrich(
+        self,
+        model: SemanticModel,
+        query_terms: QueryTerms | None = None,
+    ) -> SemanticModel:
+        terms = query_terms or {}
         enriched_tables = []
         for table in model.tables:
             try:
-                prompt = _build_prompt(table)
+                prompt = _build_prompt(table, terms)
                 raw = _call_cortex(self._session, prompt)
                 data = _parse_response(raw)
                 enriched_tables.append(_apply_enrichment(table, data))

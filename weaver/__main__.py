@@ -105,29 +105,26 @@ def _setup():
     """).collect()
     _ok(f"Cortex usage granted to role [bold]{role}[/bold]")
 
-    allowed_ip = os.environ.get("WEAVER_ALLOWED_IP")
-    if allowed_ip:
-        user = os.environ["WEAVER_SNOWFLAKE_USER"]
-        _info("refreshing network policy …")
-        session.sql(f"ALTER USER {user} UNSET NETWORK_POLICY").collect()
-        session.sql("DROP NETWORK POLICY IF EXISTS weaver_dev").collect()
-        session.sql(f"DROP NETWORK RULE IF EXISTS {db}.public.weaver_dev_ip").collect()
-        session.sql(f"""
-            CREATE NETWORK RULE {db}.public.weaver_dev_ip
-                TYPE       = ipv4
-                VALUE_LIST = ('{allowed_ip}')
-                MODE       = ingress
-                COMMENT    = 'Dev machine IP for Semantic Model Weaver local runs'
-        """).collect()
-        session.sql(f"""
-            CREATE NETWORK POLICY weaver_dev
-                ALLOWED_NETWORK_RULE_LIST = ('{db}.public.weaver_dev_ip')
-                COMMENT = 'Network policy for Semantic Model Weaver development'
-        """).collect()
-        session.sql(f"ALTER USER {user} SET NETWORK_POLICY = weaver_dev").collect()
-        _ok(f"network policy [bold]weaver_dev[/bold] → user [bold]{user}[/bold]  [dim](ip: {allowed_ip})[/dim]")
-    else:
-        _warn("WEAVER_ALLOWED_IP not set — skipping network policy")
+    allowed_ip = "0.0.0.0/0" # os.environ.get("WEAVER_ALLOWED_IP", "0.0.0.0/0")
+    user = os.environ["WEAVER_SNOWFLAKE_USER"]
+    _info("refreshing network policy …")
+    session.sql(f"ALTER USER {user} UNSET NETWORK_POLICY").collect()
+    session.sql("DROP NETWORK POLICY IF EXISTS weaver_dev").collect()
+    session.sql(f"DROP NETWORK RULE IF EXISTS {db}.public.weaver_dev_ip").collect()
+    session.sql(f"""
+        CREATE NETWORK RULE {db}.public.weaver_dev_ip
+            TYPE       = ipv4
+            VALUE_LIST = ('{allowed_ip}')
+            MODE       = ingress
+            COMMENT    = 'Dev machine IP for Semantic Model Weaver local runs'
+    """).collect()
+    session.sql(f"""
+        CREATE NETWORK POLICY weaver_dev
+            ALLOWED_NETWORK_RULE_LIST = ('{db}.public.weaver_dev_ip')
+            COMMENT = 'Network policy for Semantic Model Weaver development'
+    """).collect()
+    session.sql(f"ALTER USER {user} SET NETWORK_POLICY = weaver_dev").collect()
+    _ok(f"network policy [bold]weaver_dev[/bold] → user [bold]{user}[/bold]  [dim](ip: {allowed_ip})[/dim]")
 
     console.print()
     console.print("  [bold green]Setup complete.[/bold green]  Workspace is ready.")
@@ -221,8 +218,16 @@ def _run_pipeline(database: str, schema: str, iterations: int, version: str):
     yaml_path = _dump_yaml(run_dir, semantic_model)
     _ok(f"YAML saved → [bold]{yaml_path}[/bold]")
 
+    from weaver.query_history import QueryHistoryMiner
+    query_terms = QueryHistoryMiner(session).mine(database, schema)
+    mined_count = sum(len(cols) for cols in query_terms.values())
+    if mined_count:
+        _ok(f"mined [bold]{mined_count}[/bold] business term entries from query history")
+    else:
+        _info("no query history found — enriching from column names only")
+
     from weaver.enricher import SynonymEnricher
-    semantic_model = SynonymEnricher(session).enrich(semantic_model)
+    semantic_model = SynonymEnricher(session).enrich(semantic_model, query_terms=query_terms)
     _ok(f"synonyms and descriptions enriched via Cortex")
     syn_path = _dump_synonyms(run_dir, semantic_model)
     _ok(f"synonyms saved → [bold]{syn_path}[/bold]")
@@ -273,6 +278,9 @@ def _run_pipeline(database: str, schema: str, iterations: int, version: str):
         _ok(f"refined YAML saved → [bold]{refined_path}[/bold]")
         syn_path = _dump_synonyms(run_dir, semantic_model, suffix=f".iter{iteration}")
         _ok(f"refined synonyms saved → [bold]{syn_path}[/bold]")
+
+    final_path = _dump_yaml(run_dir, semantic_model, suffix=".final")
+    _ok(f"final YAML → [bold]{final_path}[/bold]")
 
     console.print()
     console.print("  [bold green]Done.[/bold green]  View results in [bold]Snowsight → AI & ML → Evaluations[/bold]")
