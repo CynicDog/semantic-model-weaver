@@ -34,8 +34,11 @@ _KNOWN_SQL_KEYWORDS = {
     "SUM", "AVG", "COUNT", "MIN", "MAX", "COALESCE", "NVL", "IFF", "NULLIF",
 }
 
+# Matches: COLUMN_NAME AS "quoted alias"  (Korean or ASCII, must be double-quoted)
+#       or COLUMN_NAME AS unquoted_alias  (ASCII only, no spaces)
+# Two capture groups: (quoted_alias, unquoted_alias) — one will always be empty.
 _ALIAS_RE = re.compile(
-    r'\b([A-Z][A-Z0-9_]{2,})\s+AS\s+"?([A-Za-z][A-Za-z0-9_ ]{1,60})"?',
+    r'\b([A-Z][A-Z0-9_]{2,})\s+AS\s+(?:"([^"]{1,60})"|([A-Za-z][A-Za-z0-9_]{1,60}))',
     re.IGNORECASE,
 )
 
@@ -60,11 +63,14 @@ def _is_meaningful_alias(alias: str) -> bool:
 def _extract_aliases(sql: str) -> list[tuple[str, str]]:
     """
     Return [(col_name, alias_phrase), ...] found in a SQL string.
-    col_name is uppercased; alias_phrase is a space-separated readable phrase.
+    col_name is uppercased; alias_phrase is the raw alias string (Korean or ASCII).
+    Quoted aliases (e.g. AS "거래량") are captured as-is.
+    Unquoted ASCII aliases are converted from snake_case to a readable phrase.
     """
     pairs: list[tuple[str, str]] = []
-    for col, raw_alias in _ALIAS_RE.findall(sql):
-        phrase = _snake_to_phrase(raw_alias)
+    for col, quoted, unquoted in _ALIAS_RE.findall(sql):
+        raw_alias = quoted if quoted else unquoted
+        phrase = raw_alias if quoted else _snake_to_phrase(unquoted)
         if _is_meaningful_alias(phrase):
             pairs.append((col.upper(), phrase))
     return pairs
@@ -127,7 +133,7 @@ class QueryHistoryMiner:
                 SELECT table_name
                 FROM {database}.INFORMATION_SCHEMA.TABLES
                 WHERE table_schema = '{schema}'
-                  AND table_type   = 'BASE TABLE'
+                  AND table_type   IN ('BASE TABLE', 'VIEW')
             """).collect()
             return {row[0].upper() for row in rows}
         except Exception:

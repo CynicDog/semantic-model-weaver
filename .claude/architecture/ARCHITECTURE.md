@@ -5,10 +5,12 @@
 Semantic Model Weaver is an agentic pipeline that takes a raw Snowflake database and
 produces a verified, quality-scored Cortex Analyst semantic YAML — with no human authoring.
 
-The pipeline reads the schema, drafts the YAML via LLM, generates test scenarios with
-ground-truth answers from direct SQL, fires those scenarios at the real Cortex Analyst
-API, scores results with TruLens, and patches the YAML based on failures. It loops until
-quality converges or iteration budget is exhausted.
+The pipeline reads the schema, classifies columns into dimensions/measures/time dimensions,
+mines historical query vocabulary to ground synonym generation, enriches descriptions and
+synonyms via Cortex, generates test scenarios with ground-truth answers from direct SQL,
+fires those scenarios at the real Cortex Analyst API, scores results via Snowsight AI
+Observability, and patches the YAML based on failures. It loops until quality converges
+or the iteration budget is exhausted.
 
 
 ## System context
@@ -16,10 +18,18 @@ quality converges or iteration budget is exhausted.
 **Who uses it:** A data engineer runs the weaver CLI against a Snowflake database and schema.
 
 **What it talks to:**
-- **Snowflake** — all compute and storage. Snowpark for schema discovery and SQL execution, Cortex Arctic (`COMPLETE()`) for LLM generation, Cortex Analyst REST API for semantic model probing, and SnowflakeConnector for TruLens evaluation logging.
-- **Snowsight AI Observability** — the primary results UI. TruLens logs every probe record and feedback score to `TRULENS_RECORDS` / `TRULENS_FEEDBACK_RESULTS` in Snowflake; Snowsight surfaces them under AI & ML → Evaluations.
+- **Snowflake** — all compute and storage. Snowpark for schema discovery and SQL execution,
+  `SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY` for business vocabulary mining,
+  `SNOWFLAKE.CORTEX.COMPLETE()` for synonym enrichment and scenario generation,
+  Cortex Analyst REST API for semantic model probing, and SnowflakeConnector for TruLens
+  evaluation logging.
+- **Snowsight AI Observability** — the primary results UI. TruLens logs every probe record
+  via OTEL spans to the Snowflake event table; Snowsight surfaces them under
+  AI & ML → Evaluations. Server-side metrics (`answer_relevance`, `correctness`) are
+  computed entirely inside Snowflake via `SYSTEM$EXECUTE_AI_OBSERVABILITY_RUN`.
 
-The system has no external dependencies outside Snowflake. No OpenAI key, no separate vector store, no additional services.
+The system has no external dependencies outside Snowflake. No OpenAI key, no separate
+vector store, no additional services.
 
 
 ## Layers
@@ -30,13 +40,15 @@ The system has no external dependencies outside Snowflake. No OpenAI key, no sep
 │  Parse args · build Snowpark session · drive pipeline loop      │
 ├─────────────────────────────────────────────────────────────────┤
 │  Pipeline Stages           weaver/*.py                           │
-│  discovery · writer · scenarios · probe · evaluator · refiner   │
+│  discovery · writer · query_history · enricher ·                │
+│  scenarios · probe · evaluator · refiner                        │
 ├─────────────────────────────────────────────────────────────────┤
 │  DSL / Data Model          weaver/dsl.py                         │
 │  Pydantic models for SemanticModel ↔ Cortex Analyst YAML spec   │
 ├─────────────────────────────────────────────────────────────────┤
 │  Snowflake Platform                                             │
-│  Snowpark · Cortex Arctic · Cortex Analyst REST · TruLens conn  │
+│  Snowpark · ACCOUNT_USAGE · Cortex COMPLETE() ·                 │
+│  Cortex Analyst REST · TruLens OTEL connector                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -49,24 +61,34 @@ sequenceDiagram
     participant CLI as weaver CLI
     participant D as SchemaDiscovery
     participant W as YAMLWriter
+    participant QH as QueryHistoryMiner
+    participant E as SynonymEnricher
     participant S as ScenarioGenerator
     participant P as CortexAnalystProbe
-    participant E as Evaluator + TruLens
+    participant EV as Evaluator + TruLens
     participant R as RefinementAgent
     participant SF as Snowflake Platform
 
     CLI->>D: --database, --schema
     D->>SF: INFORMATION_SCHEMA (Snowpark)
-    SF-->>D: columns, types, row counts
+    SF-->>D: columns, types, row counts, samples
     D-->>CLI: SchemaProfile
 
     CLI->>W: SchemaProfile
-    W->>SF: Cortex Arctic COMPLETE()
-    SF-->>W: draft YAML text
-    W-->>CLI: SemanticModel
+    W-->>CLI: SemanticModel (rule-based, no LLM)
+
+    CLI->>QH: database, schema
+    QH->>SF: ACCOUNT_USAGE.QUERY_HISTORY
+    SF-->>QH: historical SELECT queries (90-day lookback)
+    QH-->>CLI: QueryTerms {table → {col → [alias phrases]}}
+
+    CLI->>E: SemanticModel + QueryTerms
+    E->>SF: Cortex COMPLETE() per table
+    SF-->>E: descriptions + synonyms (grounded by query history)
+    E-->>CLI: SemanticModel.enriched
 
     CLI->>S: SchemaProfile
-    S->>SF: Cortex Arctic COMPLETE()
+    S->>SF: Cortex COMPLETE() per table
     SF-->>S: NL questions + ground-truth SQL
     S->>SF: execute ground-truth SQL (Snowpark)
     SF-->>S: expected answers
@@ -76,15 +98,15 @@ sequenceDiagram
         CLI->>P: SemanticModel + questions
         P->>SF: Cortex Analyst REST API
         SF-->>P: SQL + answer per question
-        P-->>E: ProbeResults
+        P-->>EV: ProbeResults
 
-        E->>SF: TruLens SnowflakeConnector
-        Note over E,SF: scores logged to TRULENS_RECORDS,<br/>TRULENS_FEEDBACK_RESULTS
-        E-->>CLI: feedback_df
+        EV->>SF: TruLens OTEL spans → Snowflake event table
+        Note over EV,SF: server-side metrics computed via<br/>SYSTEM$EXECUTE_AI_OBSERVABILITY_RUN
+        EV-->>CLI: feedback_df (scores + explanations)
 
         CLI->>R: SemanticModel + feedback_df
-        R->>SF: Cortex Arctic COMPLETE()
-        SF-->>R: YAML patches
+        R->>SF: Cortex COMPLETE() per table
+        SF-->>R: synonym + description patches
         R-->>CLI: patched SemanticModel (or None if converged)
     end
 ```
@@ -94,27 +116,29 @@ sequenceDiagram
 
 The core value of the system is the **generate → test → score → refine** loop.
 Each iteration produces a versioned TruLens run, so quality progression is tracked
-across versions in Snowsight.
+across versions in Snowsight. The loop stops when mean correctness reaches 0.65 or
+the iteration budget is exhausted.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant W as YAMLWriter
+    participant W as YAMLWriter + SynonymEnricher
     participant P as CortexAnalystProbe
     participant E as Evaluator
     participant R as RefinementAgent
     participant SS as Snowsight
 
-    W-->>P: SemanticModel v1
-    loop until converged or budget exhausted
-        P->>P: fire ~20 NL questions via Cortex Analyst
+    W-->>P: SemanticModel v1 (enriched)
+    loop until converged (correctness ≥ 0.65) or budget exhausted
+        P->>P: fire NL questions via Cortex Analyst REST
         P-->>E: ProbeResults (answer, sql, success per question)
-        E->>E: score answer_relevance + answer_correctness
-        E-->>SS: log versioned run to TRULENS_FEEDBACK_RESULTS
-        E-->>R: feedback_df (scores + failing questions)
-        alt mean_correctness below threshold
-            R->>R: identify failure patterns (synonyms, joins, measures)
-            R-->>P: patched SemanticModel vN
+        E->>E: OTEL spans → Snowflake event table
+        E->>E: SYSTEM$EXECUTE_AI_OBSERVABILITY_RUN
+        E-->>SS: versioned run scores (answer_relevance, correctness)
+        E-->>R: feedback_df (scores + explanations per question)
+        alt mean_correctness < 0.65
+            R->>R: build per-table patch prompts from failed questions
+            R-->>P: patched SemanticModel vN (synonyms + descriptions only)
         else converged or budget exhausted
             R-->>P: None — stop
         end
@@ -122,9 +146,34 @@ sequenceDiagram
 ```
 
 
+## Checkpoint and resume
+
+The CLI writes artifacts to `manifest/{DATABASE}.{SCHEMA}/{timestamp}/` after each stage.
+A failed or interrupted run can be resumed with `--resume <run_dir>` — the stage is
+auto-detected from whichever artifacts are present:
+
+| Artifacts present | Detected stage | Skipped stages |
+|---|---|---|
+| `model.yaml` only | `enrichment` | re-runs enrichment → scenarios → evaluation |
+| `model.enriched.yaml` + `synonyms.json` | `scenarios` | skips discovery + enrichment |
+| `scenarios.json` + any model YAML | `evaluation` | skips everything up to the probe loop |
+
+```
+manifest/
+└── NEXTRADE_EQUITY_MARKET_DATA.FIN/
+    └── 20260406_202959/
+        ├── model.yaml              ← written after YAMLWriter
+        ├── model.enriched.yaml     ← written after SynonymEnricher
+        ├── synonyms.json           ← synonym snapshot (for inspection)
+        ├── scenarios.json          ← golden_set + questions
+        ├── model.iter1.yaml        ← written after each refinement iteration
+        └── model.final.yaml        ← written at pipeline completion
+```
+
+
 ## Component reference
 
-### SchemaDiscovery — `weaver/discovery.py` (TODO)
+### SchemaDiscovery — `weaver/discovery.py`
 
 **Responsibility:** Read `INFORMATION_SCHEMA` via Snowpark and produce a `SchemaProfile` dict
 that every downstream stage uses as its source of truth.
@@ -146,9 +195,15 @@ that every downstream stage uses as its source of truth.
           "type": "DATE",
           "nullable": False,
           "comment": "DW date",
-          "sample_values": ["2025-12-15", "2026-01-23"],
+          "sample_values": [],          # empty for non-text columns
         },
-        ...
+        {
+          "name": "MKT_ID",
+          "type": "VARCHAR",
+          "nullable": True,
+          "comment": "Market ID",
+          "sample_values": ["STK", "KSQ"],   # up to 5 distinct values
+        },
       ],
       "fk_candidates": [
         {"column": "ISU_CD", "matches": ["NX_HT_BAT_EXECU_A0.ISU_CD"]}
@@ -159,115 +214,180 @@ that every downstream stage uses as its source of truth.
 ```
 
 **Snowflake touchpoints:**
-- `INFORMATION_SCHEMA.COLUMNS` — column names, types, nullability, comments
 - `INFORMATION_SCHEMA.TABLES` — row counts, table comments
-- Snowpark `DataFrame.sample()` — sample values per column for dimension hint
+- `INFORMATION_SCHEMA.COLUMNS` — column names, types, nullability, comments
+- Snowpark `table.sample(n=100)` — up to 5 distinct sample values for text/boolean columns
 
-**FK inference heuristic:** columns sharing identical name + compatible type across tables
-are candidates for `Relationship` entries in the YAML.
+**FK inference:** Columns sharing the same name (case-insensitive) and compatible type
+family (`text`, `numeric`, `date`, `timestamp`) across tables are candidates for
+`Relationship` entries in the YAML.
+
+**Type normalization:** Snowflake internal types (`FIXED`, `TEXT`, etc.) are mapped to
+DSL `DataType` values (`NUMBER`, `VARCHAR`, etc.) before leaving this stage.
 
 ```mermaid
 flowchart LR
     sp["Snowpark Session"]
-    ic["INFORMATION_SCHEMA\n.COLUMNS"]
     it["INFORMATION_SCHEMA\n.TABLES"]
-    samp["table.sample(100)"]
-    fk["FK candidate\nmatching\n(name + type)"]
+    ic["INFORMATION_SCHEMA\n.COLUMNS"]
+    samp["table.sample(100)\ntext + boolean cols only"]
+    fk["FK inference\n(name + type-family match)"]
     out["SchemaProfile dict"]
 
-    sp --> ic & it & samp
-    ic & it & samp --> fk --> out
+    sp --> it & ic & samp
+    it & ic & samp --> fk --> out
 ```
 
 
-### YAMLWriter — `weaver/writer.py` (TODO)
+### YAMLWriter — `weaver/writer.py`
 
-**Responsibility:** Translate a `SchemaProfile` into a `SemanticModel` (the DSL object)
-using Cortex Arctic as the generation LLM. The output is a first-draft semantic YAML
-that describes tables, dimensions, measures, time dimensions, synonyms, and joins.
+**Responsibility:** Translate a `SchemaProfile` into a `SemanticModel` using rule-based
+column classification. No LLM calls — output is always structurally valid. Synonym and
+description enrichment happens in the separate `SynonymEnricher` stage.
 
-**Inputs:** `SchemaProfile`
-**Outputs:** `SemanticModel` (validated Pydantic object, ready for `.to_yaml()`)
+**Column classification rules:**
 
-**LLM prompt strategy:**
-- System prompt embeds the Cortex Analyst YAML spec and column-type → field-type
-  mapping rules (e.g. `DATE` columns become `time_dimensions`, numeric columns with
-  aggregation semantics become `measures`)
-- User prompt inlines the full `SchemaProfile` for the target schema
-- Structured output: LLM is asked to produce a valid YAML which is then parsed via
-  `SemanticModel.from_yaml()` and validated by Pydantic
-- On parse failure: retry with error message appended to the prompt (up to 3 retries)
+| Column type | Condition | DSL field |
+|---|---|---|
+| `DATE`, `TIMESTAMP_*` | any | `TimeDimension` |
+| `VARCHAR`, `BOOLEAN` | any | `Dimension` |
+| `NUMBER`, `FLOAT` | name ends with `_CD`, `_ID`, `_NO`, `_TP`, `_YN`, etc., or is a FK column | `Dimension` |
+| `NUMBER`, `FLOAT` | otherwise | `Measure` (aggregation = `SUM` or `AVG` by name suffix) |
+| `VARIANT`, `OBJECT`, `ARRAY` | any | skipped |
 
-**Snowflake touchpoints:**
-- `snowflake.cortex.complete("mistral-large2", prompt)` — generation
+**Aggregation selection for measures:** columns ending in `_PRC`, `_RATE`, `_RATIO`, `_AVG`
+get `AVG(col)`; all others get `SUM(col)`.
+
+**Relationship inference:** One `Relationship` per unique FK pair inferred from
+`SchemaProfile.fk_candidates`, typed `MANY_TO_ONE / LEFT_OUTER`.
 
 ```mermaid
 flowchart LR
     sp["SchemaProfile"]
-    prompt["Prompt builder\n(spec + column rules\n+ schema profile)"]
-    arctic["Cortex Arctic\nmistral-large2"]
-    parse["SemanticModel.from_yaml()\nPydantic validation"]
-    ok{"Valid?"}
-    retry["Retry with\nerror feedback\n(max 3)"]
-    out["SemanticModel"]
+    classify["Column classifier\n(type + name suffix rules)"]
+    pk["PK inference\n(from FK candidates)"]
+    rel["Relationship builder\n(FK pairs → LEFT OUTER joins)"]
+    out["SemanticModel\n(valid Pydantic, ready for .to_yaml())"]
 
-    sp --> prompt --> arctic --> parse --> ok
-    ok -- "Yes" --> out
-    ok -- "No" --> retry --> arctic
+    sp --> classify & pk & rel --> out
 ```
 
 
-### ScenarioGenerator — `weaver/scenarios.py` (TODO)
+### QueryHistoryMiner — `weaver/query_history.py`
+
+**Responsibility:** Mine `SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY` for the target
+database/schema and extract business vocabulary — column aliases and readable phrases —
+from historical SQL. These terms ground `SynonymEnricher` in real analyst usage rather
+than relying solely on column names and Cortex guesswork.
+
+**Inputs:** `database`, `schema`
+**Outputs:** `QueryTerms = {table_name: {col_name: [alias_phrase, ...]}}`
+
+**How it works:**
+1. Fetches up to 1,000 successful `SELECT` queries from the last 90 days
+2. Parses each query with a regex that finds `<IDENTIFIER> AS <alias>` patterns
+3. Converts snake_case/camelCase aliases to readable phrases (`TRD_QTY AS trading_volume` → `"trading volume"`)
+4. Filters out SQL keywords, single-character tokens, and meaningless aliases
+5. Joins aliases to the tables they reference (via table-name substring match in the SQL text)
+
+**Graceful degradation:** Returns `{}` if the view is inaccessible, the account has no
+history, or no qualifying queries are found. `SynonymEnricher` proceeds with column names
+and comments alone in that case.
+
+```mermaid
+flowchart TD
+    qh["SNOWFLAKE.ACCOUNT_USAGE\n.QUERY_HISTORY\n(90-day lookback, ≤1000 queries)"]
+    parse["alias regex\nCOL AS alias → snake_to_phrase()"]
+    filter["filter: SQL keywords,\nshort tokens, meaningless aliases"]
+    join["join to table names\n(substring match in SQL text)"]
+    out["QueryTerms\n{table → {col → [phrase, ...]}}"]
+
+    qh --> parse --> filter --> join --> out
+```
+
+
+### SynonymEnricher — `weaver/enricher.py`
+
+**Responsibility:** Enrich a `SemanticModel` with human-readable descriptions and synonyms
+by calling `SNOWFLAKE.CORTEX.COMPLETE()` (mistral-large2) once per table. Only `description`
+and `synonyms` fields are written — no structural changes to the model.
+
+**Inputs:** `SemanticModel` (from YAMLWriter), `QueryTerms` (from QueryHistoryMiner)
+**Outputs:** `SemanticModel` with `description` and `synonyms` populated
+
+**Prompt strategy:**
+- Includes table name, all column names + types + comments
+- Injects `QueryTerms` aliases for each column as `"query-history aliases: [...]"` hints
+- Asks for `{"table_description": ..., "columns": {"COL": {"description": ..., "synonyms": [...]}}}` JSON
+- Temperature = 0 for deterministic output
+
+**Validation / filtering:**
+- Rejects descriptions that are just a data-type token echoed back
+- Rejects synonyms that look like raw data values (ISIN codes, ticker codes, date strings, pure numbers)
+- Falls back to the original column description if Cortex returns nothing usable
+- Tables that fail enrichment are left unchanged (warning logged, pipeline continues)
+
+```mermaid
+flowchart LR
+    model["SemanticModel\n(from YAMLWriter)"]
+    terms["QueryTerms\n(from QueryHistoryMiner)"]
+    prompt["Prompt builder\n(col names + types +\ncomments + query aliases)"]
+    cortex["Cortex COMPLETE()\nmistral-large2\ntemperature=0"]
+    validate["validate + filter\n(reject data values,\ntype-name echoes)"]
+    apply["apply: description +\nsynonyms per column"]
+    out["SemanticModel.enriched"]
+
+    model & terms --> prompt --> cortex --> validate --> apply --> out
+```
+
+
+### ScenarioGenerator — `weaver/scenarios.py`
 
 **Responsibility:** Produce the `golden_set` and `questions` lists that drive evaluation.
-Questions are NL queries a user would realistically ask. Ground truth answers are derived
-by running known-correct SQL directly against the raw Snowflake tables — never from the
-generated YAML.
+Questions are NL queries an analyst would realistically ask. Ground truth answers are
+derived by running known-correct SQL directly against the raw Snowflake tables —
+never from the generated YAML.
 
 **Inputs:** `SchemaProfile`
 **Outputs:**
-- `questions: list[str]` — ~20 NL questions per table cluster
+- `questions: list[str]`
 - `golden_set: list[dict]` — `[{"query": str, "expected_response": str}]`
 
-**Question types generated (per table cluster):**
-- Simple aggregation: "What is the total trading volume for KOSPI stocks last month?"
-- Filter + group: "Which market has more listed stocks, KOSPI or KOSDAQ?"
-- Multi-table join: "What is the average closing price per industry sector?"
-- Time series: "How did daily trading value trend across January 2026?"
-- Ranking: "Top 5 stocks by trading volume on 2026-01-15?"
+**Per-table generation:**
+- Cortex `COMPLETE()` (mistral-large2, temperature=0.3), one call per table
+- 5 scenarios per table requested: aggregations, filters, time-based, and joins where
+  related tables share column names
+- Related tables are identified by overlapping column names (same heuristic as FK inference)
+- Each scenario includes a fully-qualified SQL query (`DATABASE.SCHEMA.TABLE`)
 
-**Ground truth derivation:** For each question, the LLM also produces an equivalent SQL
-query that is executed via Snowpark against the actual tables. The result is serialised
-to a short natural-language string and stored as `expected_response`.
+**Ground truth derivation:**
+- Each SQL is executed via Snowpark against the actual tables
+- Result is serialized as JSON (up to 3 rows) and stored as `expected_response`
+- Scenarios where SQL execution fails are silently dropped
 
 ```mermaid
 flowchart TD
     sp["SchemaProfile"]
-    gen["Cortex Arctic\ngenerate NL questions\n+ ground-truth SQL"]
+    related["find related tables\n(overlapping column names)"]
+    gen["Cortex COMPLETE()\n5 scenarios per table\n(question + ground-truth SQL)"]
     exec["Snowpark\nexecute ground-truth SQL\nagainst raw tables"]
-    fmt["Format result\nas natural-language string"]
-    out1["questions\nlist[str]"]
-    out2["golden_set\nlist[dict]\nquery + expected_response"]
+    fmt["serialize result as JSON\n(≤3 rows)"]
+    out1["questions list[str]"]
+    out2["golden_set\n[{query, expected_response}]"]
 
-    sp --> gen
+    sp --> related --> gen
     gen --> out1
     gen --> exec --> fmt --> out2
 ```
 
 
-### CortexAnalystProbe — `weaver/probe.py` (TODO)
+### CortexAnalystProbe — `weaver/probe.py`
 
 **Responsibility:** Fire each NL question at the Cortex Analyst REST API with the current
-draft YAML and return a structured `ProbeResult`.
+draft YAML and return a structured result per question.
 
-**Interface (satisfies `evaluator.Probe` Protocol):**
-
-```python
-class CortexAnalystProbe:
-    def __init__(self, session: Session, yaml_text: str) -> None: ...
-    def query(self, question: str) -> dict: ...
-    # Returns: {"answer": str, "sql": str | None, "success": bool, "content": list}
-```
+**Auth:** Reuses the Snowpark session token (`session._conn._conn._rest._token`) —
+no separate key-pair setup required.
 
 **HTTP flow:**
 
@@ -282,19 +402,23 @@ Content-Type: application/json
 }
 ```
 
-**Response parsing:**
-- Content type `"sql"` → extract SQL, execute via Snowpark, format result as answer string
-- Content type `"text"` → use text directly as answer
-- Content type `"error"` → `success=False`, answer=""
-- HTTP 4xx/5xx → `success=False`, answer=""
+**Response handling:**
+- `type: "sql"` → extract SQL statement, execute via Snowpark, format result as answer string
+  (top 5 rows as `col=val` pairs)
+- `type: "text"` → use interpretation text as answer (fallback when no SQL)
+- SQL execution failure → fall back to interpretation text
+- HTTP 4xx/5xx → `success=False`, `answer=""`
+
+Each probe instance is bound to one YAML snapshot. A new instance is created for each
+refinement iteration so the updated YAML is used.
 
 ```mermaid
 flowchart LR
     q["question: str"]
-    yaml["yaml_text\n(current draft)"]
+    yaml["yaml_text\n(current SemanticModel)"]
     http["Cortex Analyst\nREST API\nPOST /v2/cortex/analyst/message"]
-    parse["parse content[]\ntype: sql | text | error"]
-    exec["Snowpark\nexecute SQL\n(if type=sql)"]
+    parse["parse content[]\ntype: sql | text"]
+    exec["Snowpark\nexecute SQL\n→ format top-5 rows"]
     out["ProbeResult dict\nanswer, sql, success"]
 
     q & yaml --> http --> parse
@@ -303,24 +427,28 @@ flowchart LR
 ```
 
 
-### Evaluator — `weaver/evaluator.py` (implemented)
+### Evaluator — `weaver/evaluator.py`
 
-**Responsibility:** Wrap `CortexAnalystProbe` as a TruLens `TruApp`, fire all questions,
-score results with Cortex-powered feedback functions, and log everything to Snowflake.
+**Responsibility:** Wrap `CortexAnalystProbe` in a TruLens `TruApp`, fire all questions,
+log OTEL spans to the Snowflake event table, trigger server-side metric computation, and
+return per-question scores with explanations.
 
-**Public API:**
+**OTEL / Snowflake AI Observability path (primary):**
 
-| Function | Signature | Purpose |
-|---|---|---|
-| `build_session` | `(snowpark_session) → TruSession` | Wire TruSession → SnowflakeConnector |
-| `build_feedbacks` | `(session, golden_set) → list[Feedback]` | Create `answer_relevance` + `answer_correctness` |
-| `build_tru_app` | `(app, feedbacks, version) → TruApp` | Wrap `CortexAnalystApp` in TruApp |
-| `run_evaluation` | `(tru_app, app, questions) → None` | One TruApp context per question |
-| `get_results` | `(tru_session) → (records_df, feedback_df)` | Leaderboard DataFrames |
+All evaluation runs use the OTEL + Snowflake event table path — not the classic TruLens
+local feedback-function approach. This avoids Cortex REST 403 errors and keeps all
+computation inside Snowflake.
 
-**`CortexAnalystApp`** is the TruLens-instrumented wrapper class. The `@instrument`
-decorator on `ask()` tells TruApp to record its input (question) and output (answer).
-The class is intentionally thin — it delegates entirely to the `Probe`.
+| Step | What happens |
+|---|---|
+| `build_session` | Creates `SnowflakeConnector` → `TruSession` wired to Snowflake |
+| `build_tru_app` | Wraps `CortexAnalystApp` in `TruApp` (object_type=`EXTERNAL AGENT`) |
+| `build_metrics` | Returns `["answer_relevance", "correctness"]` — server-side metric names |
+| `run_evaluation` | Opens `live_run` context; each question is one instrumented invocation; polls until ingestion completes; triggers `run.compute_metrics()` |
+| `get_results` | Queries `SNOWFLAKE.LOCAL.GET_AI_OBSERVABILITY_EVENTS()` directly; pivots scores + explanations per question; falls back to TruLens `get_records_and_feedback` if needed |
+
+**`CortexAnalystApp`** is the TruLens-instrumented class. The `@instrument` decorator on
+`ask()` tells `TruApp` to record its input (question) and output (answer string).
 
 ```python
 class CortexAnalystApp:
@@ -329,76 +457,66 @@ class CortexAnalystApp:
         return self.probe.query(question).get("answer", "")
 ```
 
-**Feedback functions:**
+**Metrics:**
 
-| Name | Implementation | What it measures |
+| Metric | Computed by | What it measures |
 |---|---|---|
-| `answer_relevance` | `Cortex.relevance_with_cot_reasons` | Does the answer actually address the question? |
-| `answer_correctness` | `GroundTruthAgreement.agreement_measure` | Does the answer match the SQL-derived expected value? |
+| `answer_relevance` | Snowflake server-side | Does the answer address the question? |
+| `correctness` | Snowflake server-side | Does the answer match the ground truth? |
 
-Both use the `Cortex` provider — Snowflake's `COMPLETE()` function — so no external API
-keys are required. Model engine: `llama3.1-8b` for iteration, `mistral-large2` for final scoring.
-
-**TruLens logging path:**
+Both metrics are computed entirely inside Snowflake via `SYSTEM$EXECUTE_AI_OBSERVABILITY_RUN`.
+No local Cortex SDK calls. Results are visible in Snowsight → AI & ML → Evaluations.
 
 ```mermaid
 flowchart LR
     q["question"]
-    app["CortexAnalystApp.ask()"]
-    tru["TruApp context manager\n(with tru_app:)"]
-    rec["TruLens records\ninput + output + trace"]
-    fb["Feedback functions\nanswer_relevance\nanswer_correctness"]
-    conn["SnowflakeConnector"]
-    tbls["Snowflake tables\nTRULENS_RECORDS\nTRULENS_FEEDBACK_RESULTS"]
+    app["CortexAnalystApp.ask()\n@instrument"]
+    live["live_run context\n(TruApp)"]
+    otel["OTEL spans\n→ Snowflake event table"]
+    metrics["SYSTEM$EXECUTE_AI_OBSERVABILITY_RUN\nanswer_relevance + correctness"]
     ui["Snowsight\nAI & ML → Evaluations"]
+    df["feedback_df\n(scores + explanations)"]
 
-    q --> tru --> app --> rec
-    rec --> fb --> conn --> tbls --> ui
+    q --> live --> app --> otel --> metrics --> ui
+    metrics --> df
 ```
 
 
-### RefinementAgent — `weaver/refiner.py` (TODO)
+### RefinementAgent — `weaver/refiner.py`
 
-**Responsibility:** Read `feedback_df` from the latest evaluation run, identify systematic
-failure patterns, and produce a patched `SemanticModel`.
+**Responsibility:** Read `feedback_df` from the latest evaluation run, identify questions
+answered incorrectly, and produce a patched `SemanticModel` with improved synonyms and
+descriptions. Structural elements (table names, `base_table`, join columns, SQL expressions)
+are never modified.
 
-**Inputs:** `SemanticModel` (current), `feedback_df` (TruLens results)
-**Outputs:** `SemanticModel` (patched) or `None` (no further improvements possible)
+**Convergence check:** If mean `correctness` ≥ 0.65, returns `None` — the pipeline stops.
 
-**Failure patterns → patch actions:**
-
-| Pattern | Symptom | Patch |
-|---|---|---|
-| Missing synonym | Questions using colloquial terms return no SQL | Add synonyms to matching dimensions/measures |
-| Wrong join | Multi-table questions return wrong results | Fix `relationship_columns` in `Relationship` |
-| Unmapped measure | Aggregation questions return "I don't know" | Add or correct `Measure.expr` |
-| Wrong table used | Answer correct type but wrong data | Verify `base_table` mapping |
-| Time dimension absent | Date filter questions fail | Add `TimeDimension` for date columns |
-
-**LLM prompt strategy:** Feeds Cortex Arctic the current YAML plus a structured failure
-report (list of questions with low scores + their generated SQL + expected vs. actual
-answers) and asks for a targeted diff to the YAML.
+**Patch strategy:**
+- One Cortex `COMPLETE()` call per table (mistral-large2, temperature=0)
+- Prompt includes: current column definitions (name, type, description, synonyms) +
+  up to 10 failed questions with explanations from Snowsight
+- Response: `{"patches": {"COL": {"description": "...", "synonyms": [...]}}}` JSON
+- New synonyms are appended (deduplicated) to existing ones — never replaced
+- Tables with no applicable patches are left unchanged
 
 ```mermaid
 flowchart TD
-    fdf["feedback_df\n(low-score records)"]
-    model["SemanticModel\n(current)"]
-    report["failure report builder\ngroup by error pattern"]
-    prompt["Cortex Arctic prompt:\ncurrent YAML + failure report\n→ requested patches"]
-    arctic["Cortex Arctic\nmistral-large2"]
-    parse["parse YAML patch\nSemanticModel.from_yaml()"]
-    validate{"Pydantic\nvalid?"}
-    none["return None\n(converged)"]
+    fdf["feedback_df\n(correctness < 0.5 per question)"]
+    check{"mean correctness\n≥ 0.65?"}
+    none["return None\n(converged — stop loop)"]
+    report["build per-table prompt:\ncurrent YAML + failed questions\n+ Snowsight explanations"]
+    cortex["Cortex COMPLETE()\nmistral-large2\ntemperature=0"]
+    parse["parse patches JSON\n{col: {description, synonyms}}"]
+    apply["apply: append synonyms\nupdate descriptions\n(structure unchanged)"]
     out["patched SemanticModel"]
 
-    fdf --> report
-    model & report --> prompt --> arctic --> parse --> validate
-    validate -- "Yes" --> out
-    validate -- "No patch needed" --> none
+    fdf --> check
+    check -- "yes" --> none
+    check -- "no" --> report --> cortex --> parse --> apply --> out
 ```
 
 
-## DSL — `weaver/dsl.py` (implemented)
+## DSL — `weaver/dsl.py`
 
 The DSL is the single source of truth for what a valid Cortex Analyst semantic model
 looks like in Python. Every pipeline stage exchanges `SemanticModel` objects — never
@@ -416,6 +534,7 @@ classDiagram
         +verified_queries: list[VerifiedQuery]
         +to_yaml() str
         +from_yaml(text) SemanticModel
+        +from_yaml_file(path) SemanticModel
         +to_dict() dict
     }
 
@@ -423,6 +542,7 @@ classDiagram
         +name: str
         +description: str
         +base_table: BaseTable
+        +primary_key: PrimaryKey | None
         +dimensions: list[Dimension]
         +time_dimensions: list[TimeDimension]
         +measures: list[Measure]
@@ -490,7 +610,7 @@ classDiagram
 
 - `SemanticModel.to_yaml()` produces Cortex Analyst-compliant YAML (ready to POST)
 - Empty lists, empty strings, and `None` values are stripped from output
-- `schema_` Python field serialises as `schema` in YAML (avoids shadowing Pydantic's `.schema()`)
+- `schema_` Python field serialises as `schema` in YAML (avoids shadowing Pydantic `.schema()`)
 - `Measure.expr` must contain the aggregation function — `SUM(col)` not bare `col`
 - `TimeDimension.data_type` is validated to be `DATE`, `TIMESTAMP_NTZ/LTZ/TZ` only
 
@@ -510,19 +630,23 @@ flowchart TD
     DB[("Snowflake\ndatabase.schema")]
 
     DB -->|INFORMATION_SCHEMA| disc["SchemaDiscovery"]
+    DB -->|ACCOUNT_USAGE\n.QUERY_HISTORY| qh["QueryHistoryMiner"]
 
     disc -->|SchemaProfile| writer["YAMLWriter"]
     disc -->|SchemaProfile| scen["ScenarioGenerator"]
 
+    writer -->|SemanticModel| enrich["SynonymEnricher"]
+    qh -->|QueryTerms| enrich
+
     DB -->|direct SQL execution| scen
 
-    writer -->|SemanticModel| probe["CortexAnalystProbe"]
+    enrich -->|SemanticModel.enriched| probe["CortexAnalystProbe"]
     scen -->|questions| probe
     scen -->|golden_set| eval["Evaluator"]
 
     probe -->|ProbeResult per question| eval
 
-    eval -->|feedback_df| refiner["RefinementAgent"]
+    eval -->|feedback_df\n(scores + explanations)| refiner["RefinementAgent"]
     refiner -->|patched SemanticModel| probe
 ```
 
@@ -532,12 +656,14 @@ flowchart TD
 |---|---|---|---|
 | `SchemaDiscovery` | `YAMLWriter` | `SchemaProfile` dict | `tables[].columns`, `fk_candidates` |
 | `SchemaDiscovery` | `ScenarioGenerator` | `SchemaProfile` dict | `tables[].columns`, `row_count` |
-| `YAMLWriter` | `CortexAnalystProbe` | `SemanticModel` | `.to_yaml()` for API POST |
+| `QueryHistoryMiner` | `SynonymEnricher` | `QueryTerms` dict | `{table: {col: [phrase]}}` |
+| `YAMLWriter` | `SynonymEnricher` | `SemanticModel` | dimensions, measures, time_dimensions |
+| `SynonymEnricher` | `CortexAnalystProbe` | `SemanticModel` | `.to_yaml()` for API POST |
 | `ScenarioGenerator` | `Evaluator` | `golden_set` | `[{"query", "expected_response"}]` |
 | `ScenarioGenerator` | `CortexAnalystProbe` | `questions` | `list[str]` |
 | `CortexAnalystProbe` | `Evaluator` | `ProbeResult` | `{"answer", "sql", "success"}` |
-| `Evaluator` | `RefinementAgent` | `feedback_df` | `answer_relevance`, `answer_correctness`, `input`, `output` |
-| `RefinementAgent` | `CortexAnalystProbe` | `SemanticModel` | patched YAML for next iteration |
+| `Evaluator` | `RefinementAgent` | `feedback_df` | `correctness`, `correctness_explanation`, `input` |
+| `RefinementAgent` | `CortexAnalystProbe` | `SemanticModel` | patched synonyms + descriptions |
 
 
 ## Snowflake platform integration
@@ -546,7 +672,9 @@ flowchart TD
 flowchart LR
     subgraph weaver["Semantic Model Weaver (local Python)"]
         disc2["SchemaDiscovery"]
+        qh2["QueryHistoryMiner"]
         writer2["YAMLWriter"]
+        enrich2["SynonymEnricher"]
         scen2["ScenarioGenerator"]
         probe2["CortexAnalystProbe"]
         eval2["Evaluator"]
@@ -555,21 +683,24 @@ flowchart LR
 
     subgraph snowflake2["Snowflake"]
         IS2["INFORMATION_SCHEMA"]
+        AU["ACCOUNT_USAGE\n.QUERY_HISTORY"]
         RAW["Raw tables\n(marketplace data)"]
-        ARC2["Cortex Arctic\nCOMPLETE()"]
+        CX["CORTEX.COMPLETE()\nmistral-large2"]
         CA2["Cortex Analyst\nREST API"]
-        TL2["TRULENS_RECORDS\nTRULENS_FEEDBACK_RESULTS"]
-        SS["Snowsight\nAI Observability"]
+        ET["Event Table\n(OTEL spans)"]
+        OBS["AI Observability\nSYSTEM$EXECUTE_AI_OBSERVABILITY_RUN"]
+        SS["Snowsight\nAI & ML → Evaluations"]
     end
 
     disc2 -->|Snowpark| IS2
+    qh2 -->|Snowpark SQL| AU
     scen2 -->|Snowpark execute| RAW
-    writer2 -->|snowflake.cortex.complete| ARC2
-    scen2 -->|snowflake.cortex.complete| ARC2
-    refiner2 -->|snowflake.cortex.complete| ARC2
+    enrich2 -->|CORTEX.COMPLETE| CX
+    scen2 -->|CORTEX.COMPLETE| CX
+    refiner2 -->|CORTEX.COMPLETE| CX
     probe2 -->|HTTPS REST| CA2
-    eval2 -->|SnowflakeConnector| TL2
-    TL2 --> SS
+    eval2 -->|OTEL spans| ET
+    ET --> OBS --> SS
 ```
 
 All Snowflake calls share a single `snowflake.snowpark.Session` created at startup
@@ -582,28 +713,35 @@ Cortex Analyst REST API (no separate auth).
 ```
 semantic-model-weaver/
 ├── weaver/
-│   ├── __main__.py       CLI entry point + pipeline orchestrator
-│   ├── dsl.py            SemanticModel Pydantic DSL (implemented)
-│   ├── evaluator.py      TruLens wrapper: CortexAnalystApp, feedbacks, run loop (implemented)
-│   ├── discovery.py      SchemaDiscovery — Snowpark INFORMATION_SCHEMA profiling (TODO)
-│   ├── writer.py         YAMLWriter — Cortex Arctic semantic YAML generation (TODO)
-│   ├── scenarios.py      ScenarioGenerator — NL questions + ground truth SQL (TODO)
-│   ├── probe.py          CortexAnalystProbe — REST API test harness (TODO)
-│   └── refiner.py        RefinementAgent — YAML patching loop (TODO)
+│   ├── __main__.py         CLI entry point + pipeline orchestrator + checkpoint/resume
+│   ├── dsl.py              SemanticModel Pydantic DSL
+│   ├── discovery.py        SchemaDiscovery — Snowpark INFORMATION_SCHEMA profiling
+│   ├── writer.py           YAMLWriter — rule-based semantic model construction
+│   ├── query_history.py    QueryHistoryMiner — ACCOUNT_USAGE business vocab extraction
+│   ├── enricher.py         SynonymEnricher — Cortex-powered description + synonym enrichment
+│   ├── scenarios.py        ScenarioGenerator — NL questions + ground truth SQL execution
+│   ├── probe.py            CortexAnalystProbe — Cortex Analyst REST API test harness
+│   ├── evaluator.py        Evaluator — TruLens OTEL wrapper + Snowflake AI Observability
+│   ├── refiner.py          RefinementAgent — YAML patching loop
+│   └── logger.py           Structured logging helpers
 ├── tests/
-│   ├── test_dsl.py                unit — DSL serialisation, validators
-│   ├── test_evaluator.py          unit — TruLens wiring, probe delegation (22 tests)
-│   └── test_cortex_analyst_api.py integration — live Cortex Analyst API acceptance
+│   ├── test_dsl.py                    unit — DSL serialisation, validators (22 tests)
+│   ├── test_evaluator.py              unit — TruLens wiring, probe delegation (22 tests)
+│   └── test_cortex_analyst_api.py     integration — live Cortex Analyst API acceptance (4 tests)
+├── manifest/
+│   └── {DATABASE}.{SCHEMA}/
+│       └── {timestamp}/               pipeline run artifacts (yaml, synonyms, scenarios)
 ├── examples/
 │   └── streamlit-on-snowflake/
 │       └── manifest/
-│           └── nti_model.yaml     Reference hand-crafted YAML (NTI — KOSPI/KOSDAQ)
+│           └── nti_model.yaml         reference hand-crafted YAML (NTI — KOSPI/KOSDAQ)
+├── example-queries.sql                seed queries for all 4 benchmark datasets
 ├── .claude/
-│   ├── architecture/ARCHITECTURE.md  this file
-│   ├── info/                         hackathon context, datasets, criteria
-│   └── whoami/ME.md                  developer background
-├── pyproject.toml                    uv project config + dependencies
-└── CLAUDE.md                         project guidance for Claude Code
+│   ├── architecture/ARCHITECTURE.md   this file
+│   ├── info/                          hackathon context, datasets, criteria
+│   └── whoami/ME.md                   developer background
+├── pyproject.toml                     uv project config + dependencies
+└── CLAUDE.md                          project guidance for Claude Code
 ```
 
 
@@ -612,15 +750,15 @@ semantic-model-weaver/
 | Component | File | Status |
 |---|---|---|
 | `SemanticModel` DSL | `weaver/dsl.py` | Done |
-| `Evaluator` + TruLens wiring | `weaver/evaluator.py` | Done |
-| CLI + pipeline skeleton | `weaver/__main__.py` | Done (stubs wired) |
+| `SchemaDiscovery` | `weaver/discovery.py` | Done |
+| `YAMLWriter` | `weaver/writer.py` | Done |
+| `QueryHistoryMiner` | `weaver/query_history.py` | Done |
+| `SynonymEnricher` | `weaver/enricher.py` | Done |
+| `ScenarioGenerator` | `weaver/scenarios.py` | Done |
+| `CortexAnalystProbe` | `weaver/probe.py` | Done |
+| `Evaluator` + TruLens OTEL wiring | `weaver/evaluator.py` | Done |
+| `RefinementAgent` | `weaver/refiner.py` | Done |
+| CLI + pipeline orchestrator + resume | `weaver/__main__.py` | Done |
 | DSL unit tests | `tests/test_dsl.py` | Done (22 tests) |
 | Evaluator unit tests | `tests/test_evaluator.py` | Done (22 tests) |
 | Cortex Analyst API integration tests | `tests/test_cortex_analyst_api.py` | Done (4 tests) |
-| `SchemaDiscovery` | `weaver/discovery.py` | TODO |
-| `YAMLWriter` | `weaver/writer.py` | TODO |
-| `ScenarioGenerator` | `weaver/scenarios.py` | TODO |
-| `CortexAnalystProbe` | `weaver/probe.py` | TODO |
-| `RefinementAgent` | `weaver/refiner.py` | TODO |
-
-**Build order:** `scenarios.py` → `probe.py` → evaluator already done → `discovery.py` → `writer.py` → `refiner.py`

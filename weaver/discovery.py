@@ -173,7 +173,7 @@ class SchemaDiscovery:
                 COALESCE(row_count, 0) AS row_count
             FROM {database}.INFORMATION_SCHEMA.TABLES
             WHERE table_schema = '{schema}'
-              AND table_type   = 'BASE TABLE'
+              AND table_type   IN ('BASE TABLE', 'VIEW')
             ORDER BY table_name
         """).collect()
         return [

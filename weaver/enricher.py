@@ -36,7 +36,7 @@ _KNOWN_DATA_TYPES = {
 }
 
 _SYSTEM_PROMPT = (
-    "You are a data dictionary assistant for a financial analytics platform. "
+    "You are a data dictionary assistant for a Korean analytics platform. "
     "Given a database table and its columns, output ONLY a JSON object. "
     "No prose, no markdown fences, no explanation — just the JSON."
 )
@@ -49,11 +49,14 @@ def _build_prompt(table: SemanticTable, query_terms: QueryTerms) -> str:
         f"Table: {table.name}",
         "",
         "For each column below, provide:",
-        "  - description: a concise business definition (1 sentence)",
-        "  - synonyms: 2-4 natural-language phrases an analyst would type to refer to this column",
+        "  - description: a concise business definition (1 sentence, in English)",
+        "  - synonyms: 3-6 natural-language phrases an analyst would type to refer to this column",
+        "              Include BOTH English phrases AND Korean (한국어) equivalents.",
+        "              Example for a trade volume column: ['trade volume', 'trading volume', '거래량', '거래대금']",
         "",
         "RULES:",
-        "  - Synonyms MUST be human-readable business phrases (e.g. 'stock code', 'trade volume')",
+        "  - Synonyms MUST be human-readable business phrases",
+        "  - Always include at least 1-2 Korean synonyms per column when the meaning is clear",
         "  - Do NOT use raw data values as synonyms (e.g. 'KR7225570001', 'A225570')",
         "  - Do NOT use SQL identifiers or column names as synonyms",
         "  - Do NOT use data type names as descriptions",

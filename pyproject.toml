@@ -10,6 +10,7 @@ dependencies = [
     "pyyaml>=6.0.3",
     "rich>=13.9.4",
     "snowflake-snowpark-python",
+    "streamlit>=1.56.0",
     "trulens-connectors-snowflake",
     "trulens-core",
     "trulens-feedback",
@@ -39,8 +40,3 @@ markers = [
 log_cli = true
 log_cli_level = "INFO"
 
-[tool.uv.sources]
-trulens-core = { path = "../trulens/src/core" }
-trulens-feedback = { path = "../trulens/src/feedback" }
-trulens-connectors-snowflake = { path = "../trulens/src/connectors/snowflake" }
-trulens-providers-cortex = { path = "../trulens/src/providers/cortex" }

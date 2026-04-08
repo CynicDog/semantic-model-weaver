@@ -7,18 +7,68 @@ Actions
   --reset-workspace        Drop and recreate the TruLens schema. Clears all evaluation
                            records. Requires confirmation unless --yes is passed.
   --database X --schema Y  Run the full pipeline against a Snowflake dataset (default).
+  --iterations N           Max refinement iterations (default: 3).
+  --version TAG            TruLens app version tag (default: v1).
+  --resume RUN_DIR         Resume from a previous run directory. Stage is auto-detected
+                           from artifacts present in the directory.
 
-Pipeline stages (implemented stages are wired; stubs are marked TODO):
+Pipeline stages
+---------------
+  [SchemaDiscovery]      → SchemaProfile            weaver/discovery.py
+      Snowpark reads INFORMATION_SCHEMA; samples text/boolean columns;
+      infers FK candidates by name + type-family matching.
 
-  [SchemaDiscovery]    → schema_profile          (TODO: weaver/discovery.py)
-  [YAMLWriter]         → semantic_model (YAML)   (TODO: weaver/writer.py)
-  [ScenarioGenerator]  → golden_set, questions   (TODO: weaver/scenarios.py)
-  [EvalLogger+TruLens] → records_df, feedback_df (weaver/evaluator.py)
-  [RefinementAgent]    → refined semantic_model  (TODO: weaver/refiner.py)
+  [YAMLWriter]           → SemanticModel            weaver/writer.py
+      Rule-based (no LLM): classifies columns into dimensions / measures /
+      time_dimensions by type and name-suffix heuristics; builds relationships
+      from FK candidates.
+
+  [QueryHistoryMiner]    → QueryTerms               weaver/query_history.py
+      Mines SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY (90-day lookback, ≤1000
+      queries); extracts column aliases from historical SQL to build a business
+      vocabulary map {table → {col → [alias phrases]}}.
+
+  [SynonymEnricher]      → SemanticModel.enriched   weaver/enricher.py
+      Cortex COMPLETE() (mistral-large2) per table; descriptions + synonyms
+      grounded by QueryTerms; raw-value synonyms and type-echo descriptions
+      are filtered before applying.
+
+  [ScenarioGenerator]    → golden_set, questions    weaver/scenarios.py
+      Cortex COMPLETE() per table; 5 NL questions per table including joins;
+      ground-truth SQL executed directly against Snowflake via Snowpark.
+
+  loop until correctness >= 0.65 or iteration budget exhausted:
+    [CortexAnalystProbe]   → ProbeResult per question  weaver/probe.py
+        Cortex Analyst REST API; session-token auth; executes returned SQL
+        and formats top-5 rows as the answer string.
+
+    [Evaluator + TruLens]  → feedback_df               weaver/evaluator.py
+        TruLens live_run -> OTEL spans -> Snowflake event table; server-side
+        metrics (answer_relevance, correctness) via
+        SYSTEM$EXECUTE_AI_OBSERVABILITY_RUN; results in Snowsight AI & ML ->
+        Evaluations.
+
+    [VerifiedQuery promotion]
+        Questions with correctness >= 0.80 and a non-empty SQL are promoted
+        into SemanticModel.verified_queries to anchor future Cortex Analyst
+        SQL generation.
+
+    [RefinementAgent]      → SemanticModel (patched)   weaver/refiner.py
+        Cortex COMPLETE() per table; patches synonyms + descriptions only
+        (structure never changed); returns None on convergence.
+
+Checkpoint / resume
+-------------------
+  Artifacts are written to manifest/{DATABASE}.{SCHEMA}/{timestamp}/ after
+  each stage. --resume auto-detects the stage from whichever artifacts exist:
+    scenarios.json present          -> jump straight to evaluation loop
+    synonyms.json present           -> jump to scenario generation
+    model.yaml present              -> jump to enrichment
 """
 
 import logging
 import os
+import re
 import warnings
 
 from dotenv import load_dotenv
@@ -62,6 +112,79 @@ def _info(msg: str):
 
 def _warn(msg: str):
     console.print(f"  [yellow]![/yellow]  {msg}")
+
+
+_PIPELINE_FACES = ["(-.-)", "(o.o)", "(^.^)", "(~_~)", "(*.*)", "(^.^)", "(o.o)", "(-_-)"]
+
+
+class _PipelineDisplay:
+    """
+    Rich Live renderable: shows all pipeline steps upfront.
+
+    Pending steps are grayed out. The active step spins with an ASCII face
+    and shows elapsed time + overall progress %. Done steps get a ✓.
+    """
+
+    _BAR_W = 16
+
+    def __init__(self, steps: list[tuple[str, str]]) -> None:
+        self._steps = steps
+        self._total = len(steps)
+        self._status: dict[str, str] = {k: "pending" for k, _ in steps}
+        self._result: dict[str, str] = {}
+        self._done = 0
+        self._frame = 0
+        self._t0: dict[str, float] = {}
+        self._duration: dict[str, float] = {}
+
+    def start(self, key: str) -> None:
+        import time
+        self._status[key] = "active"
+        self._t0[key] = time.monotonic()
+
+    def complete(self, key: str, result: str = "") -> None:
+        import time
+        self._status[key] = "done"
+        self._result[key] = result
+        self._done += 1
+        self._duration[key] = time.monotonic() - self._t0.get(key, time.monotonic())
+
+    def __rich__(self) -> object:
+        import time
+        from rich.console import Group
+        from rich.text import Text
+
+        self._frame = (self._frame + 1) % len(_PIPELINE_FACES)
+        face = _PIPELINE_FACES[self._frame]
+        pct = int(self._done / self._total * 100) if self._total else 0
+        filled = round(pct / 100 * self._BAR_W)
+        bar = "━" * filled + ("╸" if filled < self._BAR_W else "") + "─" * max(0, self._BAR_W - filled - 1)
+
+        lines: list[Text] = [Text()]
+        for key, label in self._steps:
+            s = self._status[key]
+            res = self._result.get(key, "")
+            t = Text()
+            if s == "done":
+                t.append("  ✓  ", style="bold green")
+                t.append(label, style="white")
+                dur = self._duration.get(key, 0)
+                if res:
+                    t.append(f"  {res}", style="dim")
+                t.append(f"  {dur:.0f}s", style="dim")
+            elif s == "active":
+                elapsed = time.monotonic() - self._t0.get(key, time.monotonic())
+                t.append(f"  {face}  ", style="bold cyan")
+                t.append(label, style="bold white")
+                t.append(f"  [{bar}] {pct}%  {elapsed:.0f}s", style="cyan")
+            else:
+                t.append("  ·  ", style="dim")
+                t.append(label, style="dim")
+            lines.append(t)
+
+        lines.append(Text())
+        return Group(*lines)
+
 
 
 def _session(with_database: bool = True):
@@ -197,47 +320,159 @@ def _dump_synonyms(run_dir, semantic_model, suffix: str = "") -> str:
     return str(path)
 
 
-def _run_pipeline(database: str, schema: str, iterations: int, version: str):
-    import time as _time
+def _promote_verified_queries(
+    semantic_model: "SemanticModel",
+    feedback_df: "Any",
+    probe_results: dict,
+    version: str,
+    threshold: float = 0.8,
+) -> "SemanticModel":
+    """
+    Promote high-correctness question+SQL pairs into SemanticModel.verified_queries.
+
+    A question is promoted when its correctness score is >= threshold AND the probe
+    returned a non-empty SQL string for it. Already-verified questions (by question
+    text) are not duplicated.
+    """
+    import datetime
+
+    from weaver.dsl import VerifiedQuery
+
+    if feedback_df.empty or "correctness" not in feedback_df.columns or "input" not in feedback_df.columns:
+        return semantic_model, 0
+
+    passing = feedback_df[feedback_df["correctness"] >= threshold]
+    if passing.empty:
+        return semantic_model, 0
+
+    existing_questions = {vq.question for vq in semantic_model.verified_queries}
+    now = int(datetime.datetime.now(datetime.UTC).timestamp())
+    new_vqs = list(semantic_model.verified_queries)
+
+    for _, row in passing.iterrows():
+        question = row["input"]
+        if question in existing_questions:
+            continue
+        result = probe_results.get(question, {})
+        sql = result.get("sql") or ""
+        if not sql:
+            continue
+        slug = re.sub(r"[^a-z0-9]+", "_", question.lower())[:48].strip("_")
+        new_vqs.append(VerifiedQuery(
+            name=slug,
+            question=question,
+            sql=sql,
+            verified_at=now,
+            verified_by=f"weaver/{version}",
+        ))
+        existing_questions.add(question)
+
+    added = len(new_vqs) - len(semantic_model.verified_queries)
+    return semantic_model.model_copy(update={"verified_queries": new_vqs}), added
+
+
+def _best_model_yaml(run_dir: "pathlib.Path") -> "pathlib.Path | None":
+    """Return the most refined model YAML in run_dir (final > iter{N} > enriched > base)."""
+    import pathlib
+    if (run_dir / "model.final.yaml").exists():
+        return run_dir / "model.final.yaml"
+    iter_models = sorted(
+        run_dir.glob("model.iter*.yaml"),
+        key=lambda p: int(p.stem.split("iter")[1]) if p.stem.split("iter")[1].isdigit() else 0,
+    )
+    if iter_models:
+        return iter_models[-1]
+    for name in ("model.enriched.yaml", "model.yaml"):
+        if (run_dir / name).exists():
+            return run_dir / name
+    return None
+
+
+def _detect_checkpoint(run_dir: "pathlib.Path") -> dict:
+    """
+    Scan a run dir and return what stage to resume from.
+
+    Stages:
+      "enrichment"  — model.yaml exists; re-run enrichment → scenarios → evaluation
+      "scenarios"   — model.enriched.yaml + synonyms.json; skip to scenario generation
+      "evaluation"  — scenarios.json + any model YAML; skip straight to evaluation loop
+    """
+    model_path = _best_model_yaml(run_dir)
+    scenarios_path = run_dir / "scenarios.json"
+
+    if scenarios_path.exists() and model_path:
+        return {"stage": "evaluation", "model_path": model_path, "scenarios_path": scenarios_path}
+
+    enriched_path = run_dir / "model.enriched.yaml"
+    if enriched_path.exists() and (run_dir / "synonyms.json").exists():
+        return {"stage": "scenarios", "model_path": enriched_path, "scenarios_path": None}
+
+    if model_path:
+        return {"stage": "enrichment", "model_path": model_path, "scenarios_path": None}
+
+    raise ValueError(f"no checkpoint artifacts found in {run_dir}")
+
+
+def _load_scenarios(path: "pathlib.Path") -> "tuple[list, list]":
+    import json
+    data = json.loads(path.read_text(encoding="utf-8"))
+    golden_set = data.get("golden_set", [])
+    questions = data.get("questions", [])
+    return golden_set, questions
+
+
+def _silence_third_party_loggers() -> None:
+    """Silence all third-party and internal loggers after they have been imported."""
+    _blocked_prefixes = (
+        "trulens", "alembic", "snowflake.connector", "snowflake.snowpark",
+        "weaver.discovery", "weaver.writer", "weaver.query_history",
+        "weaver.enricher", "weaver.scenarios", "weaver.probe",
+        "weaver.evaluator", "weaver.refiner",
+    )
+    for name in list(logging.Logger.manager.loggerDict.keys()):
+        if any(name.startswith(p) for p in _blocked_prefixes):
+            logging.getLogger(name).setLevel(logging.ERROR)
+
+
+def _run_pipeline(
+    database: str,
+    schema: str,
+    iterations: int,
+    version: str,
+    resume_dir: "pathlib.Path | None" = None,
+):
+    import contextlib
     import datetime as _dt
-    timestamp = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-    version = f"{version}.{timestamp}"
-    run_dir = _run_dir(database, schema, timestamp)
-    _info(f"target: [bold]{database}.{schema}[/bold]  version: [bold]{version}[/bold]  iterations: [bold]{iterations}[/bold]")
-    _info(f"manifest: [bold]{run_dir}[/bold]")
+    import io
+    import pathlib
+
+    from rich.live import Live
+    from weaver.dsl import SemanticModel
+
+    if resume_dir:
+        ckpt = _detect_checkpoint(resume_dir)
+        stage = ckpt["stage"]
+        run_dir = resume_dir
+        resume_ts = resume_dir.name
+        timestamp = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+        version = f"{version}.{resume_ts}.r{timestamp}"
+    else:
+        stage = "from_scratch"
+        ckpt = {}
+        timestamp = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+        version = f"{version}.{timestamp}"
+        run_dir = _run_dir(database, schema, timestamp)
+
+    console.print(f"  [dim]database[/dim]   [bold]{database}[/bold]  [dim]·[/dim]  [dim]schema[/dim]  [bold]{schema}[/bold]")
+    console.print(f"  [dim]version[/dim]    [bold]{version}[/bold]")
+    console.print(f"  [dim]manifest[/dim]   [dim]{run_dir}[/dim]")
+    if resume_dir:
+        _info(f"resuming from [bold]{stage}[/bold] stage  ·  model: [bold]{ckpt['model_path'].name}[/bold]")
+    console.print()
+
     session = _session(with_database=True)
 
-    from weaver.discovery import SchemaDiscovery
-    schema_profile = SchemaDiscovery(session).run(database, schema)
-    _ok(f"discovered [bold]{len(schema_profile['tables'])}[/bold] tables in [bold]{database}.{schema}[/bold]")
-
-    from weaver.writer import YAMLWriter
-    semantic_model = YAMLWriter(session).generate(schema_profile)
-    _ok(f"semantic model drafted — [bold]{len(semantic_model.tables)}[/bold] tables, [bold]{len(semantic_model.relationships)}[/bold] relationships")
-
-    yaml_path = _dump_yaml(run_dir, semantic_model)
-    _ok(f"YAML saved → [bold]{yaml_path}[/bold]")
-
-    from weaver.query_history import QueryHistoryMiner
-    query_terms = QueryHistoryMiner(session).mine(database, schema)
-    mined_count = sum(len(cols) for cols in query_terms.values())
-    if mined_count:
-        _ok(f"mined [bold]{mined_count}[/bold] business term entries from query history")
-    else:
-        _info("no query history found — enriching from column names only")
-
-    from weaver.enricher import SynonymEnricher
-    semantic_model = SynonymEnricher(session).enrich(semantic_model, query_terms=query_terms)
-    _ok(f"synonyms and descriptions enriched via Cortex")
-    syn_path = _dump_synonyms(run_dir, semantic_model)
-    _ok(f"synonyms saved → [bold]{syn_path}[/bold]")
-
-    from weaver.scenarios import ScenarioGenerator
-    golden_set, questions = ScenarioGenerator(session).generate(schema_profile)
-    _ok(f"generated [bold]{len(questions)}[/bold] evaluation scenarios")
-    scenarios_path = _dump_scenarios(run_dir, golden_set, questions)
-    _ok(f"scenarios saved → [bold]{scenarios_path}[/bold]")
-
+    # TruLens init before entering Live so stdout/stderr redirect is safe
     from weaver.evaluator import (
         CortexAnalystApp,
         build_metrics,
@@ -246,54 +481,146 @@ def _run_pipeline(database: str, schema: str, iterations: int, version: str):
         get_results,
         run_evaluation,
     )
+    _silence = io.StringIO()
+    with contextlib.redirect_stdout(_silence), contextlib.redirect_stderr(_silence):
+        tru_session, connector = build_session(session)
+    _silence_third_party_loggers()
 
-    tru_session, connector = build_session(session)
-    metrics = build_metrics(session, golden_set)
+    # Build the full step list upfront — all steps visible from the first frame
+    pre_steps: list[tuple[str, str]] = []
+    if stage != "evaluation":
+        pre_steps.append(("discovery", "Schema Discovery"))
+    pre_steps.append(("writer", "YAML Writer"))
+    if stage in ("from_scratch", "enrichment"):
+        pre_steps += [("history", "Query History"), ("enrich", "Synonym Enrichment")]
+    pre_steps.append(("scenarios", "Scenario Generation"))
 
-    for iteration in range(1, iterations + 1):
-        iter_version = f"{version}.iter{iteration}"
-        console.rule(f"[cyan]iteration {iteration} / {iterations}  ·  {iter_version}[/cyan]")
+    iter_steps: list[tuple[str, str]] = []
+    for i in range(1, iterations + 1):
+        iter_steps.append((f"probe_{i}", f"Probe + Evaluation    iter {i}"))
+        iter_steps.append((f"refine_{i}", f"Refinement Agent      iter {i}"))
 
-        from weaver.probe import CortexAnalystProbe
-        probe = CortexAnalystProbe(session, semantic_model.to_yaml())
+    display = _PipelineDisplay(pre_steps + iter_steps)
 
-        app = CortexAnalystApp(probe)
-        tru_app = build_tru_app(app, connector=connector, version=iter_version)
+    with Live(display, console=console, refresh_per_second=8, vertical_overflow="visible"):
 
-        run_evaluation(tru_app, app, questions, metrics, version=iter_version)
+        schema_profile = None
+        if stage != "evaluation":
+            display.start("discovery")
+            from weaver.discovery import SchemaDiscovery
+            schema_profile = SchemaDiscovery(session).run(database, schema)
+            n_fk = sum(len(t["fk_candidates"]) for t in schema_profile["tables"])
+            display.complete("discovery", f"{len(schema_profile['tables'])} tables · {n_fk} FK candidates")
 
-        records_df, feedback_df = get_results(tru_session, snowpark_session=session, version=iter_version)
-        mean_correctness = (
-            feedback_df["correctness"].mean() if "correctness" in feedback_df.columns else 0.0
-        )
-        _ok(f"scored [bold]{len(records_df)}[/bold] questions  ·  mean correctness: [bold]{mean_correctness:.2f}[/bold]")
+        display.start("writer")
+        if stage == "from_scratch":
+            from weaver.writer import YAMLWriter
+            semantic_model = YAMLWriter(session).generate(schema_profile)
+            _dump_yaml(run_dir, semantic_model)
+            display.complete("writer", f"{len(semantic_model.tables)} tables · {len(semantic_model.relationships)} relationships")
+        else:
+            semantic_model = SemanticModel.from_yaml_file(str(ckpt["model_path"]))
+            display.complete("writer", f"{len(semantic_model.tables)} tables from checkpoint")
 
-        from weaver.refiner import RefinementAgent
-        patch = RefinementAgent(session).refine(semantic_model, feedback_df)
-        if patch is None:
-            _info("no further refinements needed — stopping early")
-            break
-        semantic_model = patch
-        refined_path = _dump_yaml(run_dir, semantic_model, suffix=f".iter{iteration}")
-        _ok(f"refined YAML saved → [bold]{refined_path}[/bold]")
-        syn_path = _dump_synonyms(run_dir, semantic_model, suffix=f".iter{iteration}")
-        _ok(f"refined synonyms saved → [bold]{syn_path}[/bold]")
+        if stage in ("from_scratch", "enrichment"):
+            display.start("history")
+            from weaver.query_history import QueryHistoryMiner
+            query_terms = QueryHistoryMiner(session).mine(database, schema)
+            mined_count = sum(len(cols) for cols in query_terms.values())
+            if mined_count:
+                display.complete("history", f"{mined_count} terms across {len(query_terms)} tables")
+            else:
+                display.complete("history", "no history found — using column names only")
+
+            display.start("enrich")
+            from weaver.enricher import SynonymEnricher
+            semantic_model = SynonymEnricher(session).enrich(semantic_model, query_terms=query_terms)
+            enriched_path = _dump_yaml(run_dir, semantic_model, suffix=".enriched")
+            _dump_synonyms(run_dir, semantic_model)
+            display.complete("enrich", f"{len(semantic_model.tables)} tables enriched")
+
+        display.start("scenarios")
+        if stage in ("from_scratch", "enrichment", "scenarios"):
+            from weaver.scenarios import ScenarioGenerator
+            golden_set, questions = ScenarioGenerator(session).generate(schema_profile)
+            _dump_scenarios(run_dir, golden_set, questions)
+            display.complete("scenarios", f"{len(questions)} scenarios")
+        else:
+            golden_set, questions = _load_scenarios(ckpt["scenarios_path"])
+            display.complete("scenarios", f"{len(questions)} from checkpoint")
+
+        metrics = build_metrics(session, golden_set)
+
+        for iteration in range(1, iterations + 1):
+            iter_version = f"{version}.iter{iteration}"
+            pk, rk = f"probe_{iteration}", f"refine_{iteration}"
+
+            from weaver.probe import CortexAnalystProbe
+            probe = CortexAnalystProbe(session, semantic_model.to_yaml())
+            app = CortexAnalystApp(probe)
+            tru_app = build_tru_app(app, connector=connector, version=iter_version)
+
+            display.start(pk)
+            run_evaluation(tru_app, app, questions, metrics, version=iter_version)
+            records_df, feedback_df = get_results(tru_session, snowpark_session=session, version=iter_version)
+
+            mean_correctness = feedback_df["correctness"].mean() if "correctness" in feedback_df.columns else 0.0
+            mean_relevance = feedback_df["answer_relevance"].mean() if "answer_relevance" in feedback_df.columns else 0.0
+            semantic_model, promoted = _promote_verified_queries(
+                semantic_model, feedback_df, app.results, iter_version
+            )
+            probe_result = (
+                f"{len(records_df)} scored · correctness {mean_correctness:.2f} · relevance {mean_relevance:.2f}"
+                + (f" · {promoted} verified" if promoted else "")
+            )
+            display.complete(pk, probe_result)
+
+            display.start(rk)
+            from weaver.refiner import RefinementAgent
+            patch = RefinementAgent(session).refine(semantic_model, feedback_df)
+            if patch is None:
+                display.complete(rk, "converged")
+                for j in range(iteration + 1, iterations + 1):
+                    display.complete(f"probe_{j}", "—")
+                    display.complete(f"refine_{j}", "—")
+                break
+            semantic_model = patch
+            refined_path = _dump_yaml(run_dir, semantic_model, suffix=f".iter{iteration}")
+            _dump_synonyms(run_dir, semantic_model, suffix=f".iter{iteration}")
+            display.complete(rk, f"patched  →  {refined_path}")
 
     final_path = _dump_yaml(run_dir, semantic_model, suffix=".final")
-    _ok(f"final YAML → [bold]{final_path}[/bold]")
-
     console.print()
-    console.print("  [bold green]Done.[/bold green]  View results in [bold]Snowsight → AI & ML → Evaluations[/bold]")
+    console.rule(style="cyan dim")
+    _ok(f"final model  →  [bold]{final_path}[/bold]")
+    _info("view results in [bold]Snowsight → AI & ML → Evaluations[/bold]")
     console.print()
 
 
 def main():
     load_dotenv()
 
-    # Silence noisy Snowflake connector / Snowpark INFO logs
-    for noisy in ("snowflake.connector", "snowflake.snowpark"):
-        logging.getLogger(noisy).setLevel(logging.WARNING)
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
+    # Rich console is the UI — block all pipeline and third-party log output.
+    # A filter on the root handler catches every propagating child logger,
+    # regardless of when the logger is created (covers dynamic TruLens loggers).
+    _blocked_prefixes = (
+        "trulens", "alembic",
+        "snowflake.connector", "snowflake.snowpark",
+        "weaver.discovery", "weaver.writer", "weaver.query_history",
+        "weaver.enricher", "weaver.scenarios", "weaver.probe",
+        "weaver.evaluator", "weaver.refiner",
+    )
+
+    class _PipelineFilter(logging.Filter):
+        def filter(self, record: logging.LogRecord) -> bool:
+            return not any(record.name.startswith(p) for p in _blocked_prefixes)
+
+    _handler = logging.StreamHandler()
+    _handler.addFilter(_PipelineFilter())
+    _handler.setFormatter(logging.Formatter("%(levelname)s %(name)s %(message)s"))
+    logging.root.setLevel(logging.WARNING)
+    logging.root.handlers.clear()
+    logging.root.addHandler(_handler)
 
     import argparse
 
@@ -306,10 +633,21 @@ def main():
     parser.add_argument("--setup", action="store_true", help="Create workspace DB, schema, and network policy. Safe to re-run.")
     parser.add_argument("--reset-workspace", action="store_true", help="Drop and recreate the TruLens schema. Clears all evaluation records.")
     parser.add_argument("--yes", action="store_true", help="Skip confirmation prompt for --reset-workspace.")
-    parser.add_argument("--database", help="Snowflake database to weave a model for (required for pipeline run).")
-    parser.add_argument("--schema", help="Snowflake schema to weave a model for (required for pipeline run).")
+    parser.add_argument("--database", help="Snowflake database to weave a model for.")
+    parser.add_argument("--schema", help="Snowflake schema to weave a model for.")
     parser.add_argument("--iterations", type=int, default=3, help="Max refinement iterations (default: 3).")
     parser.add_argument("--version", default="v1", help="TruLens app version tag (default: v1).")
+    parser.add_argument(
+        "--resume",
+        metavar="RUN_DIR",
+        help=(
+            "Resume from a previous run directory, e.g. "
+            "manifest/NEXTRADE_EQUITY_MARKET_DATA.FIN/20260405_232125/. "
+            "The stage is detected automatically from the artifacts present: "
+            "scenarios.json → evaluation; synonyms.json → scenarios; model.yaml → enrichment. "
+            "--database and --schema are inferred from the path if not given."
+        ),
+    )
     args = parser.parse_args()
 
     if args.setup:
@@ -320,10 +658,27 @@ def main():
         _reset_workspace(yes=args.yes)
         return
 
-    if not args.database or not args.schema:
-        parser.error("--database and --schema are required to run the pipeline (or use --setup / --reset-workspace)")
+    import pathlib
 
-    _run_pipeline(args.database, args.schema, args.iterations, args.version)
+    resume_dir: pathlib.Path | None = None
+    if args.resume:
+        resume_dir = pathlib.Path(args.resume).resolve()
+        if not resume_dir.is_dir():
+            parser.error(f"--resume path does not exist or is not a directory: {resume_dir}")
+        # Infer database/schema from path (manifest/{DATABASE}.{SCHEMA}/{timestamp}/)
+        if not args.database or not args.schema:
+            db_schema_part = resume_dir.parent.name
+            if "." in db_schema_part:
+                inferred_db, inferred_schema = db_schema_part.split(".", 1)
+                args.database = args.database or inferred_db
+                args.schema = args.schema or inferred_schema
+            else:
+                parser.error("could not infer --database/--schema from resume path; provide them explicitly")
+
+    if not args.resume and (not args.database or not args.schema):
+        parser.error("--database and --schema are required (or use --resume / --setup / --reset-workspace)")
+
+    _run_pipeline(args.database, args.schema, args.iterations, args.version, resume_dir=resume_dir)
 
 
 if __name__ == "__main__":

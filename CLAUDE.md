@@ -21,30 +21,46 @@ The hackathon's four Marketplace datasets are not the domain. They are the bench
 ```
 [SchemaDiscovery]
     Snowpark — reads INFORMATION_SCHEMA, profiles columns,
-    samples data, infers FK candidates via column name/type matching.
+    samples text/boolean values (up to 5 distinct), infers FK candidates
+    via column name + type-family matching.
         ↓
 [YAMLWriter]
-    Cortex Arctic — drafts a Cortex Analyst-compliant semantic YAML:
-    tables, dimensions, measures, time_dimensions, synonyms, joins.
+    Rule-based (no LLM) — classifies columns into dimensions, measures, and
+    time_dimensions by type and name-suffix heuristics. Infers relationships
+    from FK candidates. Output is always structurally valid.
+        ↓
+[QueryHistoryMiner]
+    Mines SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY (90-day lookback, ≤1000 queries)
+    — extracts column aliases from historical SQL to build a business vocabulary
+    map {table → {col → [alias phrases]}} that grounds synonym enrichment.
+        ↓
+[SynonymEnricher]
+    Cortex COMPLETE() (mistral-large2) — one call per table, prompted with column
+    names/types/comments + query-history aliases. Writes descriptions and synonyms
+    only; no structural changes. Raw-value synonyms and type-echo descriptions are
+    filtered out before applying.
         ↓
 [ScenarioGenerator]
-    LLM — generates ~20 natural-language questions per table cluster
-    that *should* be answerable by the model (joins, aggregations, filters).
-    Also independently queries raw tables to compute ground truth answers.
+    Cortex COMPLETE() (mistral-large2) — generates 5 NL questions per table,
+    including related-table joins. Each question comes with a ground-truth SQL
+    executed directly against Snowflake (Snowpark). Failed SQL is dropped silently.
         ↓
 [CortexAnalystProbe]
-    Cortex Analyst REST API — fires each NL question with the draft YAML.
-    Captures: SQL generated, execution success, join count, result shape, answer.
+    Cortex Analyst REST API — fires each NL question with the current YAML.
+    Executes returned SQL via Snowpark and formats result as the answer string.
+    One probe instance per refinement iteration (YAML is swapped between iterations).
         ↓
-[EvalLogger + TruLens]
-    TruLens (Snowflake-incubated OSS, logs to Snowflake backend) — scores each
-    question on groundedness, relevance, and answer correctness vs. ground truth.
-    Ground truth = answers derived directly from raw table queries, not from any
-    hand-crafted YAML. TruLens dashboard is the primary UI.
+[Evaluator + TruLens OTEL]
+    TruLens live_run → OTEL spans → Snowflake event table.
+    Server-side metrics (answer_relevance, correctness) computed via
+    SYSTEM$EXECUTE_AI_OBSERVABILITY_RUN. Results visible in Snowsight → AI & ML → Evaluations.
+    get_results() queries GET_AI_OBSERVABILITY_EVENTS directly for scores + explanations.
         ↓
 [RefinementAgent]
-    Reads the failure report, patches the YAML (missing synonyms, wrong joins,
-    unmapped measures), loops back to [CortexAnalystProbe].
+    Reads failed questions (correctness < 0.5) + Snowsight explanations.
+    Cortex COMPLETE() per table → synonym + description patches (structure never changed).
+    Returns None when mean correctness ≥ 0.65 (convergence) or no failed questions remain.
+    Loops back to [CortexAnalystProbe].
 ```
 
 ## Ground Truth

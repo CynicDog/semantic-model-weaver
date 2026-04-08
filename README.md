@@ -114,11 +114,23 @@ cp .env.example .env
 # First time — create workspace database, schema, and network policy
 uv run python -m weaver --setup
 
-# Run the pipeline against a dataset
+# Korean equity market (Nextrade)
 uv run python -m weaver --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN
+
+# Apartment prices and population (Richgo)
+uv run python -m weaver --database KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA --schema HACKATHON_2025Q2
+
+# Floating population, consumption, and assets (SPH)
+uv run python -m weaver --database SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS --schema GRANDATA
+
+# Telecom subscription analytics (아정당)
+uv run python -m weaver --database SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION --schema TELECOM_INSIGHTS
 
 # Run with custom iteration count and version tag
 uv run python -m weaver --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN --iterations 5 --version v2
+
+# Resume a previous run from a checkpoint directory (stage auto-detected from artifacts)
+uv run python -m weaver --resume manifest/NEXTRADE_EQUITY_MARKET_DATA.FIN/20260406_202959/
 
 # Clear all evaluation records and start fresh
 uv run python -m weaver --reset-workspace
@@ -126,6 +138,42 @@ uv run python -m weaver --reset-workspace --yes   # skip confirmation prompt
 ```
 
 View results in **Snowsight → AI & ML → Evaluations** after a run completes.
+
+## Chat Apps
+
+Each dataset has a standalone Streamlit chat app that sends the generated semantic YAML to Cortex Analyst and renders results as interactive tables and charts.
+
+Copy the final model from a pipeline run into the app directory first:
+
+```bash
+cp manifest/NEXTRADE_EQUITY_MARKET_DATA.FIN/<timestamp>/model.final.yaml                                                                    examples/nextrade/model.yaml
+cp manifest/KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA.HACKATHON_2025Q2/<timestamp>/model.final.yaml                                    examples/korean_population/model.yaml
+cp manifest/SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS.GRANDATA/<timestamp>/model.final.yaml                       examples/seoul_floating_population/model.yaml
+cp manifest/SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION.TELECOM_INSIGHTS/<timestamp>/model.final.yaml  examples/telecom/model.yaml
+```
+
+Then run any app:
+
+```bash
+# 📈 넥스트레이드 — 한국 주식시장 데이터
+uv run streamlit run examples/nextrade/app.py
+       
+# 🏘️ Richgo — 한국 아파트 시세 및 인구 이동 데이터
+uv run streamlit run examples/korean_population/app.py
+
+# 🗺️ SPH / GranData — 서울 생활인구·소비·자산 데이터
+uv run streamlit run examples/seoul_floating_population/app.py
+
+# 📡 아정당 — 통신 계약·마케팅·콜센터 지역별 분석 데이터
+uv run streamlit run examples/telecom/app.py
+```
+
+Or override the model path without copying:
+
+```bash
+WEAVER_MODEL_YAML=manifest/NEXTRADE_EQUITY_MARKET_DATA.FIN/<timestamp>/model.final.yaml \
+  uv run --project examples/nextrade streamlit run examples/nextrade/app.py
+```
 
 ## Testing
 

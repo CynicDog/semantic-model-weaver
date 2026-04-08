@@ -178,7 +178,7 @@ class VerifiedQuery(BaseModel):
     name: str
     question: str
     sql: str
-    verified_at: str = ""
+    verified_at: int = 0  # Unix timestamp (int64) — required by Cortex Analyst YAML spec
     verified_by: str = ""
 
 

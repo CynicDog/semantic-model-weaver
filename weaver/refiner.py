@@ -29,11 +29,8 @@ from typing import TYPE_CHECKING
 from snowflake.snowpark import Session
 
 from weaver.dsl import (
-    Dimension,
-    Measure,
     SemanticModel,
     SemanticTable,
-    TimeDimension,
 )
 
 if TYPE_CHECKING:
@@ -42,7 +39,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 _MODEL = "mistral-large2"
-_CONVERGENCE_THRESHOLD = 0.85
+_CONVERGENCE_THRESHOLD = 0.65
 
 _SYSTEM_PROMPT = (
     "You are a semantic model editor. "
@@ -58,17 +55,30 @@ def _score_summary(feedback_df: pd.DataFrame) -> dict:
     return numeric.mean().to_dict()
 
 
-def _failed_questions(feedback_df: pd.DataFrame, threshold: float = 0.5) -> list[str]:
+def _failed_questions(
+    feedback_df: "pd.DataFrame", threshold: float = 0.5
+) -> list[dict]:
+    """Return list of {question, explanation} for questions below threshold."""
     if feedback_df.empty or "input" not in feedback_df.columns:
         return []
     col = "correctness" if "correctness" in feedback_df.columns else None
     if col is None:
         return []
     mask = feedback_df[col] < threshold
-    return feedback_df.loc[mask, "input"].tolist()
+    rows = feedback_df.loc[mask]
+    result = []
+    for _, row in rows.iterrows():
+        expl_col = "correctness_explanation"
+        explanation = ""
+        if expl_col in row.index and row[expl_col] and str(row[expl_col]) != "nan":
+            explanation = str(row[expl_col])
+        elif "answer_relevance_explanation" in row.index and row["answer_relevance_explanation"]:
+            explanation = str(row["answer_relevance_explanation"])
+        result.append({"question": row["input"], "explanation": explanation})
+    return result
 
 
-def _build_patch_prompt(table: SemanticTable, failed: list[str]) -> str:
+def _build_patch_prompt(table: SemanticTable, failed: list[dict]) -> str:
     col_lines = []
     for col in [*table.dimensions, *table.time_dimensions, *table.measures]:
         col_lines.append(f"  {col.name} ({col.data_type}) desc={col.description!r} synonyms={col.synonyms}")
@@ -83,13 +93,19 @@ def _build_patch_prompt(table: SemanticTable, failed: list[str]) -> str:
         },
     }
 
+    failure_lines = []
+    for item in failed[:10]:
+        failure_lines.append(f"  - {item['question']}")
+        if item.get("explanation"):
+            failure_lines.append(f"    Reason: {item['explanation']}")
+
     lines = [
         f"Table: {table.name}",
         "Current columns:",
         *col_lines,
         "",
         "The following analyst questions were answered incorrectly:",
-        *[f"  - {q}" for q in failed[:10]],
+        *failure_lines,
         "",
         "Suggest synonym and description improvements that would help Cortex Analyst",
         "understand these questions better. Do NOT change column names or SQL expressions.",
@@ -183,6 +199,8 @@ class RefinementAgent:
         if not failed:
             log.info("RefinementAgent: no failed questions to refine on")
             return None
+        n_with_expl = sum(1 for f in failed if f.get("explanation"))
+        log.info("RefinementAgent: %d failed questions (%d with explanations)", len(failed), n_with_expl)
 
         patched_tables = []
         for table in model.tables:
