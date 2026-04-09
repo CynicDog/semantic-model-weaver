@@ -1,0 +1,393 @@
+{
+  "ASSET_INCOME_INFO": {
+    "CITY_CODE": [
+      "city",
+      "city name",
+      "city identifier"
+    ],
+    "DISTRICT_CODE": [
+      "district",
+      "district name",
+      "district identifier",
+      "Seongbuk-gu",
+      "district code"
+    ],
+    "STANDARD_YEAR_MONTH": [
+      "year and month",
+      "date",
+      "year-month",
+      "year",
+      "month",
+      "standard year and month"
+    ],
+    "GENDER": [
+      "sex",
+      "gender type",
+      "gender category"
+    ],
+    "AGE_GROUP": [
+      "age range",
+      "age category",
+      "age bracket"
+    ],
+    "RATE_MODEL_GROUP_GENERAL_EMPLOYEE": [
+      "general employee ratio",
+      "general employees",
+      "general employee percentage",
+      "average income of general employees",
+      "general employee income"
+    ],
+    "AVERAGE_INCOME": [
+      "average income",
+      "annual income",
+      "income average"
+    ],
+    "TOTAL_SALES_USAGE_AMOUNT": [
+      "total card sales",
+      "credit sales amount",
+      "sales usage amount"
+    ]
+  },
+  "CARD_SALES_INFO": {
+    "PROVINCE_CODE": [
+      "province",
+      "region",
+      "area"
+    ],
+    "CITY_CODE": [
+      "city",
+      "district",
+      "gu"
+    ],
+    "DISTRICT_CODE": [
+      "gu",
+      "neighborhood",
+      "dong",
+      "Seongbuk-gu"
+    ],
+    "STANDARD_YEAR_MONTH": [
+      "year",
+      "month",
+      "date",
+      "period",
+      "2023"
+    ],
+    "CARD_TYPE": [
+      "card category",
+      "card classification",
+      "employee type",
+      "general employees"
+    ],
+    "WEEKDAY_WEEKEND": [
+      "day type",
+      "weekday or weekend"
+    ],
+    "GENDER": [
+      "sex",
+      "gender category"
+    ],
+    "AGE_GROUP": [
+      "age range",
+      "age bracket"
+    ],
+    "TIME_SLOT": [
+      "time of day",
+      "time period"
+    ],
+    "LIFESTYLE": [
+      "lifestyle category",
+      "lifestyle type"
+    ],
+    "TOTAL_SALES": [
+      "total card sales",
+      "total sales amount",
+      "income",
+      "revenue",
+      "average income"
+    ],
+    "TOTAL_COUNT": [
+      "total transaction count",
+      "total transactions"
+    ]
+  },
+  "CODE_MASTER": {
+    "CODE_ID": [
+      "code ID",
+      "code identifier",
+      "코드 ID",
+      "코드 식별자",
+      "employee ID",
+      "employee identifier",
+      "직원 ID",
+      "직원 식별자",
+      "employee code",
+      "employee code ID",
+      "직원 코드",
+      "직원 코드 ID"
+    ],
+    "CODE_NAME": [
+      "code name",
+      "code title",
+      "코드 이름",
+      "코드 명칭",
+      "employee name",
+      "employee title",
+      "직원 이름",
+      "직원 명칭",
+      "employee code name",
+      "직원 코드 이름"
+    ],
+    "SUB_CODE": [
+      "sub code",
+      "sub-code",
+      "하위 코드",
+      "서브 코드",
+      "income code",
+      "sales code",
+      "수입 코드",
+      "판매 코드",
+      "income sub-code",
+      "sales sub-code",
+      "수입 하위 코드",
+      "판매 하위 코드",
+      "general employees",
+      "일반 직원",
+      "employee income code",
+      "직원 수입 코드"
+    ],
+    "SUB_CODE_NAME": [
+      "sub-code name",
+      "sub code name",
+      "하위 코드 이름",
+      "서브 코드 명칭",
+      "income type",
+      "sales type",
+      "수입 유형",
+      "판매 유형",
+      "income sub-code name",
+      "sales sub-code name",
+      "수입 하위 코드 이름",
+      "판매 하위 코드 명칭"
+    ],
+    "USE_YN": [
+      "use flag",
+      "usage flag",
+      "사용 여부",
+      "사용 플래그",
+      "active flag",
+      "activity flag",
+      "활성 여부",
+      "활동 플래그",
+      "employee active flag",
+      "employee activity flag",
+      "직원 활성 여부",
+      "직원 활동 플래그",
+      "income active flag",
+      "income activity flag",
+      "수입 활성 여부",
+      "수입 활동 플래그"
+    ],
+    "REMARKS": [
+      "remarks",
+      "description",
+      "비고",
+      "설명",
+      "additional information",
+      "notes",
+      "추가 정보",
+      "메모",
+      "employee remarks",
+      "employee description",
+      "직원 비고",
+      "직원 설명",
+      "distinct remarks",
+      "unique remarks",
+      "고유 비고",
+      "고유 설명"
+    ],
+    "SORT_ORDER": [
+      "sort order",
+      "order",
+      "정렬 순서",
+      "순서",
+      "sequence",
+      "ranking",
+      "순위",
+      "순차",
+      "employee sort order",
+      "employee order",
+      "직원 정렬 순서",
+      "직원 순서"
+    ]
+  },
+  "FLOATING_POPULATION_INFO": {
+    "PROVINCE_CODE": [
+      "province code",
+      "province identifier",
+      "도 코드",
+      "도 식별자"
+    ],
+    "CITY_CODE": [
+      "city code",
+      "city identifier",
+      "시 코드",
+      "시 식별자"
+    ],
+    "DISTRICT_CODE": [
+      "district code",
+      "district identifier",
+      "구 코드",
+      "구 식별자",
+      "Seongbuk-gu",
+      "Jungnang-gu",
+      "district",
+      "district name",
+      "district area",
+      "district region"
+    ],
+    "STANDARD_YEAR_MONTH": [
+      "year and month",
+      "standard year month",
+      "연도 및 월",
+      "표준 연월",
+      "year",
+      "month",
+      "2023",
+      "year month",
+      "date",
+      "time period"
+    ],
+    "WEEKDAY_WEEKEND": [
+      "weekday or weekend",
+      "weekday weekend indicator",
+      "평일 및 주말 지표",
+      "평일 주말 구분"
+    ],
+    "GENDER": [
+      "gender",
+      "sex",
+      "성별",
+      "남녀",
+      "male",
+      "female"
+    ],
+    "AGE_GROUP": [
+      "age group",
+      "age range",
+      "연령대",
+      "연령 그룹",
+      "20-29"
+    ],
+    "TIME_SLOT": [
+      "time slot",
+      "time period",
+      "시간대",
+      "시간 구간",
+      "evening hours",
+      "evening"
+    ],
+    "RESIDENTIAL_POPULATION": [
+      "residential population",
+      "resident count",
+      "거주 인구",
+      "거주 인구수"
+    ],
+    "WORKING_POPULATION": [
+      "working population",
+      "worker count",
+      "근로 인구",
+      "근로 인구수"
+    ],
+    "VISITING_POPULATION": [
+      "visiting population",
+      "visitor count",
+      "방문 인구",
+      "방문 인구수"
+    ]
+  },
+  "M_SCCO_MST": {
+    "PROVINCE_CODE": [
+      "province code",
+      "province identifier",
+      "도 코드",
+      "도 식별자"
+    ],
+    "CITY_CODE": [
+      "city code",
+      "county code",
+      "district code",
+      "시군구 코드",
+      "시군구 식별자"
+    ],
+    "DISTRICT_CODE": [
+      "town code",
+      "township code",
+      "neighborhood code",
+      "읍면동 코드",
+      "읍면동 식별자"
+    ],
+    "PROVINCE_KOR_NAME": [
+      "province name",
+      "province name in Korean",
+      "도 이름",
+      "도 명칭"
+    ],
+    "CITY_KOR_NAME": [
+      "city name",
+      "county name",
+      "district name",
+      "시군구 이름",
+      "시군구 명칭",
+      "Seongbuk-gu",
+      "Jungnang-gu",
+      "city remarks",
+      "county remarks",
+      "district remarks",
+      "시군구 비고",
+      "시군구 설명"
+    ],
+    "DISTRICT_KOR_NAME": [
+      "town name",
+      "township name",
+      "neighborhood name",
+      "읍면동 이름",
+      "읍면동 명칭",
+      "Seongbuk-gu",
+      "Jungnang-gu",
+      "remarks",
+      "district remarks",
+      "town remarks",
+      "township remarks",
+      "neighborhood remarks",
+      "읍면동 비고",
+      "읍면동 설명"
+    ],
+    "PROVINCE_ENG_NAME": [
+      "province name in English",
+      "province English name",
+      "도 영문 이름",
+      "도 영문 명칭"
+    ],
+    "CITY_ENG_NAME": [
+      "city name in English",
+      "county name in English",
+      "district name in English",
+      "시군구 영문 이름",
+      "시군구 영문 명칭"
+    ],
+    "DISTRICT_ENG_NAME": [
+      "town name in English",
+      "township name in English",
+      "neighborhood name in English",
+      "읍면동 영문 이름",
+      "읍면동 영문 명칭"
+    ],
+    "DISTRICT_GEOM": [
+      "district polygon",
+      "town polygon",
+      "neighborhood polygon",
+      "읍면동 폴리곤",
+      "읍면동 경계"
+    ]
+  }
+}

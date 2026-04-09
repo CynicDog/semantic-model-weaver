@@ -1,0 +1,1133 @@
+{
+  "V01_MONTHLY_REGIONAL_CONTRACT_STATS": {
+    "INSTALL_STATE": [
+      "installation state",
+      "installation province",
+      "설치 주소 시도",
+      "설치 주소 도",
+      "state",
+      "province",
+      "경기도",
+      "서울특별시"
+    ],
+    "INSTALL_CITY": [
+      "installation city",
+      "installation district",
+      "설치 주소 시군구",
+      "설치 주소 시",
+      "city",
+      "district"
+    ],
+    "MAIN_CATEGORY_NAME": [
+      "main product type",
+      "main category",
+      "주 상품 유형",
+      "주 상품 종류",
+      "product type",
+      "category",
+      "인터넷"
+    ],
+    "CONTRACT_COUNT": [
+      "total contracts",
+      "contract count",
+      "총 계약서 생성 건수",
+      "총 계약 건수",
+      "contracts",
+      "total contract count",
+      "total sessions",
+      "total call count"
+    ],
+    "CONSULT_REQUEST_COUNT": [
+      "consultation requests",
+      "consultation contracts",
+      "상담 요청 계약 건수",
+      "상담 요청 계약",
+      "consultation request count",
+      "consultation contracts count"
+    ],
+    "REGISTEND_COUNT": [
+      "completed registrations",
+      "registration count",
+      "접수 완료 건수",
+      "접수 완료",
+      "registration completion count",
+      "registration completions"
+    ],
+    "OPEN_COUNT": [
+      "completed activations",
+      "activation count",
+      "개통 완료 건수",
+      "개통 완료",
+      "activation completion count",
+      "activation completions"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment count",
+      "지급 완료 건수",
+      "지급 완료",
+      "payment completion count",
+      "payment completions",
+      "completed contracts",
+      "payend"
+    ],
+    "OPEN_CVR": [
+      "activation conversion rate",
+      "open conversion rate",
+      "개통 완료 전환율",
+      "개통 전환율",
+      "activation rate",
+      "open rate",
+      "average conversion rate",
+      "open contracts"
+    ],
+    "PAYEND_CVR": [
+      "payment conversion rate",
+      "payend conversion rate",
+      "지급 완료 전환율",
+      "지급 전환율",
+      "payment rate",
+      "payend rate"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "average sales",
+      "평균 순매출",
+      "평균 매출",
+      "average net sales amount",
+      "average sales amount"
+    ],
+    "TOTAL_NET_SALES": [
+      "total net sales",
+      "total sales",
+      "총 순매출",
+      "총 매출",
+      "total net sales amount",
+      "total sales amount",
+      "total revenue"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation month",
+      "집계 기준 연월",
+      "집계 연월",
+      "year and month",
+      "aggregation year-month",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "January 2023",
+      "January 2025",
+      "year 2023"
+    ],
+    "REGISTEND_CVR": [
+      "registration conversion rate",
+      "registend conversion rate",
+      "접수 완료 전환율",
+      "접수 전환율",
+      "registration rate",
+      "registend rate"
+    ]
+  },
+  "V02_SERVICE_BUNDLE_PATTERNS": {
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "product category",
+      "상품 유형",
+      "상품 종류",
+      "main category",
+      "category",
+      "UTM source",
+      "UTM medium",
+      "device category",
+      "region"
+    ],
+    "BUNDLE_COMBINATION": [
+      "combination discount type",
+      "bundle type",
+      "결합 할인 유형",
+      "결합 종류명",
+      "discount type",
+      "bundle combination",
+      "UTM source and medium combination"
+    ],
+    "HAS_TV": [
+      "TV availability",
+      "TV combination",
+      "TV 결합 여부",
+      "TV 포함 여부",
+      "TV included",
+      "TV availability status"
+    ],
+    "HAS_PHONE": [
+      "internet phone availability",
+      "phone combination",
+      "인터넷전화 결합 여부",
+      "전화 포함 여부",
+      "phone included",
+      "internet phone availability status"
+    ],
+    "HAS_WIFI": [
+      "WiFi availability",
+      "WiFi combination",
+      "WiFi 결합 여부",
+      "WiFi 포함 여부",
+      "WiFi included",
+      "WiFi availability status"
+    ],
+    "CONTRACT_COUNT": [
+      "contract count",
+      "number of contracts",
+      "계약 건수",
+      "계약 수",
+      "total contracts",
+      "contracts",
+      "total sessions",
+      "total call count"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment completion count",
+      "지급 완료 건수",
+      "지급 완료 수",
+      "completed payment count",
+      "payments completed",
+      "payend"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "평균 순매출",
+      "순매출 평균",
+      "average sales",
+      "net sales",
+      "total revenue"
+    ],
+    "AVG_POLICY_AMOUNT": [
+      "average policy amount",
+      "policy amount average",
+      "평균 정책금 총액",
+      "정책금 평균",
+      "average policy total",
+      "policy amount"
+    ],
+    "YEAR_MONTH": [
+      "year and month",
+      "aggregation period",
+      "집계 기준 연월",
+      "기준 연월",
+      "year-month",
+      "aggregation base",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "month of January 2023",
+      "January 2025",
+      "year 2023"
+    ]
+  },
+  "V03_CONTRACT_FUNNEL_CONVERSION": {
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "product category",
+      "상품 유형",
+      "상품 카테고리",
+      "main category",
+      "category",
+      "UTM source",
+      "UTM medium",
+      "device category",
+      "region"
+    ],
+    "CONSULT_REQUEST_COUNT": [
+      "consultation requests",
+      "consultation count",
+      "상담 요청 건수",
+      "상담 요청 수"
+    ],
+    "REGISTEND_COUNT": [
+      "completed registrations",
+      "registration count",
+      "접수 완료 건수",
+      "접수 완료 수"
+    ],
+    "OPEN_COUNT": [
+      "completed activations",
+      "activation count",
+      "개통 완료 건수",
+      "개통 완료 수"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment count",
+      "지급 완료 건수",
+      "지급 완료 수",
+      "completed contracts",
+      "contracts completed",
+      "total contracts",
+      "total count",
+      "총 계약서 수",
+      "총 계약 수",
+      "total contract count",
+      "total number of contracts"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "집계 기간",
+      "time period",
+      "month",
+      "year",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "January 2023",
+      "January 2025",
+      "year 2023"
+    ],
+    "TOTAL_COUNT": [
+      "total contracts",
+      "total count",
+      "총 계약서 수",
+      "총 계약 수",
+      "total contract count",
+      "total number of contracts"
+    ],
+    "SUBSCRIPTION_COUNT": [
+      "subscriptions",
+      "subscription count",
+      "청약 건수",
+      "청약 수"
+    ],
+    "CVR_CONSULT_REQUEST": [
+      "consultation request conversion rate",
+      "consultation request CVR",
+      "상담 요청 전환율",
+      "상담 요청 CVR"
+    ],
+    "CVR_SUBSCRIPTION": [
+      "subscription conversion rate",
+      "subscription CVR",
+      "청약 전환율",
+      "청약 CVR"
+    ],
+    "CVR_REGISTEND": [
+      "completed registration conversion rate",
+      "registration CVR",
+      "접수 완료 전환율",
+      "접수 완료 CVR"
+    ],
+    "CVR_OPEN": [
+      "completed activation conversion rate",
+      "activation CVR",
+      "개통 완료 전환율",
+      "개통 완료 CVR",
+      "open conversion rate",
+      "open CVR",
+      "average conversion rate",
+      "average CVR"
+    ],
+    "CVR_PAYEND": [
+      "completed payment conversion rate",
+      "payment CVR",
+      "지급 완료 전환율",
+      "지급 완료 CVR"
+    ],
+    "OVERALL_CVR": [
+      "overall conversion rate",
+      "overall CVR",
+      "전체 전환율",
+      "전체 CVR"
+    ]
+  },
+  "V04_CHANNEL_CONTRACT_PERFORMANCE": {
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "product category",
+      "상품 유형",
+      "상품 카테고리",
+      "main category",
+      "category",
+      "UTM source",
+      "UTM medium",
+      "device category",
+      "region"
+    ],
+    "RECEIVE_PATH_NAME": [
+      "reception path",
+      "reception channel",
+      "접수 경로",
+      "접수 채널",
+      "receive path",
+      "channel",
+      "UTM source",
+      "UTM medium",
+      "device category",
+      "region"
+    ],
+    "INFLOW_PATH_NAME": [
+      "marketing inflow path",
+      "marketing channel",
+      "마케팅 유입 경로",
+      "마케팅 채널",
+      "inflow path",
+      "marketing path",
+      "UTM source",
+      "UTM medium",
+      "device category",
+      "region"
+    ],
+    "CONTRACT_COUNT": [
+      "total contracts",
+      "contract count",
+      "채널 총 계약 건수",
+      "계약 건수",
+      "contracts",
+      "total contract count",
+      "total sessions",
+      "total call count",
+      "total revenue"
+    ],
+    "REGISTEND_COUNT": [
+      "completed registrations",
+      "registration count",
+      "접수 완료 건수",
+      "접수 건수",
+      "registrations",
+      "completed registration count",
+      "total sessions",
+      "total call count",
+      "total revenue"
+    ],
+    "OPEN_COUNT": [
+      "completed activations",
+      "activation count",
+      "개통 완료 건수",
+      "개통 건수",
+      "activations",
+      "completed activation count",
+      "total sessions",
+      "total call count",
+      "total revenue"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment count",
+      "지급 완료 건수",
+      "지급 건수",
+      "payments",
+      "completed payment count",
+      "total sessions",
+      "total call count",
+      "total revenue"
+    ],
+    "OPEN_CVR": [
+      "activation conversion rate",
+      "open conversion rate",
+      "개통 완료 전환율",
+      "개통 전환율",
+      "open CVR",
+      "activation CVR",
+      "average conversion rate",
+      "connection rate"
+    ],
+    "PAYEND_CVR": [
+      "payment conversion rate",
+      "payend conversion rate",
+      "지급 완료 전환율",
+      "지급 전환율",
+      "payend CVR",
+      "payment CVR",
+      "average conversion rate",
+      "connection rate"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "평균 순매출",
+      "순매출 평균",
+      "average sales",
+      "net sales",
+      "total revenue"
+    ],
+    "TOTAL_NET_SALES": [
+      "total net sales",
+      "net sales total",
+      "총 순매출",
+      "순매출 총액",
+      "total sales",
+      "net sales",
+      "total revenue"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월",
+      "year and month",
+      "monthly period",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "January 2023",
+      "January 2025",
+      "year 2023"
+    ]
+  },
+  "V05_REGIONAL_NEW_INSTALL": {
+    "INSTALL_STATE": [
+      "installation state",
+      "state of installation",
+      "설치 주소 시도",
+      "설치 주소 도",
+      "state",
+      "region",
+      "main category",
+      "main categories"
+    ],
+    "INSTALL_CITY": [
+      "installation city",
+      "city of installation",
+      "설치 주소 시군구",
+      "설치 주소 시",
+      "city",
+      "district",
+      "region"
+    ],
+    "CONTRACT_COUNT": [
+      "internet contract count",
+      "total contracts",
+      "인터넷 계약 총 건수",
+      "계약 총 건수",
+      "contracts",
+      "total contract count",
+      "total sessions",
+      "total call count"
+    ],
+    "OPEN_COUNT": [
+      "completed installations",
+      "open count",
+      "개통 완료 건수",
+      "개통 건수",
+      "open contracts",
+      "completed contracts",
+      "open contracts in the '인터넷' category"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment completion count",
+      "지급 완료 건수",
+      "지급 건수",
+      "payments",
+      "completed payment count",
+      "contracts completed",
+      "payend"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "0 제외 평균 순매출",
+      "평균 순매출",
+      "average sales",
+      "net sales",
+      "total revenue"
+    ],
+    "YEAR_MONTH": [
+      "year and month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월",
+      "date",
+      "period",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "month of January 2023",
+      "January 2025",
+      "year 2023"
+    ],
+    "BUNDLE_COUNT": [
+      "bundled contracts",
+      "bundle count",
+      "TV/전화 등 결합 상품 계약 건수",
+      "결합 상품 계약 건수",
+      "bundled product contracts",
+      "bundle contracts"
+    ],
+    "STANDALONE_COUNT": [
+      "standalone contracts",
+      "standalone count",
+      "인터넷 단독 계약 건수",
+      "단독 계약 건수",
+      "standalone internet contracts",
+      "standalone contract count"
+    ]
+  },
+  "V06_RENTAL_CATEGORY_TRENDS": {
+    "INSTALL_STATE": [
+      "installation state",
+      "address state",
+      "설치 주소 시도",
+      "주소 상태",
+      "state",
+      "region",
+      "경기도",
+      "서울특별시"
+    ],
+    "RENTAL_MAIN_CATEGORY": [
+      "main rental category",
+      "rental main category",
+      "렌탈 대분류",
+      "주요 렌탈 카테고리",
+      "main category",
+      "category",
+      "인터넷"
+    ],
+    "RENTAL_SUB_CATEGORY": [
+      "rental sub-category",
+      "sub-category of rental",
+      "렌탈 소분류",
+      "브랜드/모델 계열",
+      "sub-category",
+      "brand",
+      "model"
+    ],
+    "CONTRACT_COUNT": [
+      "contract count",
+      "number of contracts",
+      "계약 건수",
+      "계약 수",
+      "total contracts",
+      "contracts",
+      "completed contracts"
+    ],
+    "OPEN_COUNT": [
+      "open count",
+      "completed activations",
+      "개통 완료 건수",
+      "개통 완료 수",
+      "activations",
+      "open contracts"
+    ],
+    "PAYEND_COUNT": [
+      "payend count",
+      "completed payments",
+      "지급 완료 건수",
+      "지급 완료 수",
+      "payments",
+      "completed contracts"
+    ],
+    "OPEN_CVR": [
+      "open conversion rate",
+      "activation completion rate",
+      "개통 완료 전환율",
+      "개통 전환율",
+      "conversion rate",
+      "open rate"
+    ],
+    "PAYEND_CVR": [
+      "payend conversion rate",
+      "payment completion rate",
+      "지급 완료 전환율",
+      "지급 전환율",
+      "payment rate",
+      "completion rate"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "평균 순매출",
+      "순매출 평균",
+      "net sales",
+      "average sales"
+    ],
+    "AVG_POLICY_AMOUNT": [
+      "average policy amount",
+      "policy amount average",
+      "평균 정책금 총액",
+      "정책금 평균",
+      "policy amount",
+      "average policy"
+    ],
+    "YEAR_MONTH": [
+      "year month",
+      "aggregation year-month",
+      "집계 기준 연월",
+      "연월",
+      "month",
+      "year",
+      "date",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "January 2023",
+      "January 2025",
+      "year 2023"
+    ]
+  },
+  "V07_GA4_MARKETING_ATTRIBUTION": {
+    "UTM_SOURCE": [
+      "UTM source",
+      "traffic source",
+      "소스",
+      "트래픽 소스"
+    ],
+    "UTM_MEDIUM": [
+      "UTM medium",
+      "traffic medium",
+      "매체",
+      "트래픽 매체"
+    ],
+    "YEAR_MONTH": [
+      "year month",
+      "aggregation period",
+      "연월",
+      "집계 기준 연월",
+      "month",
+      "year"
+    ],
+    "TOTAL_SESSIONS": [
+      "total sessions",
+      "session count",
+      "총 세션 수",
+      "세션 수",
+      "total call count",
+      "call count",
+      "total sessions for each device category"
+    ],
+    "TOTAL_USERS": [
+      "total users",
+      "user count",
+      "총 사용자 수",
+      "사용자 수",
+      "unique users",
+      "total unique users"
+    ],
+    "TOTAL_CONSULT_REQUESTS": [
+      "total consult requests",
+      "consultation requests",
+      "상담 요청 수",
+      "상담 요청 이벤트 수"
+    ],
+    "TOTAL_CONSULT_PHONE": [
+      "total phone consults",
+      "phone consultation clicks",
+      "전화 상담 클릭 수",
+      "전화 상담 수"
+    ],
+    "TOTAL_CONSULT_KAKAO": [
+      "total Kakao consults",
+      "Kakao consultation clicks",
+      "카카오 상담 클릭 수",
+      "카카오 상담 수"
+    ],
+    "TOTAL_CONSULT_CHANNELTALK": [
+      "total ChannelTalk consults",
+      "ChannelTalk consultation clicks",
+      "채널톡 상담 클릭 수",
+      "채널톡 상담 수"
+    ],
+    "TOTAL_CONTRACTS": [
+      "total contracts",
+      "contract count",
+      "계약 수",
+      "계약 건수",
+      "PAYEND_COUNT",
+      "payend",
+      "completed contracts",
+      "contracts completed"
+    ],
+    "CONSULT_CVR": [
+      "consult CVR",
+      "consultation conversion rate",
+      "상담 요청 전환율",
+      "상담 전환율",
+      "open conversion rate",
+      "OPEN_CVR",
+      "average conversion rate for open contracts"
+    ],
+    "CONTRACT_CVR": [
+      "contract CVR",
+      "contract conversion rate",
+      "계약 전환율",
+      "계약 전환율"
+    ],
+    "TOTAL_REVENUE": [
+      "total revenue",
+      "revenue amount",
+      "총 매출",
+      "매출액",
+      "total net sales",
+      "average net sales",
+      "total revenue generated"
+    ]
+  },
+  "V08_GA4_DEVICE_STATS": {
+    "DEVICE_CATEGORY": [
+      "device type",
+      "device category",
+      "디바이스 유형",
+      "디바이스 종류",
+      "기기 유형",
+      "main category",
+      "main categories"
+    ],
+    "YEAR_MONTH": [
+      "year month",
+      "aggregation period",
+      "연월",
+      "집계 기준 연월",
+      "기준 연월",
+      "last quarter",
+      "last 6 months",
+      "month of January 2023",
+      "last year",
+      "last quarter of 2022",
+      "each month of 2022",
+      "January 2025",
+      "January 2023"
+    ],
+    "SESSION_COUNT": [
+      "session count",
+      "total sessions",
+      "세션 수",
+      "총 세션 수",
+      "세션 총 수",
+      "total number of sessions",
+      "total sessions for each UTM source and medium combination",
+      "total number of sessions for each device category"
+    ],
+    "USER_COUNT": [
+      "user count",
+      "unique users",
+      "사용자 수",
+      "순 사용자 수",
+      "사용자 총 수"
+    ],
+    "CONVERSION_EVENT_COUNT": [
+      "conversion event count",
+      "total conversions",
+      "전환 이벤트 수",
+      "전환 이벤트 총 수",
+      "전환 총 수",
+      "contracts completed",
+      "PAYEND_COUNT",
+      "payend",
+      "open contracts",
+      "OPEN_CVR",
+      "open conversion rate"
+    ],
+    "CONVERSION_RATE": [
+      "conversion rate",
+      "conversion percentage",
+      "전환율",
+      "전환률",
+      "전환 비율",
+      "average conversion rate",
+      "conversion rate for open contracts"
+    ]
+  },
+  "V09_MONTHLY_CALL_STATS": {
+    "DIVISION_NAME": [
+      "call direction",
+      "inbound/outbound",
+      "통화 방향",
+      "수신/발신",
+      "contract direction",
+      "contract type",
+      "contracts completed",
+      "payend"
+    ],
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "consultation category",
+      "상담 상품 유형",
+      "인터넷",
+      "렌탈",
+      "모바일",
+      "main category",
+      "category",
+      "product category",
+      "UTM source",
+      "UTM medium",
+      "device category",
+      "regions"
+    ],
+    "CALL_COUNT": [
+      "total calls",
+      "call attempts",
+      "총 통화 시도 건수",
+      "통화 시도",
+      "total call count",
+      "call count",
+      "total sessions",
+      "total revenue"
+    ],
+    "AVG_BILL_SECOND": [
+      "average billing time",
+      "average call duration",
+      "평균 과금 시간",
+      "평균 통화 시간",
+      "average billing time in seconds",
+      "average call duration in seconds",
+      "average conversion rate"
+    ],
+    "AVG_BILL_MINUTE": [
+      "average billing time in minutes",
+      "average call duration in minutes",
+      "평균 과금 시간 (분)",
+      "평균 통화 시간 (분)"
+    ],
+    "CONNECTED_COUNT": [
+      "successful calls",
+      "connected calls",
+      "통화 연결 성공 건수",
+      "연결 성공",
+      "successful connections",
+      "connected count",
+      "unique users",
+      "total users"
+    ],
+    "UNCONNECTED_COUNT": [
+      "failed calls",
+      "unconnected calls",
+      "통화 연결 실패 건수",
+      "연결 실패",
+      "failed connections",
+      "unconnected count"
+    ],
+    "CONNECTION_RATE": [
+      "connection rate",
+      "call success rate",
+      "통화 연결률",
+      "연결률"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월",
+      "year and month",
+      "monthly period",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "January 2023",
+      "January 2025",
+      "year 2023"
+    ],
+    "MAX_BILL_SECOND": [
+      "maximum call time",
+      "longest call duration",
+      "최장 통화 시간",
+      "최장 통화 시간 (초)",
+      "maximum call duration (seconds)",
+      "maximum call duration in seconds",
+      "longest call duration in seconds"
+    ],
+    "TOTAL_BILL_SECOND": [
+      "total call time",
+      "total call duration",
+      "총 통화 시간 합계",
+      "총 통화 시간 (초)",
+      "total call duration (seconds)",
+      "total call duration in seconds",
+      "total call time in seconds"
+    ]
+  },
+  "V10_HOURLY_CALL_DISTRIBUTION": {
+    "DAY_OF_WEEK_NAME": [
+      "day of the week",
+      "weekday name",
+      "요일명",
+      "요일 이름",
+      "contract day",
+      "session day",
+      "main category"
+    ],
+    "DIVISION_NAME": [
+      "call direction",
+      "call type",
+      "통화 방향",
+      "통화 유형",
+      "contract type",
+      "session type",
+      "UTM source",
+      "UTM medium"
+    ],
+    "CALL_COUNT": [
+      "total calls",
+      "call volume",
+      "통화 건수",
+      "총 통화 건수",
+      "contract count",
+      "session count",
+      "total sessions",
+      "total contracts"
+    ],
+    "CONNECTED_COUNT": [
+      "connected calls",
+      "successful calls",
+      "통화 연결 성공 건수",
+      "연결된 통화 건수",
+      "completed contracts",
+      "successful sessions",
+      "payend",
+      "PAYEND_COUNT"
+    ],
+    "UNCONNECTED_COUNT": [
+      "failed calls",
+      "unconnected calls",
+      "통화 연결 실패 건수",
+      "연결 실패 통화 건수",
+      "failed contracts",
+      "failed sessions"
+    ],
+    "CONNECTION_RATE": [
+      "connection rate",
+      "call success rate",
+      "통화 연결률",
+      "연결률",
+      "conversion rate",
+      "success rate",
+      "average conversion rate"
+    ],
+    "AVG_BILL_SECOND": [
+      "average billing seconds",
+      "average call duration in seconds",
+      "평균 과금 시간 (초)",
+      "평균 통화 시간 (초)",
+      "average session duration in seconds"
+    ],
+    "AVG_BILL_MINUTE": [
+      "average billing minutes",
+      "average call duration in minutes",
+      "평균 과금 시간 (분)",
+      "평균 통화 시간 (분)",
+      "average session duration in minutes"
+    ],
+    "HOUR_OF_DAY": [
+      "hour of day",
+      "call start hour",
+      "통화 시작 시각",
+      "시작 시간",
+      "contract start hour",
+      "session start hour"
+    ],
+    "DAY_OF_WEEK": [
+      "day of week number",
+      "weekday number",
+      "요일 번호",
+      "요일 숫자",
+      "contract day number",
+      "session day number",
+      "main category"
+    ]
+  },
+  "V11_CALL_TO_CONTRACT_CONVERSION": {
+    "MAIN_CATEGORY_NAME": [
+      "product category",
+      "consultation type",
+      "상담 상품 유형",
+      "상품 카테고리",
+      "상담 유형",
+      "main category",
+      "category",
+      "product type",
+      "UTM source",
+      "UTM medium",
+      "device category"
+    ],
+    "DIVISION_NAME": [
+      "call direction",
+      "call type",
+      "통화 방향",
+      "통화 유형",
+      "수신/발신",
+      "call division",
+      "call path",
+      "receive path",
+      "state",
+      "region"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월",
+      "통화 요청일 기준",
+      "month",
+      "year",
+      "date",
+      "time period",
+      "last quarter of 2022",
+      "each month of 2022",
+      "last 6 months",
+      "January 2023",
+      "January 2025",
+      "year 2023"
+    ],
+    "TOTAL_CALLS": [
+      "total calls",
+      "total call count",
+      "총 통화 건수",
+      "총 통화 수",
+      "통화 건수",
+      "call count",
+      "total sessions",
+      "total call sessions",
+      "total number of sessions",
+      "total revenue"
+    ],
+    "LINKED_CONTRACTS": [
+      "linked contracts",
+      "unique contracts",
+      "연결된 고유 계약서 수",
+      "고유 계약서 수",
+      "연결된 계약서",
+      "contract count",
+      "total contracts",
+      "completed contracts",
+      "payend count",
+      "PAYEND_COUNT",
+      "payend",
+      "open contracts"
+    ],
+    "CALLS_PER_CONTRACT": [
+      "calls per contract",
+      "average calls per contract",
+      "계약 1건당 평균 통화 횟수",
+      "계약당 통화 횟수",
+      "평균 통화 횟수",
+      "average call count per contract"
+    ],
+    "CALL_TO_CONTRACT_CVR": [
+      "call to contract conversion rate",
+      "conversion rate",
+      "통화 → 계약 전환율",
+      "전환율",
+      "계약 전환율",
+      "open conversion rate",
+      "open cvr",
+      "contract conversion rate",
+      "average conversion rate"
+    ],
+    "AVG_LEADTIME_DAYS": [
+      "average lead time",
+      "lead time days",
+      "통화 요청일 → 계약서 생성일 평균 리드타임",
+      "평균 리드타임",
+      "리드타임 평균",
+      "average lead time in days"
+    ],
+    "MEDIAN_LEADTIME_DAYS": [
+      "median lead time",
+      "lead time median",
+      "통화 요청일 → 계약서 생성일 중앙값 리드타임",
+      "중앙값 리드타임",
+      "리드타임 중앙값",
+      "median lead time in days"
+    ]
+  }
+}

@@ -1,0 +1,1180 @@
+name: south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region_telecom_insights
+description: Semantic model for SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION.TELECOM_INSIGHTS
+tables:
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  description: 월별 지역(시도/시군구)별 상품 유형별 계약 통계 - 계약 수, 퍼널 전환수, 전환율, 매출 포함
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - CONSULT_REQUEST_COUNT
+    - CONTRACT_COUNT
+    - INSTALL_CITY
+    - INSTALL_STATE
+    - MAIN_CATEGORY_NAME
+    - OPEN_COUNT
+    - OPEN_CVR
+    - PAYEND_COUNT
+    - PAYEND_CVR
+    - REGISTEND_COUNT
+    - TOTAL_NET_SALES
+    - YEAR_MONTH
+  dimensions:
+  - name: INSTALL_STATE
+    expr: INSTALL_STATE
+    data_type: VARCHAR
+    description: '설치 주소 시도 (예: 서울특별시, 경기도)'
+    sample_values:
+    - 경북
+    - 전남
+    - 강원특별자치도
+    - 서울
+    - 대전
+  - name: INSTALL_CITY
+    expr: INSTALL_CITY
+    data_type: VARCHAR
+    description: '설치 주소 시군구 (예: 강남구, 수원시)'
+    sample_values:
+    - 예천군
+    - 여수시
+    - 양구군
+    - 도봉구
+    - 동구
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: 주 상품 유형 (인터넷, 렌탈, 모바일, 알뜰 요금제 등)
+    sample_values:
+    - 렌탈
+    - 인터넷
+    - 유심만
+    - 모바일
+    - 알뜰 요금제
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: 총 계약서 생성 건수
+  - name: CONSULT_REQUEST_COUNT
+    expr: CONSULT_REQUEST_COUNT
+    data_type: NUMBER
+    description: 상담 요청으로 생성된 계약 건수
+  - name: REGISTEND_COUNT
+    expr: REGISTEND_COUNT
+    data_type: NUMBER
+    description: 접수 완료 건수
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: 개통 완료 건수
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: 지급 완료 건수
+  - name: OPEN_CVR
+    expr: OPEN_CVR
+    data_type: NUMBER
+    description: 개통 완료 전환율 (%) = 개통완료 / 총계약
+  - name: PAYEND_CVR
+    expr: PAYEND_CVR
+    data_type: NUMBER
+    description: 지급 완료 전환율 (%) = 지급완료 / 총계약
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: 0 제외 평균 순매출 (원)
+  - name: TOTAL_NET_SALES
+    expr: TOTAL_NET_SALES
+    data_type: NUMBER
+    description: 총 순매출 (원)
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월 (월 첫째 날 기준)
+  measures:
+  - name: REGISTEND_CVR
+    expr: SUM(REGISTEND_CVR)
+    data_type: NUMBER
+    description: 접수 완료 전환율 (%) = 접수완료 / 총계약
+- name: V02_SERVICE_BUNDLE_PATTERNS
+  description: 인터넷 서비스 결합 상품 패턴 - TV/전화/WiFi 결합 여부별 계약 현황 및 정책금 분석
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V02_SERVICE_BUNDLE_PATTERNS
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - AVG_POLICY_AMOUNT
+    - CONTRACT_COUNT
+    - MAIN_CATEGORY_NAME
+    - PAYEND_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: 상품 유형
+    sample_values:
+    - 인터넷
+  - name: BUNDLE_COMBINATION
+    expr: BUNDLE_COMBINATION
+    data_type: VARCHAR
+    description: 결합 할인 유형 (단독가입 또는 결합 종류명)
+    sample_values:
+    - 패밀리
+    - 선납할인(pop)
+    - 모바일 알뜰결합
+    - 요즘가족결합
+    - 프리미엄싱글결합
+  - name: HAS_TV
+    expr: HAS_TV
+    data_type: VARCHAR
+    description: TV 결합 여부 (Y/N)
+    sample_values:
+    - N
+    - Y
+  - name: HAS_PHONE
+    expr: HAS_PHONE
+    data_type: VARCHAR
+    description: 인터넷전화 결합 여부 (Y/N)
+    sample_values:
+    - Y
+    - N
+  - name: HAS_WIFI
+    expr: HAS_WIFI
+    data_type: VARCHAR
+    description: WiFi 결합 여부 (Y/N)
+    sample_values:
+    - Y
+    - N
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: 해당 결합 패턴 계약 건수
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: 지급 완료 건수
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: 0 제외 평균 순매출 (원)
+  - name: AVG_POLICY_AMOUNT
+    expr: AVG_POLICY_AMOUNT
+    data_type: NUMBER
+    description: 0 제외 평균 정책금 총액 (원)
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월
+- name: V03_CONTRACT_FUNNEL_CONVERSION
+  description: 월별 상품 유형별 계약 퍼널 전환율 - 상담요청→청약→접수→개통→지급 단계별 CVR
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V03_CONTRACT_FUNNEL_CONVERSION
+  primary_key:
+    columns:
+    - CONSULT_REQUEST_COUNT
+    - MAIN_CATEGORY_NAME
+    - OPEN_COUNT
+    - PAYEND_COUNT
+    - REGISTEND_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: 상품 유형
+    sample_values:
+    - 모바일
+    - 렌탈
+    - 인터넷
+    - 유심만
+    - 기업용인터넷
+  - name: CONSULT_REQUEST_COUNT
+    expr: CONSULT_REQUEST_COUNT
+    data_type: NUMBER
+    description: 상담 요청 건수
+  - name: REGISTEND_COUNT
+    expr: REGISTEND_COUNT
+    data_type: NUMBER
+    description: 접수 완료 건수
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: 개통 완료 건수
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: 지급 완료 건수
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월
+  measures:
+  - name: TOTAL_COUNT
+    expr: SUM(TOTAL_COUNT)
+    data_type: NUMBER
+    description: 총 계약서 수 (퍼널 최상단)
+  - name: SUBSCRIPTION_COUNT
+    expr: SUM(SUBSCRIPTION_COUNT)
+    data_type: NUMBER
+    description: 청약 건수
+  - name: CVR_CONSULT_REQUEST
+    expr: SUM(CVR_CONSULT_REQUEST)
+    data_type: NUMBER
+    description: 상담 요청 전환율 (%) = 상담요청 / 총계약
+  - name: CVR_SUBSCRIPTION
+    expr: SUM(CVR_SUBSCRIPTION)
+    data_type: NUMBER
+    description: 청약 전환율 (%) = 청약 / 상담요청
+  - name: CVR_REGISTEND
+    expr: SUM(CVR_REGISTEND)
+    data_type: NUMBER
+    description: 접수 완료 전환율 (%) = 접수완료 / 청약
+  - name: CVR_OPEN
+    expr: SUM(CVR_OPEN)
+    data_type: NUMBER
+    description: 개통 완료 전환율 (%) = 개통완료 / 접수완료
+  - name: CVR_PAYEND
+    expr: SUM(CVR_PAYEND)
+    data_type: NUMBER
+    description: 지급 완료 전환율 (%) = 지급완료 / 개통완료
+  - name: OVERALL_CVR
+    expr: SUM(OVERALL_CVR)
+    data_type: NUMBER
+    description: 전체 전환율 (%) = 지급완료 / 총계약
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE
+  description: 유입 채널(접수 경로/마케팅 경로)별 계약 성과 - 개통률, 지급률, 매출 포함
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - CONTRACT_COUNT
+    - MAIN_CATEGORY_NAME
+    - OPEN_COUNT
+    - OPEN_CVR
+    - PAYEND_COUNT
+    - PAYEND_CVR
+    - REGISTEND_COUNT
+    - TOTAL_NET_SALES
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: 상품 유형
+    sample_values:
+    - 렌탈
+    - 인터넷
+    - 모바일
+    - 유심만
+    - 알뜰 요금제
+  - name: RECEIVE_PATH_NAME
+    expr: RECEIVE_PATH_NAME
+    data_type: VARCHAR
+    description: '접수 경로명 (예: 콜센터, 셀프접수, 파트너 등)'
+    sample_values:
+    - 인바운드
+    - 아정당랜딩
+    - 플랫폼
+    - 카톡
+    - 기타
+  - name: INFLOW_PATH_NAME
+    expr: INFLOW_PATH_NAME
+    data_type: VARCHAR
+    description: '마케팅 유입 경로명 (예: 그로스마케팅, 랜딩페이지, 바로상담 등)'
+    sample_values:
+    - TV광고
+    - 전화예약상담
+    - 플랫폼
+    - 기타
+    - 유튜브(PPL)
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: 해당 채널 총 계약 건수
+  - name: REGISTEND_COUNT
+    expr: REGISTEND_COUNT
+    data_type: NUMBER
+    description: 접수 완료 건수
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: 개통 완료 건수
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: 지급 완료 건수
+  - name: OPEN_CVR
+    expr: OPEN_CVR
+    data_type: NUMBER
+    description: 개통 완료 전환율 (%)
+  - name: PAYEND_CVR
+    expr: PAYEND_CVR
+    data_type: NUMBER
+    description: 지급 완료 전환율 (%)
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: 0 제외 평균 순매출 (원)
+  - name: TOTAL_NET_SALES
+    expr: TOTAL_NET_SALES
+    data_type: NUMBER
+    description: 총 순매출 (원)
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월
+- name: V05_REGIONAL_NEW_INSTALL
+  description: 지역별 인터넷 신규 설치 현황 - 단독/결합 비율, 개통/지급 건수, 평균 매출
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V05_REGIONAL_NEW_INSTALL
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - CONTRACT_COUNT
+    - INSTALL_CITY
+    - INSTALL_STATE
+    - OPEN_COUNT
+    - PAYEND_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: INSTALL_STATE
+    expr: INSTALL_STATE
+    data_type: VARCHAR
+    description: 설치 주소 시도
+    sample_values:
+    - 전남
+    - 인천
+    - 충북
+    - 전북특별자치도
+    - 충남
+  - name: INSTALL_CITY
+    expr: INSTALL_CITY
+    data_type: VARCHAR
+    description: 설치 주소 시군구
+    sample_values:
+    - 영암군
+    - 부평구
+    - 옥천군
+    - 무주군
+    - 태안군
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: 인터넷 계약 총 건수
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: 개통 완료 건수
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: 지급 완료 건수
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: 0 제외 평균 순매출 (원)
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월
+  measures:
+  - name: BUNDLE_COUNT
+    expr: SUM(BUNDLE_COUNT)
+    data_type: NUMBER
+    description: TV/전화 등 결합 상품 계약 건수
+  - name: STANDALONE_COUNT
+    expr: SUM(STANDALONE_COUNT)
+    data_type: NUMBER
+    description: 인터넷 단독 계약 건수
+- name: V06_RENTAL_CATEGORY_TRENDS
+  description: 렌탈 상품 카테고리(대분류/소분류)별 월별 트렌드 - 지역, 개통/지급 전환율, 정책금 포함
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V06_RENTAL_CATEGORY_TRENDS
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - AVG_POLICY_AMOUNT
+    - CONTRACT_COUNT
+    - INSTALL_STATE
+    - OPEN_COUNT
+    - OPEN_CVR
+    - PAYEND_COUNT
+    - PAYEND_CVR
+    - YEAR_MONTH
+  dimensions:
+  - name: INSTALL_STATE
+    expr: INSTALL_STATE
+    data_type: VARCHAR
+    description: 설치 주소 시도
+    sample_values:
+    - 대구
+    - 서울
+    - 충북
+    - 경기
+    - 부산
+  - name: RENTAL_MAIN_CATEGORY
+    expr: RENTAL_MAIN_CATEGORY
+    data_type: VARCHAR
+    description: '렌탈 대분류 (예: 정수기, 공기청정기 등)'
+    sample_values:
+    - 생활가전
+    - 계절가전
+    - TV/디지털
+    - 주방가전
+    - 미분류
+  - name: RENTAL_SUB_CATEGORY
+    expr: RENTAL_SUB_CATEGORY
+    data_type: VARCHAR
+    description: 렌탈 소분류 (브랜드/모델 계열)
+    sample_values:
+    - 안마의자
+    - 공기청정기
+    - TV
+    - 전기레인지
+    - 식기세척기
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: 계약 건수
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: 개통 완료 건수
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: 지급 완료 건수
+  - name: OPEN_CVR
+    expr: OPEN_CVR
+    data_type: NUMBER
+    description: 개통 완료 전환율 (%)
+  - name: PAYEND_CVR
+    expr: PAYEND_CVR
+    data_type: NUMBER
+    description: 지급 완료 전환율 (%)
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: 0 제외 평균 순매출 (원)
+  - name: AVG_POLICY_AMOUNT
+    expr: AVG_POLICY_AMOUNT
+    data_type: NUMBER
+    description: 0 제외 평균 정책금 총액 (원)
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월
+- name: V07_GA4_MARKETING_ATTRIBUTION
+  description: GA4 기반 UTM 소스/매체별 마케팅 전환 분석 - 세션, 상담요청, 계약 CVR, 매출 포함
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V07_GA4_MARKETING_ATTRIBUTION
+  primary_key:
+    columns:
+    - YEAR_MONTH
+  dimensions:
+  - name: UTM_SOURCE
+    expr: UTM_SOURCE
+    data_type: VARCHAR
+    description: 'UTM 소스 (예: google, naver, facebook, (direct))'
+    sample_values:
+    - dbdbdeep.com
+    - b2513a35d988ca3ff7e55067a685e1ce.safeframe.googlesyndication.com
+    - brunch.co.kr
+    - nb_influencer_it
+    - booksterhouse.com
+  - name: UTM_MEDIUM
+    expr: UTM_MEDIUM
+    data_type: VARCHAR
+    description: 'UTM 매체 (예: cpc, organic, referral, (none))'
+    sample_values:
+    - referral
+    - 건빵이
+    - 아재식당_250401_250926_sp_ppl_csm
+    - 인스
+    - 꾸준_250502_250712_n_ppl_jjy
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월
+  measures:
+  - name: TOTAL_SESSIONS
+    expr: SUM(TOTAL_SESSIONS)
+    data_type: NUMBER
+    description: 총 세션 수
+  - name: TOTAL_USERS
+    expr: SUM(TOTAL_USERS)
+    data_type: NUMBER
+    description: 총 사용자 수
+  - name: TOTAL_CONSULT_REQUESTS
+    expr: SUM(TOTAL_CONSULT_REQUESTS)
+    data_type: NUMBER
+    description: 상담 요청 이벤트 총 발생 수
+  - name: TOTAL_CONSULT_PHONE
+    expr: SUM(TOTAL_CONSULT_PHONE)
+    data_type: NUMBER
+    description: 전화 상담 클릭 총 수
+  - name: TOTAL_CONSULT_KAKAO
+    expr: SUM(TOTAL_CONSULT_KAKAO)
+    data_type: NUMBER
+    description: 카카오 상담 클릭 총 수
+  - name: TOTAL_CONSULT_CHANNELTALK
+    expr: SUM(TOTAL_CONSULT_CHANNELTALK)
+    data_type: NUMBER
+    description: 채널톡 상담 클릭 총 수
+  - name: TOTAL_CONTRACTS
+    expr: SUM(TOTAL_CONTRACTS)
+    data_type: NUMBER
+    description: 계약 총 건수
+  - name: CONSULT_CVR
+    expr: SUM(CONSULT_CVR)
+    data_type: NUMBER
+    description: 상담 요청 전환율 (%) = 상담요청 / 세션
+  - name: CONTRACT_CVR
+    expr: SUM(CONTRACT_CVR)
+    data_type: NUMBER
+    description: 계약 전환율 (%) = 계약 / 세션
+  - name: TOTAL_REVENUE
+    expr: SUM(TOTAL_REVENUE)
+    data_type: NUMBER
+    description: 총 매출 (원)
+- name: V08_GA4_DEVICE_STATS
+  description: GA4 디바이스 유형별(모바일/데스크탑/태블릿) 세션 수, 사용자 수, 전환 이벤트 집계
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V08_GA4_DEVICE_STATS
+  primary_key:
+    columns:
+    - YEAR_MONTH
+  dimensions:
+  - name: DEVICE_CATEGORY
+    expr: DEVICE_CATEGORY
+    data_type: VARCHAR
+    description: 디바이스 유형 (mobile, desktop, tablet)
+    sample_values:
+    - smart tv
+    - desktop
+    - mobile
+    - tablet
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월 (2025-01-01 이후 데이터)
+  measures:
+  - name: SESSION_COUNT
+    expr: SUM(SESSION_COUNT)
+    data_type: NUMBER
+    description: session_start 이벤트 기준 총 세션 수
+  - name: USER_COUNT
+    expr: SUM(USER_COUNT)
+    data_type: NUMBER
+    description: 세션 기준 순 사용자 수
+  - name: CONVERSION_EVENT_COUNT
+    expr: SUM(CONVERSION_EVENT_COUNT)
+    data_type: NUMBER
+    description: 전환 이벤트 총 수
+  - name: CONVERSION_RATE
+    expr: AVG(CONVERSION_RATE)
+    data_type: NUMBER
+    description: 전환율 (%) = 전환 이벤트 / 세션
+- name: V09_MONTHLY_CALL_STATS
+  description: 월별 콜센터 통화 통계 - 수신/발신 구분, 상품 유형별 통화량, 평균 통화 시간, 연결률
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V09_MONTHLY_CALL_STATS
+  primary_key:
+    columns:
+    - AVG_BILL_MINUTE
+    - AVG_BILL_SECOND
+    - CALL_COUNT
+    - CONNECTED_COUNT
+    - CONNECTION_RATE
+    - DIVISION_NAME
+    - MAIN_CATEGORY_NAME
+    - UNCONNECTED_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: DIVISION_NAME
+    expr: DIVISION_NAME
+    data_type: VARCHAR
+    description: 통화 방향 (수신/발신)
+    sample_values:
+    - 발신
+    - 수신
+    - 미분류
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: 상담 상품 유형 (인터넷, 렌탈, 모바일 등)
+    sample_values:
+    - 유심만
+    - 인터넷
+    - 알뜰 요금제
+    - 다이렉트자보
+    - 기업용인터넷
+  - name: CALL_COUNT
+    expr: CALL_COUNT
+    data_type: NUMBER
+    description: 총 통화 시도 건수
+  - name: AVG_BILL_SECOND
+    expr: AVG_BILL_SECOND
+    data_type: NUMBER
+    description: 0 제외 평균 과금 시간 (초)
+  - name: AVG_BILL_MINUTE
+    expr: AVG_BILL_MINUTE
+    data_type: NUMBER
+    description: 0 제외 평균 과금 시간 (분)
+  - name: CONNECTED_COUNT
+    expr: CONNECTED_COUNT
+    data_type: NUMBER
+    description: 통화 연결 성공 건수
+  - name: UNCONNECTED_COUNT
+    expr: UNCONNECTED_COUNT
+    data_type: NUMBER
+    description: 통화 연결 실패 건수
+  - name: CONNECTION_RATE
+    expr: CONNECTION_RATE
+    data_type: NUMBER
+    description: 통화 연결률 (%) = 연결 성공 / 총 시도
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월
+  measures:
+  - name: MAX_BILL_SECOND
+    expr: SUM(MAX_BILL_SECOND)
+    data_type: NUMBER
+    description: 최장 통화 시간 (초)
+  - name: TOTAL_BILL_SECOND
+    expr: SUM(TOTAL_BILL_SECOND)
+    data_type: NUMBER
+    description: 총 통화 시간 합계 (초)
+- name: V10_HOURLY_CALL_DISTRIBUTION
+  description: 콜센터 시간대(0~23시) × 요일별 통화 분포 - 피크타임 및 연결률 분석용
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V10_HOURLY_CALL_DISTRIBUTION
+  primary_key:
+    columns:
+    - AVG_BILL_MINUTE
+    - AVG_BILL_SECOND
+    - CALL_COUNT
+    - CONNECTED_COUNT
+    - CONNECTION_RATE
+    - DIVISION_NAME
+    - UNCONNECTED_COUNT
+  dimensions:
+  - name: DAY_OF_WEEK_NAME
+    expr: DAY_OF_WEEK_NAME
+    data_type: VARCHAR
+    description: 요일명 (일/월/화/수/목/금/토)
+    sample_values:
+    - 월
+    - 화
+    - 금
+    - 수
+    - 목
+  - name: DIVISION_NAME
+    expr: DIVISION_NAME
+    data_type: VARCHAR
+    description: 통화 방향 (수신/발신)
+    sample_values:
+    - 발신
+    - 수신
+  - name: CALL_COUNT
+    expr: CALL_COUNT
+    data_type: NUMBER
+    description: 해당 시간대/요일 총 통화 건수
+  - name: CONNECTED_COUNT
+    expr: CONNECTED_COUNT
+    data_type: NUMBER
+    description: 통화 연결 성공 건수
+  - name: UNCONNECTED_COUNT
+    expr: UNCONNECTED_COUNT
+    data_type: NUMBER
+    description: 통화 연결 실패 건수
+  - name: CONNECTION_RATE
+    expr: CONNECTION_RATE
+    data_type: NUMBER
+    description: 통화 연결률 (%)
+  - name: AVG_BILL_SECOND
+    expr: AVG_BILL_SECOND
+    data_type: NUMBER
+    description: 0 제외 평균 과금 시간 (초)
+  - name: AVG_BILL_MINUTE
+    expr: AVG_BILL_MINUTE
+    data_type: NUMBER
+    description: 0 제외 평균 과금 시간 (분)
+  measures:
+  - name: HOUR_OF_DAY
+    expr: SUM(HOUR_OF_DAY)
+    data_type: NUMBER
+    description: 통화 시작 시각 (0~23)
+  - name: DAY_OF_WEEK
+    expr: SUM(DAY_OF_WEEK)
+    data_type: NUMBER
+    description: 요일 번호 (1=일, 2=월, ..., 7=토)
+- name: V11_CALL_TO_CONTRACT_CONVERSION
+  description: 콜센터 통화에서 계약서 생성까지의 전환율 및 리드타임 분석 (평균/중앙값)
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V11_CALL_TO_CONTRACT_CONVERSION
+  primary_key:
+    columns:
+    - DIVISION_NAME
+    - MAIN_CATEGORY_NAME
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: 상담 상품 유형 (인터넷, 렌탈, 모바일 등)
+    sample_values:
+    - 렌탈
+    - 모바일
+    - 인터넷
+    - 유심만
+    - 알뜰 요금제
+  - name: DIVISION_NAME
+    expr: DIVISION_NAME
+    data_type: VARCHAR
+    description: 통화 방향 (수신/발신)
+    sample_values:
+    - 수신
+    - 발신
+    - 미분류
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: 집계 기준 연월 (통화 요청일 기준)
+  measures:
+  - name: TOTAL_CALLS
+    expr: SUM(TOTAL_CALLS)
+    data_type: NUMBER
+    description: 총 통화 건수
+  - name: LINKED_CONTRACTS
+    expr: SUM(LINKED_CONTRACTS)
+    data_type: NUMBER
+    description: 연결된 고유 계약서 수
+  - name: CALLS_PER_CONTRACT
+    expr: SUM(CALLS_PER_CONTRACT)
+    data_type: NUMBER
+    description: 계약 1건당 평균 통화 횟수
+  - name: CALL_TO_CONTRACT_CVR
+    expr: SUM(CALL_TO_CONTRACT_CVR)
+    data_type: NUMBER
+    description: 통화 → 계약 전환율 (%)
+  - name: AVG_LEADTIME_DAYS
+    expr: SUM(AVG_LEADTIME_DAYS)
+    data_type: NUMBER
+    description: 통화 요청일 → 계약서 생성일 평균 리드타임 (일)
+  - name: MEDIAN_LEADTIME_DAYS
+    expr: SUM(MEDIAN_LEADTIME_DAYS)
+    data_type: NUMBER
+    description: 통화 요청일 → 계약서 생성일 중앙값 리드타임 (일)
+relationships:
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V02_SERVICE_BUNDLE_PATTERNS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V02_SERVICE_BUNDLE_PATTERNS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V03_CONTRACT_FUNNEL_CONVERSION
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V03_CONTRACT_FUNNEL_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V04_CHANNEL_CONTRACT_PERFORMANCE
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V08_GA4_DEVICE_STATS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V09_MONTHLY_CALL_STATS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V03_CONTRACT_FUNNEL_CONVERSION
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V03_CONTRACT_FUNNEL_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V04_CHANNEL_CONTRACT_PERFORMANCE
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V08_GA4_DEVICE_STATS
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V09_MONTHLY_CALL_STATS
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V04_CHANNEL_CONTRACT_PERFORMANCE
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V08_GA4_DEVICE_STATS
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V09_MONTHLY_CALL_STATS
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V08_GA4_DEVICE_STATS
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V09_MONTHLY_CALL_STATS
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V08_GA4_DEVICE_STATS
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V09_MONTHLY_CALL_STATS
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V08_GA4_DEVICE_STATS
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V09_MONTHLY_CALL_STATS
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V07_GA4_MARKETING_ATTRIBUTION_to_V08_GA4_DEVICE_STATS
+  left_table: V07_GA4_MARKETING_ATTRIBUTION
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V07_GA4_MARKETING_ATTRIBUTION_to_V09_MONTHLY_CALL_STATS
+  left_table: V07_GA4_MARKETING_ATTRIBUTION
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V07_GA4_MARKETING_ATTRIBUTION_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V07_GA4_MARKETING_ATTRIBUTION
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V08_GA4_DEVICE_STATS_to_V09_MONTHLY_CALL_STATS
+  left_table: V08_GA4_DEVICE_STATS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V08_GA4_DEVICE_STATS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V08_GA4_DEVICE_STATS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V09_MONTHLY_CALL_STATS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V09_MONTHLY_CALL_STATS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V09_MONTHLY_CALL_STATS_to_V10_HOURLY_CALL_DISTRIBUTION
+  left_table: V09_MONTHLY_CALL_STATS
+  right_table: V10_HOURLY_CALL_DISTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DIVISION_NAME
+    right_column: DIVISION_NAME
+- name: V10_HOURLY_CALL_DISTRIBUTION_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V10_HOURLY_CALL_DISTRIBUTION
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DIVISION_NAME
+    right_column: DIVISION_NAME

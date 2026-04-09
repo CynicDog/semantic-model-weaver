@@ -1,0 +1,755 @@
+{
+  "V01_MONTHLY_REGIONAL_CONTRACT_STATS": {
+    "INSTALL_STATE": [
+      "installation state",
+      "installation province",
+      "설치 주소 시도",
+      "설치 주소 도"
+    ],
+    "INSTALL_CITY": [
+      "installation city",
+      "installation district",
+      "설치 주소 시군구",
+      "설치 주소 시"
+    ],
+    "MAIN_CATEGORY_NAME": [
+      "main product type",
+      "main category",
+      "주 상품 유형",
+      "주 상품 종류"
+    ],
+    "CONTRACT_COUNT": [
+      "total contracts",
+      "contract count",
+      "총 계약서 생성 건수",
+      "총 계약 건수"
+    ],
+    "CONSULT_REQUEST_COUNT": [
+      "consultation requests",
+      "consultation contracts",
+      "상담 요청 계약 건수",
+      "상담 요청 계약"
+    ],
+    "REGISTEND_COUNT": [
+      "completed registrations",
+      "registration count",
+      "접수 완료 건수",
+      "접수 완료"
+    ],
+    "OPEN_COUNT": [
+      "completed activations",
+      "activation count",
+      "개통 완료 건수",
+      "개통 완료"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment count",
+      "지급 완료 건수",
+      "지급 완료"
+    ],
+    "OPEN_CVR": [
+      "activation conversion rate",
+      "open conversion rate",
+      "개통 완료 전환율",
+      "개통 전환율"
+    ],
+    "PAYEND_CVR": [
+      "payment conversion rate",
+      "payend conversion rate",
+      "지급 완료 전환율",
+      "지급 전환율"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "average sales",
+      "평균 순매출",
+      "평균 매출"
+    ],
+    "TOTAL_NET_SALES": [
+      "total net sales",
+      "total sales",
+      "총 순매출",
+      "총 매출"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation month",
+      "집계 기준 연월",
+      "집계 연월"
+    ],
+    "REGISTEND_CVR": [
+      "registration conversion rate",
+      "registend conversion rate",
+      "접수 완료 전환율",
+      "접수 전환율"
+    ]
+  },
+  "V02_SERVICE_BUNDLE_PATTERNS": {
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "product category",
+      "상품 유형",
+      "상품 종류"
+    ],
+    "BUNDLE_COMBINATION": [
+      "combination discount type",
+      "bundle type",
+      "결합 할인 유형",
+      "결합 종류명"
+    ],
+    "HAS_TV": [
+      "TV availability",
+      "TV combination",
+      "TV 결합 여부",
+      "TV 포함 여부"
+    ],
+    "HAS_PHONE": [
+      "internet phone availability",
+      "phone combination",
+      "인터넷전화 결합 여부",
+      "전화 포함 여부"
+    ],
+    "HAS_WIFI": [
+      "WiFi availability",
+      "WiFi combination",
+      "WiFi 결합 여부",
+      "WiFi 포함 여부"
+    ],
+    "CONTRACT_COUNT": [
+      "contract count",
+      "number of contracts",
+      "계약 건수",
+      "계약 수"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment completion count",
+      "지급 완료 건수",
+      "지급 완료 수"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "평균 순매출",
+      "순매출 평균"
+    ],
+    "AVG_POLICY_AMOUNT": [
+      "average policy amount",
+      "policy amount average",
+      "평균 정책금 총액",
+      "정책금 평균"
+    ],
+    "YEAR_MONTH": [
+      "year and month",
+      "aggregation period",
+      "집계 기준 연월",
+      "기준 연월"
+    ]
+  },
+  "V03_CONTRACT_FUNNEL_CONVERSION": {
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "product category",
+      "상품 유형",
+      "상품 카테고리"
+    ],
+    "CONSULT_REQUEST_COUNT": [
+      "consultation requests",
+      "consultation count",
+      "상담 요청 건수",
+      "상담 요청 수"
+    ],
+    "REGISTEND_COUNT": [
+      "completed registrations",
+      "registration count",
+      "접수 완료 건수",
+      "접수 완료 수"
+    ],
+    "OPEN_COUNT": [
+      "completed activations",
+      "activation count",
+      "개통 완료 건수",
+      "개통 완료 수"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment count",
+      "지급 완료 건수",
+      "지급 완료 수"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "집계 기간"
+    ],
+    "TOTAL_COUNT": [
+      "total contracts",
+      "total count",
+      "총 계약서 수",
+      "총 계약 수"
+    ],
+    "SUBSCRIPTION_COUNT": [
+      "subscriptions",
+      "subscription count",
+      "청약 건수",
+      "청약 수"
+    ],
+    "CVR_CONSULT_REQUEST": [
+      "consultation request conversion rate",
+      "consultation request CVR",
+      "상담 요청 전환율",
+      "상담 요청 CVR"
+    ],
+    "CVR_SUBSCRIPTION": [
+      "subscription conversion rate",
+      "subscription CVR",
+      "청약 전환율",
+      "청약 CVR"
+    ],
+    "CVR_REGISTEND": [
+      "completed registration conversion rate",
+      "registration CVR",
+      "접수 완료 전환율",
+      "접수 완료 CVR"
+    ],
+    "CVR_OPEN": [
+      "completed activation conversion rate",
+      "activation CVR",
+      "개통 완료 전환율",
+      "개통 완료 CVR"
+    ],
+    "CVR_PAYEND": [
+      "completed payment conversion rate",
+      "payment CVR",
+      "지급 완료 전환율",
+      "지급 완료 CVR"
+    ],
+    "OVERALL_CVR": [
+      "overall conversion rate",
+      "overall CVR",
+      "전체 전환율",
+      "전체 CVR"
+    ]
+  },
+  "V04_CHANNEL_CONTRACT_PERFORMANCE": {
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "product category",
+      "상품 유형",
+      "상품 카테고리"
+    ],
+    "RECEIVE_PATH_NAME": [
+      "reception path",
+      "reception channel",
+      "접수 경로",
+      "접수 채널"
+    ],
+    "INFLOW_PATH_NAME": [
+      "marketing inflow path",
+      "marketing channel",
+      "마케팅 유입 경로",
+      "마케팅 채널"
+    ],
+    "CONTRACT_COUNT": [
+      "total contracts",
+      "contract count",
+      "채널 총 계약 건수",
+      "계약 건수"
+    ],
+    "REGISTEND_COUNT": [
+      "completed registrations",
+      "registration count",
+      "접수 완료 건수",
+      "접수 건수"
+    ],
+    "OPEN_COUNT": [
+      "completed activations",
+      "activation count",
+      "개통 완료 건수",
+      "개통 건수"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment count",
+      "지급 완료 건수",
+      "지급 건수"
+    ],
+    "OPEN_CVR": [
+      "activation conversion rate",
+      "open conversion rate",
+      "개통 완료 전환율",
+      "개통 전환율"
+    ],
+    "PAYEND_CVR": [
+      "payment conversion rate",
+      "payend conversion rate",
+      "지급 완료 전환율",
+      "지급 전환율"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "평균 순매출",
+      "순매출 평균"
+    ],
+    "TOTAL_NET_SALES": [
+      "total net sales",
+      "net sales total",
+      "총 순매출",
+      "순매출 총액"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월"
+    ]
+  },
+  "V05_REGIONAL_NEW_INSTALL": {
+    "INSTALL_STATE": [
+      "installation state",
+      "state of installation",
+      "설치 주소 시도",
+      "설치 주소 도"
+    ],
+    "INSTALL_CITY": [
+      "installation city",
+      "city of installation",
+      "설치 주소 시군구",
+      "설치 주소 시"
+    ],
+    "CONTRACT_COUNT": [
+      "internet contract count",
+      "total contracts",
+      "인터넷 계약 총 건수",
+      "계약 총 건수"
+    ],
+    "OPEN_COUNT": [
+      "completed installations",
+      "open count",
+      "개통 완료 건수",
+      "개통 건수"
+    ],
+    "PAYEND_COUNT": [
+      "completed payments",
+      "payment completion count",
+      "지급 완료 건수",
+      "지급 건수"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "0 제외 평균 순매출",
+      "평균 순매출"
+    ],
+    "YEAR_MONTH": [
+      "year and month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월"
+    ],
+    "BUNDLE_COUNT": [
+      "bundled contracts",
+      "bundle count",
+      "TV/전화 등 결합 상품 계약 건수",
+      "결합 상품 계약 건수"
+    ],
+    "STANDALONE_COUNT": [
+      "standalone contracts",
+      "standalone count",
+      "인터넷 단독 계약 건수",
+      "단독 계약 건수"
+    ]
+  },
+  "V06_RENTAL_CATEGORY_TRENDS": {
+    "INSTALL_STATE": [
+      "installation state",
+      "address state",
+      "설치 주소 시도",
+      "주소 상태"
+    ],
+    "RENTAL_MAIN_CATEGORY": [
+      "main rental category",
+      "rental main category",
+      "렌탈 대분류",
+      "주요 렌탈 카테고리"
+    ],
+    "RENTAL_SUB_CATEGORY": [
+      "rental sub-category",
+      "sub-category of rental",
+      "렌탈 소분류",
+      "브랜드/모델 계열"
+    ],
+    "CONTRACT_COUNT": [
+      "contract count",
+      "number of contracts",
+      "계약 건수",
+      "계약 수"
+    ],
+    "OPEN_COUNT": [
+      "open count",
+      "completed activations",
+      "개통 완료 건수",
+      "개통 완료 수"
+    ],
+    "PAYEND_COUNT": [
+      "payend count",
+      "completed payments",
+      "지급 완료 건수",
+      "지급 완료 수"
+    ],
+    "OPEN_CVR": [
+      "open conversion rate",
+      "activation completion rate",
+      "개통 완료 전환율",
+      "개통 전환율"
+    ],
+    "PAYEND_CVR": [
+      "payend conversion rate",
+      "payment completion rate",
+      "지급 완료 전환율",
+      "지급 전환율"
+    ],
+    "AVG_NET_SALES": [
+      "average net sales",
+      "net sales average",
+      "평균 순매출",
+      "순매출 평균"
+    ],
+    "AVG_POLICY_AMOUNT": [
+      "average policy amount",
+      "policy amount average",
+      "평균 정책금 총액",
+      "정책금 평균"
+    ],
+    "YEAR_MONTH": [
+      "year month",
+      "aggregation year-month",
+      "집계 기준 연월",
+      "연월"
+    ]
+  },
+  "V07_GA4_MARKETING_ATTRIBUTION": {
+    "UTM_SOURCE": [
+      "UTM source",
+      "traffic source",
+      "소스",
+      "트래픽 소스"
+    ],
+    "UTM_MEDIUM": [
+      "UTM medium",
+      "traffic medium",
+      "매체",
+      "트래픽 매체"
+    ],
+    "YEAR_MONTH": [
+      "year month",
+      "aggregation period",
+      "연월",
+      "집계 기준 연월"
+    ],
+    "TOTAL_SESSIONS": [
+      "total sessions",
+      "session count",
+      "총 세션 수",
+      "세션 수"
+    ],
+    "TOTAL_USERS": [
+      "total users",
+      "user count",
+      "총 사용자 수",
+      "사용자 수"
+    ],
+    "TOTAL_CONSULT_REQUESTS": [
+      "total consult requests",
+      "consultation requests",
+      "상담 요청 수",
+      "상담 요청 이벤트 수"
+    ],
+    "TOTAL_CONSULT_PHONE": [
+      "total phone consults",
+      "phone consultation clicks",
+      "전화 상담 클릭 수",
+      "전화 상담 수"
+    ],
+    "TOTAL_CONSULT_KAKAO": [
+      "total Kakao consults",
+      "Kakao consultation clicks",
+      "카카오 상담 클릭 수",
+      "카카오 상담 수"
+    ],
+    "TOTAL_CONSULT_CHANNELTALK": [
+      "total ChannelTalk consults",
+      "ChannelTalk consultation clicks",
+      "채널톡 상담 클릭 수",
+      "채널톡 상담 수"
+    ],
+    "TOTAL_CONTRACTS": [
+      "total contracts",
+      "contract count",
+      "계약 수",
+      "계약 건수"
+    ],
+    "CONSULT_CVR": [
+      "consult CVR",
+      "consultation conversion rate",
+      "상담 요청 전환율",
+      "상담 전환율"
+    ],
+    "CONTRACT_CVR": [
+      "contract CVR",
+      "contract conversion rate",
+      "계약 전환율",
+      "계약 전환율"
+    ],
+    "TOTAL_REVENUE": [
+      "total revenue",
+      "revenue amount",
+      "총 매출",
+      "매출액"
+    ]
+  },
+  "V08_GA4_DEVICE_STATS": {
+    "DEVICE_CATEGORY": [
+      "device type",
+      "device category",
+      "디바이스 유형",
+      "디바이스 종류",
+      "기기 유형"
+    ],
+    "YEAR_MONTH": [
+      "year month",
+      "aggregation period",
+      "연월",
+      "집계 기준 연월",
+      "기준 연월"
+    ],
+    "SESSION_COUNT": [
+      "session count",
+      "total sessions",
+      "세션 수",
+      "총 세션 수",
+      "세션 총 수"
+    ],
+    "USER_COUNT": [
+      "user count",
+      "unique users",
+      "사용자 수",
+      "순 사용자 수",
+      "사용자 총 수"
+    ],
+    "CONVERSION_EVENT_COUNT": [
+      "conversion event count",
+      "total conversions",
+      "전환 이벤트 수",
+      "전환 이벤트 총 수",
+      "전환 총 수"
+    ],
+    "CONVERSION_RATE": [
+      "conversion rate",
+      "conversion percentage",
+      "전환율",
+      "전환률",
+      "전환 비율"
+    ]
+  },
+  "V09_MONTHLY_CALL_STATS": {
+    "DIVISION_NAME": [
+      "call direction",
+      "inbound/outbound",
+      "통화 방향",
+      "수신/발신"
+    ],
+    "MAIN_CATEGORY_NAME": [
+      "product type",
+      "consultation category",
+      "상담 상품 유형",
+      "인터넷",
+      "렌탈",
+      "모바일"
+    ],
+    "CALL_COUNT": [
+      "total calls",
+      "call attempts",
+      "총 통화 시도 건수",
+      "통화 시도"
+    ],
+    "AVG_BILL_SECOND": [
+      "average billing time",
+      "average call duration",
+      "평균 과금 시간",
+      "평균 통화 시간"
+    ],
+    "AVG_BILL_MINUTE": [
+      "average billing time in minutes",
+      "average call duration in minutes",
+      "평균 과금 시간 (분)",
+      "평균 통화 시간 (분)"
+    ],
+    "CONNECTED_COUNT": [
+      "successful calls",
+      "connected calls",
+      "통화 연결 성공 건수",
+      "연결 성공"
+    ],
+    "UNCONNECTED_COUNT": [
+      "failed calls",
+      "unconnected calls",
+      "통화 연결 실패 건수",
+      "연결 실패"
+    ],
+    "CONNECTION_RATE": [
+      "connection rate",
+      "call success rate",
+      "통화 연결률",
+      "연결률"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월"
+    ],
+    "MAX_BILL_SECOND": [
+      "maximum call time",
+      "longest call duration",
+      "최장 통화 시간",
+      "최장 통화 시간 (초)"
+    ],
+    "TOTAL_BILL_SECOND": [
+      "total call time",
+      "total call duration",
+      "총 통화 시간 합계",
+      "총 통화 시간 (초)"
+    ]
+  },
+  "V10_HOURLY_CALL_DISTRIBUTION": {
+    "DAY_OF_WEEK_NAME": [
+      "day of the week",
+      "weekday name",
+      "요일명",
+      "요일 이름"
+    ],
+    "DIVISION_NAME": [
+      "call direction",
+      "call type",
+      "통화 방향",
+      "통화 유형"
+    ],
+    "CALL_COUNT": [
+      "total calls",
+      "call volume",
+      "통화 건수",
+      "총 통화 건수"
+    ],
+    "CONNECTED_COUNT": [
+      "connected calls",
+      "successful calls",
+      "통화 연결 성공 건수",
+      "연결된 통화 건수"
+    ],
+    "UNCONNECTED_COUNT": [
+      "failed calls",
+      "unconnected calls",
+      "통화 연결 실패 건수",
+      "연결 실패 통화 건수"
+    ],
+    "CONNECTION_RATE": [
+      "connection rate",
+      "call success rate",
+      "통화 연결률",
+      "연결률"
+    ],
+    "AVG_BILL_SECOND": [
+      "average billing seconds",
+      "average call duration in seconds",
+      "평균 과금 시간 (초)",
+      "평균 통화 시간 (초)"
+    ],
+    "AVG_BILL_MINUTE": [
+      "average billing minutes",
+      "average call duration in minutes",
+      "평균 과금 시간 (분)",
+      "평균 통화 시간 (분)"
+    ],
+    "HOUR_OF_DAY": [
+      "hour of day",
+      "call start hour",
+      "통화 시작 시각",
+      "시작 시간"
+    ],
+    "DAY_OF_WEEK": [
+      "day of week number",
+      "weekday number",
+      "요일 번호",
+      "요일 숫자"
+    ]
+  },
+  "V11_CALL_TO_CONTRACT_CONVERSION": {
+    "MAIN_CATEGORY_NAME": [
+      "product category",
+      "consultation type",
+      "상담 상품 유형",
+      "상품 카테고리",
+      "상담 유형"
+    ],
+    "DIVISION_NAME": [
+      "call direction",
+      "call type",
+      "통화 방향",
+      "통화 유형",
+      "수신/발신"
+    ],
+    "YEAR_MONTH": [
+      "year-month",
+      "aggregation period",
+      "집계 기준 연월",
+      "연월",
+      "통화 요청일 기준"
+    ],
+    "TOTAL_CALLS": [
+      "total calls",
+      "total call count",
+      "총 통화 건수",
+      "총 통화 수",
+      "통화 건수"
+    ],
+    "LINKED_CONTRACTS": [
+      "linked contracts",
+      "unique contracts",
+      "연결된 고유 계약서 수",
+      "고유 계약서 수",
+      "연결된 계약서"
+    ],
+    "CALLS_PER_CONTRACT": [
+      "calls per contract",
+      "average calls per contract",
+      "계약 1건당 평균 통화 횟수",
+      "계약당 통화 횟수",
+      "평균 통화 횟수"
+    ],
+    "CALL_TO_CONTRACT_CVR": [
+      "call to contract conversion rate",
+      "conversion rate",
+      "통화 → 계약 전환율",
+      "전환율",
+      "계약 전환율"
+    ],
+    "AVG_LEADTIME_DAYS": [
+      "average lead time",
+      "lead time days",
+      "통화 요청일 → 계약서 생성일 평균 리드타임",
+      "평균 리드타임",
+      "리드타임 평균"
+    ],
+    "MEDIAN_LEADTIME_DAYS": [
+      "median lead time",
+      "lead time median",
+      "통화 요청일 → 계약서 생성일 중앙값 리드타임",
+      "중앙값 리드타임",
+      "리드타임 중앙값"
+    ]
+  }
+}

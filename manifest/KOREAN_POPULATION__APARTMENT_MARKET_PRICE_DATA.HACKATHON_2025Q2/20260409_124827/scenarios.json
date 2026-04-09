@@ -1,0 +1,81 @@
+{
+  "golden_set": [
+    {
+      "query": "What is the average MEME_PRICE_PER_SUPPLY_PYEONG for apartments in '서울' in 2025?",
+      "expected_response": "[{\"AVG(MEME_PRICE_PER_SUPPLY_PYEONG)\": null}]"
+    },
+    {
+      "query": "What is the total number of households in '영등포구' as of the latest date?",
+      "expected_response": "[{\"TOTAL_HOUSEHOLDS\": 5515}]"
+    },
+    {
+      "query": "What is the average JEONSE_PRICE_PER_SUPPLY_PYEONG for apartments in '서초구' in the second quarter of 2025?",
+      "expected_response": "[{\"AVG(JEONSE_PRICE_PER_SUPPLY_PYEONG)\": null}]"
+    },
+    {
+      "query": "What is the ratio of AGE_UNDER5 to FEMALE_20TO40 in '영등포동8가' as of the latest date?",
+      "expected_response": "[{\"AGE_UNDER5_PER_FEMALE_20TO40\": 0.093145}]"
+    },
+    {
+      "query": "What is the total number of males under 20 in '중구' as of the latest date?",
+      "expected_response": "[{\"MALE\": 1}]"
+    },
+    {
+      "query": "What is the average ratio of children under 5 to females aged 20 to 40 in Seoul for the year 2025?",
+      "expected_response": "[{\"AVG(AGE_UNDER5_PER_FEMALE_20TO40)\": 0.1281450306122449}]"
+    },
+    {
+      "query": "Which district (SGG) in Seoul has the highest number of children under 5 as of the latest date in the dataset?",
+      "expected_response": "[{\"SGG\": \"\\uc601\\ub4f1\\ud3ec\\uad6c\", \"MAX(AGE_UNDER5)\": 2505}]"
+    },
+    {
+      "query": "What is the total number of females aged 20 to 40 in the '중구' district for the year 2025?",
+      "expected_response": "[{\"SUM(FEMALE_20TO40)\": 20032}]"
+    },
+    {
+      "query": "What is the ratio of children under 5 to females aged 20 to 40 in each district (SGG) of Seoul for the latest date in the dataset?",
+      "expected_response": "[{\"SGG\": \"\\uc911\\uad6c\", \"AGE_UNDER5_PER_FEMALE_20TO40\": 0.0}, {\"SGG\": \"\\uc911\\uad6c\", \"AGE_UNDER5_PER_FEMALE_20TO40\": 0.0}, {\"SGG\": \"\\uc911\\uad6c\", \"AGE_UNDER5_PER_FEMALE_20TO40\": 0.176136}] (showing 3 of 118 rows)"
+    },
+    {
+      "query": "What is the average market price per supply pyeong for apartments in districts (SGG) with the highest ratio of children under 5 to females aged 20 to 40 for the latest date in the dataset?",
+      "expected_response": "[{\"AVG(MEME_PRICE_PER_SUPPLY_PYEONG)\": 2798.8619602716853}]"
+    },
+    {
+      "query": "What is the total population in each '시도명' (SD) for the latest date available?",
+      "expected_response": "[{\"SD\": \"\\uc11c\\uc6b8\", \"TOTAL_POPULATION\": 901956}]"
+    },
+    {
+      "query": "What is the average male population in '서울' (SD) for each '시군구명' (SGG) in 2025?",
+      "expected_response": "[{\"SGG\": \"\\uc11c\\ucd08\\uad6c\", \"AVERAGE_MALE_POPULATION\": \"19412.400000\"}, {\"SGG\": \"\\uc601\\ub4f1\\ud3ec\\uad6c\", \"AVERAGE_MALE_POPULATION\": \"5371.029412\"}, {\"SGG\": \"\\uc911\\uad6c\", \"AVERAGE_MALE_POPULATION\": \"783.081081\"}]"
+    },
+    {
+      "query": "What is the total population of people aged 20-29 in '중구' (SGG) for the latest date available?",
+      "expected_response": "[{\"TOTAL_20S_POPULATION\": 16637}]"
+    },
+    {
+      "query": "What is the total number of households and the average meme price per supply pyeong in '서초구' (SGG) for the latest date available?",
+      "expected_response": "[{\"TOTAL_HOUSEHOLDS\": 90290, \"AVERAGE_MEME_PRICE\": 7180.739092184555}]"
+    },
+    {
+      "query": "What is the ratio of children under 5 to females aged 20-40 in each '시군구명' (SGG) for the latest date available?",
+      "expected_response": "[{\"SGG\": \"\\uc911\\uad6c\", \"RATIO\": 0.0}, {\"SGG\": \"\\uc911\\uad6c\", \"RATIO\": 0.0}, {\"SGG\": \"\\uc911\\uad6c\", \"RATIO\": 0.176136}] (showing 3 of 118 rows)"
+    }
+  ],
+  "questions": [
+    "What is the average MEME_PRICE_PER_SUPPLY_PYEONG for apartments in '서울' in 2025?",
+    "What is the total number of households in '영등포구' as of the latest date?",
+    "What is the average JEONSE_PRICE_PER_SUPPLY_PYEONG for apartments in '서초구' in the second quarter of 2025?",
+    "What is the ratio of AGE_UNDER5 to FEMALE_20TO40 in '영등포동8가' as of the latest date?",
+    "What is the total number of males under 20 in '중구' as of the latest date?",
+    "What is the average ratio of children under 5 to females aged 20 to 40 in Seoul for the year 2025?",
+    "Which district (SGG) in Seoul has the highest number of children under 5 as of the latest date in the dataset?",
+    "What is the total number of females aged 20 to 40 in the '중구' district for the year 2025?",
+    "What is the ratio of children under 5 to females aged 20 to 40 in each district (SGG) of Seoul for the latest date in the dataset?",
+    "What is the average market price per supply pyeong for apartments in districts (SGG) with the highest ratio of children under 5 to females aged 20 to 40 for the latest date in the dataset?",
+    "What is the total population in each '시도명' (SD) for the latest date available?",
+    "What is the average male population in '서울' (SD) for each '시군구명' (SGG) in 2025?",
+    "What is the total population of people aged 20-29 in '중구' (SGG) for the latest date available?",
+    "What is the total number of households and the average meme price per supply pyeong in '서초구' (SGG) for the latest date available?",
+    "What is the ratio of children under 5 to females aged 20-40 in each '시군구명' (SGG) for the latest date available?"
+  ]
+}

@@ -1,0 +1,468 @@
+{
+  "NX_HT_ONL_MKTPR_A3": {
+    "MKT_ID": [
+      "market ID",
+      "market identifier",
+      "시장ID",
+      "시장 식별자"
+    ],
+    "BRD_ID": [
+      "board ID",
+      "board identifier",
+      "보드ID",
+      "보드 식별자"
+    ],
+    "ISU_CD": [
+      "issue code",
+      "stock code",
+      "종목코드",
+      "주식 코드"
+    ],
+    "INFO_DSTB_SEQ": [
+      "information distribution sequence",
+      "info dist seq",
+      "정보분배일련번호",
+      "정보 분배 일련번호"
+    ],
+    "SESS_ID": [
+      "session ID",
+      "session identifier",
+      "세션ID",
+      "세션 식별자"
+    ],
+    "TDG_PROCS_DTLS_TIME": [
+      "trade processing time",
+      "trade time",
+      "매매처리상세시각",
+      "거래 처리 시각"
+    ],
+    "PRDY_CMP_TP_CD": [
+      "previous day comparison code",
+      "day comparison code",
+      "전일대비구분코드",
+      "전일 대비 구분 코드"
+    ],
+    "LST_AKNB_TP_CD": [
+      "last acknowledgment code",
+      "acknowledgment code",
+      "최종매도매수구분코드",
+      "최종 매도매수 구분 코드"
+    ],
+    "DWDD": [
+      "DW date",
+      "data warehouse date",
+      "DW일자",
+      "데이터 웨어하우스 일자"
+    ],
+    "PRDY_CMP_PRC": [
+      "previous day price",
+      "day comparison price",
+      "전일대비가격",
+      "전일 대비 가격"
+    ],
+    "TD_PRC": [
+      "trade price",
+      "transaction price",
+      "체결가격",
+      "거래 가격"
+    ],
+    "TRD_QTY": [
+      "trade quantity",
+      "trading volume",
+      "거래수량",
+      "거래량"
+    ],
+    "OPPR": [
+      "opening price",
+      "starting price",
+      "시가",
+      "시작 가격"
+    ],
+    "HGPR": [
+      "high price",
+      "highest price",
+      "고가",
+      "최고 가격"
+    ],
+    "LWPR": [
+      "low price",
+      "lowest price",
+      "저가",
+      "최저 가격"
+    ],
+    "ACC_TRD_QTY": [
+      "accumulated trade quantity",
+      "total trade quantity",
+      "누적거래수량",
+      "누적 거래량"
+    ],
+    "ACC_TRVAL": [
+      "accumulated trade value",
+      "total trade value",
+      "누적거래대금",
+      "누적 거래 대금"
+    ],
+    "LP_HOLD_QTY": [
+      "LP holding quantity",
+      "LP holdings",
+      "LP보유수량",
+      "LP 보유량"
+    ],
+    "AKFB_OD_PRC": [
+      "best ask price",
+      "highest ask price",
+      "매도최우선호가가격",
+      "매도 최우선 호가 가격"
+    ],
+    "BDFB_OD_PRC": [
+      "best bid price",
+      "highest bid price",
+      "매수최우선호가가격",
+      "매수 최우선 호가 가격"
+    ]
+  },
+  "NX_HT_ONL_MKTPR_E1": {
+    "MKT_ID": [
+      "market ID",
+      "market identifier",
+      "시장ID",
+      "시장 식별자"
+    ],
+    "BRD_ID": [
+      "board ID",
+      "board identifier",
+      "보드ID",
+      "보드 식별자"
+    ],
+    "ISU_CD": [
+      "issue code",
+      "stock code",
+      "종목코드",
+      "주식 코드"
+    ],
+    "INFO_DSTB_SEQ": [
+      "information distribution sequence",
+      "distribution sequence number",
+      "정보분배일련번호",
+      "정보 분배 일련번호"
+    ],
+    "DWDD": [
+      "DW date",
+      "data warehouse date",
+      "DW일자",
+      "데이터 웨어하우스 일자"
+    ],
+    "AKOD_TOT_RQTY": [
+      "total ask quantity",
+      "total sell order quantity",
+      "매도호가총잔량",
+      "매도 호가 총 잔량"
+    ],
+    "BIOD_TOT_RQTY": [
+      "total bid quantity",
+      "total buy order quantity",
+      "매수호가총잔량",
+      "매수 호가 총 잔량"
+    ]
+  },
+  "NX_HT_ONL_STATS_B5": {
+    "DATA_CALC_TIME": [
+      "data calculation time",
+      "data generation time",
+      "데이터산출시각",
+      "데이터생성시각"
+    ],
+    "MKT_ID": [
+      "market ID",
+      "market identifier",
+      "시장ID",
+      "시장식별자"
+    ],
+    "DWDD": [
+      "DW date",
+      "data warehouse date",
+      "DW일자",
+      "데이터웨어하우스일자"
+    ],
+    "FLUC_OBJ_ISU_CT": [
+      "fluctuating issues count",
+      "number of fluctuating issues",
+      "등락대상종목수",
+      "등락종목수"
+    ],
+    "FLUC_TRD_FORM_CT": [
+      "fluctuating trades count",
+      "number of fluctuating trades",
+      "등락거래형성수",
+      "등락거래수"
+    ],
+    "FLUC_UPLM_CT": [
+      "upper limit count",
+      "number of upper limit fluctuations",
+      "등락상한수",
+      "상한가수"
+    ],
+    "FLUC_UP_CT": [
+      "upward fluctuations count",
+      "number of upward fluctuations",
+      "등락상승수",
+      "상승수"
+    ],
+    "FLUC_STDN_CT": [
+      "steady fluctuations count",
+      "number of steady fluctuations",
+      "등락보합수",
+      "보합수"
+    ],
+    "FLUC_LWLM_CT": [
+      "lower limit count",
+      "number of lower limit fluctuations",
+      "등락하한수",
+      "하한가수"
+    ],
+    "FLUC_DN_CT": [
+      "downward fluctuations count",
+      "number of downward fluctuations",
+      "등락하락수",
+      "하락수"
+    ],
+    "FLUC_BQUT_CT": [
+      "trend fluctuations count",
+      "number of trend fluctuations",
+      "등락기세수",
+      "기세수"
+    ],
+    "FLUC_BQUT_UP_CT": [
+      "upward trend count",
+      "number of upward trend fluctuations",
+      "등락기세상승수",
+      "기세상승수"
+    ],
+    "FLUC_BQUT_DN_CT": [
+      "downward trend count",
+      "number of downward trend fluctuations",
+      "등락기세하락수",
+      "기세하락수"
+    ]
+  },
+  "NX_HT_ONL_STATS_C3": {
+    "DATA_CALC_TIME": [
+      "data calculation time",
+      "calculation time",
+      "데이터산출시각",
+      "산출시각"
+    ],
+    "MKT_ID": [
+      "market ID",
+      "market identifier",
+      "시장ID",
+      "시장 식별자"
+    ],
+    "ISU_CD": [
+      "stock code",
+      "issue code",
+      "종목코드",
+      "주식 코드"
+    ],
+    "DWDD": [
+      "DW date",
+      "data warehouse date",
+      "DW일자",
+      "데이터웨어하우스 일자"
+    ],
+    "ASK_ARB_RQTY": [
+      "sell arbitrage remaining quantity",
+      "매도차익잔량",
+      "매도 차익 잔량"
+    ],
+    "BID_ARB_RQTY": [
+      "buy arbitrage remaining quantity",
+      "매수차익잔량",
+      "매수 차익 잔량"
+    ],
+    "ASK_NARB_RQTY": [
+      "sell non-arbitrage remaining quantity",
+      "매도비차익잔량",
+      "매도 비차익 잔량"
+    ],
+    "BID_NARB_RQTY": [
+      "buy non-arbitrage remaining quantity",
+      "매수비차익잔량",
+      "매수 비차익 잔량"
+    ],
+    "ASK_ARB_QTY": [
+      "sell arbitrage quantity",
+      "매도차익수량",
+      "매도 차익 수량"
+    ],
+    "BID_ARB_QTY": [
+      "buy arbitrage quantity",
+      "매수차익수량",
+      "매수 차익 수량"
+    ],
+    "ASK_NARB_QTY": [
+      "sell non-arbitrage quantity",
+      "매도비차익수량",
+      "매도 비차익 수량"
+    ],
+    "BID_NARB_QTY": [
+      "buy non-arbitrage quantity",
+      "매수비차익수량",
+      "매수 비차익 수량"
+    ],
+    "TRAK_ARB_TD_QTY": [
+      "entrusted sell arbitrage transaction quantity",
+      "위탁매도차익체결수량",
+      "위탁 매도 차익 체결 수량"
+    ],
+    "PCAK_ARB_TD_QTY": [
+      "self sell arbitrage transaction quantity",
+      "자기매도차익체결수량",
+      "자기 매도 차익 체결 수량"
+    ],
+    "TRBD_ARB_TD_QTY": [
+      "entrusted buy arbitrage transaction quantity",
+      "위탁매수차익체결수량",
+      "위탁 매수 차익 체결 수량"
+    ],
+    "PCBD_ARB_TD_QTY": [
+      "self buy arbitrage transaction quantity",
+      "자기매수차익체결수량",
+      "자기 매수 차익 체결 수량"
+    ],
+    "TRAK_NARB_TD_QTY": [
+      "entrusted sell non-arbitrage transaction quantity",
+      "위탁매도비차익체결수량",
+      "위탁 매도 비차익 체결 수량"
+    ],
+    "PCAK_NARB_TD_QTY": [
+      "self sell non-arbitrage transaction quantity",
+      "자기매도비차익체결수량",
+      "자기 매도 비차익 체결 수량"
+    ],
+    "TRBD_NARB_TD_QTY": [
+      "entrusted buy non-arbitrage transaction quantity",
+      "위탁매수비차익체결수량",
+      "위탁 매수 비차익 체결 수량"
+    ],
+    "PCBD_NARB_TD_QTY": [
+      "self buy non-arbitrage transaction quantity",
+      "자기매수비차익체결수량",
+      "자기 매수 비차익 체결 수량"
+    ],
+    "TRAK_ARB_TRVAL": [
+      "entrusted sell arbitrage transaction value",
+      "위탁매도차익거래대금",
+      "위탁 매도 차익 거래 대금"
+    ],
+    "PCAK_ARB_TRVAL": [
+      "self sell arbitrage transaction value",
+      "자기매도차익거래대금",
+      "자기 매도 차익 거래 대금"
+    ],
+    "TRBD_ARB_TRVAL": [
+      "entrusted buy arbitrage transaction value",
+      "위탁매수차익거래대금",
+      "위탁 매수 차익 거래 대금"
+    ],
+    "PCBD_ARB_TRVAL": [
+      "self buy arbitrage transaction value",
+      "자기매수차익거래대금",
+      "자기 매수 차익 거래 대금"
+    ],
+    "TRAK_NARB_TRVAL": [
+      "entrusted sell non-arbitrage transaction value",
+      "위탁매도비차익거래대금",
+      "위탁 매도 비차익 거래 대금"
+    ],
+    "PCAK_NARB_TRVAL": [
+      "self sell non-arbitrage transaction value",
+      "자기매도비차익거래대금",
+      "자기 매도 비차익 거래 대금"
+    ],
+    "TRBD_NARB_TRVAL": [
+      "entrusted buy non-arbitrage transaction value",
+      "위탁매수비차익거래대금",
+      "위탁 매수 비차익 거래 대금"
+    ],
+    "PCBD_NARB_TRVAL": [
+      "self buy non-arbitrage transaction value",
+      "자기매수비차익거래대금",
+      "자기 매수 비차익 거래 대금"
+    ]
+  },
+  "NX_HT_ONL_STATS_P0": {
+    "DATA_CALC_TIME": [
+      "data calculation time",
+      "data generation time",
+      "데이터 산출 시각",
+      "데이터 생성 시각"
+    ],
+    "MKT_ID": [
+      "market ID",
+      "market identifier",
+      "시장 ID",
+      "시장 식별자"
+    ],
+    "IVTR_TP_CD": [
+      "investor type code",
+      "investor classification code",
+      "투자자 구분 코드",
+      "투자자 분류 코드"
+    ],
+    "DWDD": [
+      "data warehouse date",
+      "DW date",
+      "DW 일자",
+      "데이터 웨어하우스 일자"
+    ],
+    "ASK_ARB_TD_QTY": [
+      "arbitrage sell quantity",
+      "arbitrage sell trade quantity",
+      "매도 차익 체결 수량",
+      "매도 차익 거래 수량"
+    ],
+    "ASK_ARB_TRVAL": [
+      "arbitrage sell value",
+      "arbitrage sell trade value",
+      "매도 차익 거래 대금",
+      "매도 차익 거래 금액"
+    ],
+    "ASK_NARB_TD_QTY": [
+      "non-arbitrage sell quantity",
+      "non-arbitrage sell trade quantity",
+      "매도 비차익 체결 수량",
+      "매도 비차익 거래 수량"
+    ],
+    "ASK_NARB_TRVAL": [
+      "non-arbitrage sell value",
+      "non-arbitrage sell trade value",
+      "매도 비차익 거래 대금",
+      "매도 비차익 거래 금액"
+    ],
+    "BID_ARB_TD_QTY": [
+      "arbitrage buy quantity",
+      "arbitrage buy trade quantity",
+      "매수 차익 체결 수량",
+      "매수 차익 거래 수량"
+    ],
+    "BID_ARB_TRVAL": [
+      "arbitrage buy value",
+      "arbitrage buy trade value",
+      "매수 차익 거래 대금",
+      "매수 차익 거래 금액"
+    ],
+    "BID_NARB_TD_QTY": [
+      "non-arbitrage buy quantity",
+      "non-arbitrage buy trade quantity",
+      "매수 비차익 체결 수량",
+      "매수 비차익 거래 수량"
+    ],
+    "BID_NARB_TRVAL": [
+      "non-arbitrage buy value",
+      "non-arbitrage buy trade value",
+      "매수 비차익 거래 대금",
+      "매수 비차익 거래 금액"
+    ]
+  }
+}

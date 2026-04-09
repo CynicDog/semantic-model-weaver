@@ -1,0 +1,1076 @@
+name: seoul_districtlevel_data_floating_population_consumption_and_assets_grandata
+description: Semantic model for SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS.GRANDATA
+tables:
+- name: ASSET_INCOME_INFO
+  description: Monthly KCB customer group income and assets information
+  base_table:
+    database: SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS
+    schema: GRANDATA
+    table: ASSET_INCOME_INFO
+  primary_key:
+    columns:
+    - AGE_GROUP
+    - CITY_CODE
+    - DISTRICT_CODE
+    - GENDER
+    - PROVINCE_CODE
+    - STANDARD_YEAR_MONTH
+  dimensions:
+  - name: PROVINCE_CODE
+    expr: PROVINCE_CODE
+    data_type: VARCHAR
+    description: Province code
+    sample_values:
+    - '11'
+  - name: CITY_CODE
+    expr: CITY_CODE
+    data_type: VARCHAR
+    description: City code
+    sample_values:
+    - '11560'
+    - '11140'
+    - '11650'
+  - name: DISTRICT_CODE
+    expr: DISTRICT_CODE
+    data_type: VARCHAR
+    description: District code
+    sample_values:
+    - '11560112'
+    - '11140161'
+    - '11140170'
+    - '11140158'
+    - '11560109'
+  - name: STANDARD_YEAR_MONTH
+    expr: STANDARD_YEAR_MONTH
+    data_type: VARCHAR
+    description: Standard year and month (YYYYMM)
+    sample_values:
+    - '202104'
+    - '202305'
+    - '202110'
+    - '202312'
+    - '202103'
+  - name: INCOME_TYPE
+    expr: INCOME_TYPE
+    data_type: VARCHAR
+    description: File classification (Residential/Corporate)
+    sample_values:
+    - '1'
+    - '0'
+  - name: GENDER
+    expr: GENDER
+    data_type: VARCHAR
+    description: Gender
+    sample_values:
+    - F
+    - M
+  - name: AGE_GROUP
+    expr: AGE_GROUP
+    data_type: VARCHAR
+    description: Age group
+    sample_values:
+    - '35'
+    - '20'
+    - '70'
+    - '65'
+    - '55'
+  measures:
+  - name: CUSTOMER_COUNT
+    expr: SUM(CUSTOMER_COUNT)
+    data_type: NUMBER
+    description: 'Total population count (Unit: persons)'
+  - name: RATE_MODEL_GROUP_LARGE_COMPANY_EMPLOYEE
+    expr: SUM(RATE_MODEL_GROUP_LARGE_COMPANY_EMPLOYEE)
+    data_type: FLOAT
+    description: 'Occupation group ratio - Large company employees (Unit: %)'
+  - name: RATE_MODEL_GROUP_GENERAL_EMPLOYEE
+    expr: SUM(RATE_MODEL_GROUP_GENERAL_EMPLOYEE)
+    data_type: FLOAT
+    description: 'Occupation group ratio - General employees (Unit: %)'
+  - name: RATE_MODEL_GROUP_PROFESSIONAL_EMPLOYEE
+    expr: SUM(RATE_MODEL_GROUP_PROFESSIONAL_EMPLOYEE)
+    data_type: FLOAT
+    description: 'Occupation group ratio - Professional employees (Unit: %)'
+  - name: RATE_MODEL_GROUP_EXECUTIVES
+    expr: SUM(RATE_MODEL_GROUP_EXECUTIVES)
+    data_type: FLOAT
+    description: 'Occupation group ratio - Executives (Unit: %)'
+  - name: RATE_MODEL_GROUP_GENERAL_SELF_EMPLOYED
+    expr: SUM(RATE_MODEL_GROUP_GENERAL_SELF_EMPLOYED)
+    data_type: FLOAT
+    description: 'Occupation group ratio - General self-employed (Unit: %)'
+  - name: RATE_MODEL_GROUP_PROFESSIONAL_SELF_EMPLOYED
+    expr: SUM(RATE_MODEL_GROUP_PROFESSIONAL_SELF_EMPLOYED)
+    data_type: FLOAT
+    description: 'Occupation group ratio - Professional self-employed (Unit: %)'
+  - name: RATE_MODEL_GROUP_OTHERS
+    expr: SUM(RATE_MODEL_GROUP_OTHERS)
+    data_type: FLOAT
+    description: 'Occupation group ratio - Others (housewives, students, unemployed, etc.) (Unit: %)'
+  - name: PYEONG_UNDER_20_COUNT
+    expr: SUM(PYEONG_UNDER_20_COUNT)
+    data_type: NUMBER
+    description: '(Based on apartment) Number of residents living in under 20 pyeong units (Unit: persons)'
+  - name: PYEONG_OVER_20_COUNT
+    expr: SUM(PYEONG_OVER_20_COUNT)
+    data_type: NUMBER
+    description: '(Based on apartment) Number of residents living in 20-29 pyeong units (Unit: persons)'
+  - name: PYEONG_OVER_30_COUNT
+    expr: SUM(PYEONG_OVER_30_COUNT)
+    data_type: NUMBER
+    description: '(Based on apartment) Number of residents living in 30-39 pyeong units (Unit: persons)'
+  - name: PYEONG_OVER_40_COUNT
+    expr: SUM(PYEONG_OVER_40_COUNT)
+    data_type: NUMBER
+    description: '(Based on apartment) Number of residents living in 40+ pyeong units (Unit: persons)'
+  - name: AVERAGE_PRICE_GAP
+    expr: SUM(AVERAGE_PRICE_GAP)
+    data_type: FLOAT
+    description: '(Based on apartment) Sale price growth rate (Unit: %)'
+  - name: AVERAGE_LEASE_GAP
+    expr: SUM(AVERAGE_LEASE_GAP)
+    data_type: FLOAT
+    description: '(Based on apartment) Jeonse deposit growth rate (Unit: %)'
+  - name: AVERAGE_INCOME
+    expr: SUM(AVERAGE_INCOME)
+    data_type: NUMBER
+    description: 'Average annual income (Unit: thousand KRW)'
+  - name: AVERAGE_INCOME_OVER_70
+    expr: SUM(AVERAGE_INCOME_OVER_70)
+    data_type: NUMBER
+    description: 'Average annual income of high-income earners (Unit: thousand KRW)'
+  - name: AVERAGE_HOUSEHOLD_INCOME
+    expr: SUM(AVERAGE_HOUSEHOLD_INCOME)
+    data_type: NUMBER
+    description: 'Average household income (Unit: thousand KRW)'
+  - name: MEDIAN_INCOME
+    expr: SUM(MEDIAN_INCOME)
+    data_type: NUMBER
+    description: 'Median annual income (Unit: thousand KRW)'
+  - name: RATE_INCOME_UNDER_20M
+    expr: SUM(RATE_INCOME_UNDER_20M)
+    data_type: FLOAT
+    description: 'Ratio of residents with annual income under 20 million won (Unit: %)'
+  - name: RATE_INCOME_20M_TO_30M
+    expr: SUM(RATE_INCOME_20M_TO_30M)
+    data_type: FLOAT
+    description: 'Ratio of residents with annual income between 20-30 million won (Unit: %)'
+  - name: RATE_INCOME_30M_TO_40M
+    expr: SUM(RATE_INCOME_30M_TO_40M)
+    data_type: FLOAT
+    description: 'Ratio of residents with annual income between 30-40 million won (Unit: %)'
+  - name: RATE_INCOME_40M_TO_50M
+    expr: SUM(RATE_INCOME_40M_TO_50M)
+    data_type: FLOAT
+    description: 'Ratio of residents with annual income between 40-50 million won (Unit: %)'
+  - name: RATE_INCOME_50M_TO_60M
+    expr: SUM(RATE_INCOME_50M_TO_60M)
+    data_type: FLOAT
+    description: 'Ratio of residents with annual income between 50-60 million won (Unit: %)'
+  - name: RATE_INCOME_60M_TO_70M
+    expr: SUM(RATE_INCOME_60M_TO_70M)
+    data_type: FLOAT
+    description: 'Ratio of residents with annual income between 60-70 million won (Unit: %)'
+  - name: RATE_INCOME_OVER_70M
+    expr: SUM(RATE_INCOME_OVER_70M)
+    data_type: FLOAT
+    description: 'Ratio of residents with annual income over 70 million won (Unit: %)'
+  - name: CARD_COUNT
+    expr: SUM(CARD_COUNT)
+    data_type: NUMBER
+    description: 'Number of cardholders (Unit: persons)'
+  - name: CREDIT_CARD_COUNT
+    expr: SUM(CREDIT_CARD_COUNT)
+    data_type: NUMBER
+    description: 'Number of cardholders - Credit cards (Unit: persons)'
+  - name: CHECK_CARD_COUNT
+    expr: SUM(CHECK_CARD_COUNT)
+    data_type: NUMBER
+    description: 'Number of cardholders - Debit cards (Unit: persons)'
+  - name: AVERAGE_CARD_COUNT
+    expr: SUM(AVERAGE_CARD_COUNT)
+    data_type: NUMBER
+    description: 'Average number of cards per person (Unit: cases)'
+  - name: AVERAGE_CREDIT_CARD_COUNT
+    expr: SUM(AVERAGE_CREDIT_CARD_COUNT)
+    data_type: NUMBER
+    description: 'Average number of credit cards per person (Unit: cases)'
+  - name: AVERAGE_CHECK_CARD_COUNT
+    expr: SUM(AVERAGE_CHECK_CARD_COUNT)
+    data_type: NUMBER
+    description: 'Average number of debit cards per person (Unit: cases)'
+  - name: TOTAL_USAGE_AMOUNT
+    expr: SUM(TOTAL_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: '3-month card usage amount (Unit: thousand KRW)'
+  - name: TOTAL_SALES_USAGE_AMOUNT
+    expr: SUM(TOTAL_SALES_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: '3-month credit sales usage amount (Unit: thousand KRW)'
+  - name: TOTAL_FULL_PAYMENT_USAGE_AMOUNT
+    expr: SUM(TOTAL_FULL_PAYMENT_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: '3-month lump-sum payment usage amount (Unit: thousand KRW)'
+  - name: TOTAL_INSTALLMENT_USAGE_AMOUNT
+    expr: SUM(TOTAL_INSTALLMENT_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: '3-month installment usage amount (Unit: thousand KRW)'
+  - name: TOTAL_CASH_ADVANCE_USAGE_AMOUNT
+    expr: SUM(TOTAL_CASH_ADVANCE_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: '3-month cash advance usage amount (Unit: thousand KRW)'
+  - name: TOTAL_CREDIT_CARD_USAGE_AMOUNT
+    expr: SUM(TOTAL_CREDIT_CARD_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: '3-month credit card usage amount (Unit: thousand KRW)'
+  - name: TOTAL_CHECK_CARD_USAGE_AMOUNT
+    expr: SUM(TOTAL_CHECK_CARD_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: '3-month debit card usage amount (Unit: thousand KRW)'
+  - name: TOTAL_ABROAD_AMOUNT
+    expr: SUM(TOTAL_ABROAD_AMOUNT)
+    data_type: NUMBER
+    description: '3-month overseas consumption amount (Unit: thousand KRW)'
+  - name: AVERAGE_USAGE_AMOUNT
+    expr: SUM(AVERAGE_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month card usage amount (Unit: thousand KRW)'
+  - name: AVERAGE_SALES_USAGE_AMOUNT
+    expr: SUM(AVERAGE_SALES_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month credit sales usage amount (Unit: thousand KRW)'
+  - name: AVERAGE_FULL_PAYMENT_USAGE_AMOUNT
+    expr: SUM(AVERAGE_FULL_PAYMENT_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month lump-sum payment usage amount (Unit: thousand KRW)'
+  - name: AVERAGE_INSTALLMENT_USAGE_AMOUNT
+    expr: SUM(AVERAGE_INSTALLMENT_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month installment usage amount (Unit: thousand KRW)'
+  - name: AVERAGE_CASH_ADVANCE_USAGE_AMOUNT
+    expr: SUM(AVERAGE_CASH_ADVANCE_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month cash advance usage amount (Unit: thousand KRW)'
+  - name: AVERAGE_CREDIT_CARD_USAGE_AMOUNT
+    expr: SUM(AVERAGE_CREDIT_CARD_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month credit card usage amount (Unit: thousand KRW)'
+  - name: AVERAGE_CHECK_CARD_USAGE_AMOUNT
+    expr: SUM(AVERAGE_CHECK_CARD_USAGE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month debit card usage amount (Unit: thousand KRW)'
+  - name: AVERAGE_ABROAD_AMOUNT
+    expr: SUM(AVERAGE_ABROAD_AMOUNT)
+    data_type: NUMBER
+    description: 'Average 3-month overseas consumption amount (Unit: thousand KRW)'
+  - name: AVERAGE_TOTAL_LIMIT_AMOUNT
+    expr: SUM(AVERAGE_TOTAL_LIMIT_AMOUNT)
+    data_type: NUMBER
+    description: 'Average total card limit amount (Unit: thousand KRW)'
+  - name: BALANCE_COUNT
+    expr: SUM(BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of loan holders (Unit: persons)'
+  - name: BANK_BALANCE_COUNT
+    expr: SUM(BANK_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of loan holders - Primary financial institution loans (Unit: persons)'
+  - name: NON_BANK_BALANCE_COUNT
+    expr: SUM(NON_BANK_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of loan holders - Secondary financial institution loans (Unit: persons)'
+  - name: CREDIT_BALANCE_COUNT
+    expr: SUM(CREDIT_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of loan holders - Unsecured loans (Unit: persons)'
+  - name: HOUSING_BALANCE_COUNT
+    expr: SUM(HOUSING_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of loan holders - Mortgage loans (Unit: persons)'
+  - name: MORTGAGE1_BALANCE_COUNT
+    expr: SUM(MORTGAGE1_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of loan holders - Deposit/securities-backed loans (Unit: persons)'
+  - name: MORTGAGE2_BALANCE_COUNT
+    expr: SUM(MORTGAGE2_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of loan holders - Asset-backed loans (Unit: persons)'
+  - name: AVERAGE_BALANCE_COUNT
+    expr: SUM(AVERAGE_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Average number of loans (Unit: cases)'
+  - name: AVERAGE_BANK_BALANCE_COUNT
+    expr: SUM(AVERAGE_BANK_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Average number of loans - Primary financial institution (Unit: cases)'
+  - name: AVERAGE_NON_BANK_BALANCE_COUNT
+    expr: SUM(AVERAGE_NON_BANK_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Average number of loans - Secondary financial institution (Unit: cases)'
+  - name: AVERAGE_CREDIT_BALANCE_COUNT
+    expr: SUM(AVERAGE_CREDIT_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Average number of loans - Unsecured loans (Unit: cases)'
+  - name: AVERAGE_HOUSING_BALANCE_COUNT
+    expr: SUM(AVERAGE_HOUSING_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Average number of loans - Mortgage loans (Unit: cases)'
+  - name: AVERAGE_MORTGAGE1_BALANCE_COUNT
+    expr: SUM(AVERAGE_MORTGAGE1_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Average number of loans - Deposit/securities-backed loans (Unit: cases)'
+  - name: AVERAGE_MORTGAGE2_BALANCE_COUNT
+    expr: SUM(AVERAGE_MORTGAGE2_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Average number of loans - Asset-backed loans (Unit: cases)'
+  - name: TOTAL_BALANCE_AMOUNT
+    expr: SUM(TOTAL_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total loan balance (Unit: thousand KRW)'
+  - name: TOTAL_BANK_BALANCE_AMOUNT
+    expr: SUM(TOTAL_BANK_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total loan balance - Primary financial institution (Unit: thousand KRW)'
+  - name: TOTAL_NON_BANK_BALANCE_AMOUNT
+    expr: SUM(TOTAL_NON_BANK_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total loan balance - Secondary financial institution (Unit: thousand KRW)'
+  - name: TOTAL_CREDIT_BALANCE_AMOUNT
+    expr: SUM(TOTAL_CREDIT_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total loan balance - Unsecured loans (Unit: thousand KRW)'
+  - name: TOTAL_HOUSING_BALANCE_AMOUNT
+    expr: SUM(TOTAL_HOUSING_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total loan balance - Mortgage loans (Unit: thousand KRW)'
+  - name: TOTAL_MORTGAGE1_BALANCE_AMOUNT
+    expr: SUM(TOTAL_MORTGAGE1_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total loan balance - Deposit/securities-backed loans (Unit: thousand KRW)'
+  - name: TOTAL_MORTGAGE2_BALANCE_AMOUNT
+    expr: SUM(TOTAL_MORTGAGE2_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total loan balance - Asset-backed loans (Unit: thousand KRW)'
+  - name: AVERAGE_BALANCE_AMOUNT
+    expr: SUM(AVERAGE_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average loan balance (Unit: thousand KRW)'
+  - name: AVERAGE_BANK_BALANCE_AMOUNT
+    expr: SUM(AVERAGE_BANK_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average loan balance - Primary financial institution (Unit: thousand KRW)'
+  - name: AVERAGE_NON_BANK_BALANCE_AMOUNT
+    expr: SUM(AVERAGE_NON_BANK_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average loan balance - Secondary financial institution (Unit: thousand KRW)'
+  - name: AVERAGE_CREDIT_BALANCE_AMOUNT
+    expr: SUM(AVERAGE_CREDIT_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average loan balance - Unsecured loans (Unit: thousand KRW)'
+  - name: AVERAGE_HOUSING_BALANCE_AMOUNT
+    expr: SUM(AVERAGE_HOUSING_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average loan balance - Mortgage loans (Unit: thousand KRW)'
+  - name: AVERAGE_MORTGAGE1_BALANCE_AMOUNT
+    expr: SUM(AVERAGE_MORTGAGE1_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average loan balance - Deposit/securities-backed loans (Unit: thousand KRW)'
+  - name: AVERAGE_MORTGAGE2_BALANCE_AMOUNT
+    expr: SUM(AVERAGE_MORTGAGE2_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Average loan balance - Asset-backed loans (Unit: thousand KRW)'
+  - name: NEW_BALANCE_COUNT
+    expr: SUM(NEW_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of new loans (Unit: cases)'
+  - name: NEW_BANK_BALANCE_COUNT
+    expr: SUM(NEW_BANK_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of new loans - Primary financial institution (Unit: cases)'
+  - name: NEW_NON_BANK_BALANCE_COUNT
+    expr: SUM(NEW_NON_BANK_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of new loans - Secondary financial institution (Unit: cases)'
+  - name: NEW_CREDIT_BALANCE_COUNT
+    expr: SUM(NEW_CREDIT_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of new loans - Unsecured loans (Unit: cases)'
+  - name: NEW_HOUSING_BALANCE_COUNT
+    expr: SUM(NEW_HOUSING_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of new loans - Mortgage loans (Unit: cases)'
+  - name: NEW_MORTGAGE1_BALANCE_COUNT
+    expr: SUM(NEW_MORTGAGE1_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of new loans - Deposit/securities-backed loans (Unit: cases)'
+  - name: NEW_MORTGAGE2_BALANCE_COUNT
+    expr: SUM(NEW_MORTGAGE2_BALANCE_COUNT)
+    data_type: NUMBER
+    description: 'Number of new loans - Asset-backed loans (Unit: cases)'
+  - name: NEW_TOTAL_BALANCE_AMOUNT
+    expr: SUM(NEW_TOTAL_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total new loan balance (Unit: thousand KRW)'
+  - name: NEW_TOTAL_BANK_BALANCE_AMOUNT
+    expr: SUM(NEW_TOTAL_BANK_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total new loan balance - Primary financial institution (Unit: thousand KRW)'
+  - name: NEW_TOTAL_NON_BANK_BALANCE_AMOUNT
+    expr: SUM(NEW_TOTAL_NON_BANK_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total new loan balance - Secondary financial institution (Unit: thousand KRW)'
+  - name: NEW_TOTAL_CREDIT_BALANCE_AMOUNT
+    expr: SUM(NEW_TOTAL_CREDIT_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total new loan balance - Unsecured loans (Unit: thousand KRW)'
+  - name: NEW_TOTAL_HOUSING_BALANCE_AMOUNT
+    expr: SUM(NEW_TOTAL_HOUSING_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total new loan balance - Mortgage loans (Unit: thousand KRW)'
+  - name: NEW_TOTAL_MORTGAGE1_BALANCE_AMOUNT
+    expr: SUM(NEW_TOTAL_MORTGAGE1_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total new loan balance - Deposit/securities-backed loans (Unit: thousand KRW)'
+  - name: NEW_TOTAL_MORTGAGE2_BALANCE_AMOUNT
+    expr: SUM(NEW_TOTAL_MORTGAGE2_BALANCE_AMOUNT)
+    data_type: NUMBER
+    description: 'Total new loan balance - Asset-backed loans (Unit: thousand KRW)'
+  - name: DELINQUENT0_COUNT
+    expr: SUM(DELINQUENT0_COUNT)
+    data_type: NUMBER
+    description: 'Number of delinquent borrowers (mild) (Unit: persons)'
+  - name: DELINQUENT30_COUNT
+    expr: SUM(DELINQUENT30_COUNT)
+    data_type: NUMBER
+    description: 'Number of delinquent borrowers (moderate) (Unit: persons)'
+  - name: DELINQUENT90_COUNT
+    expr: SUM(DELINQUENT90_COUNT)
+    data_type: NUMBER
+    description: 'Number of delinquent borrowers (severe) (Unit: persons)'
+  - name: AVERAGE_DELINQUENT_COUNT
+    expr: SUM(AVERAGE_DELINQUENT_COUNT)
+    data_type: NUMBER
+    description: 'Average number of delinquencies (Unit: persons)'
+  - name: AVERAGE_DELINQUENT_DAYS
+    expr: SUM(AVERAGE_DELINQUENT_DAYS)
+    data_type: NUMBER
+    description: 'Average delinquency days (Unit: days)'
+  - name: AVERAGE_MAX_DELINQUENT_DAYS
+    expr: SUM(AVERAGE_MAX_DELINQUENT_DAYS)
+    data_type: NUMBER
+    description: 'Average maximum delinquency days (Unit: days)'
+  - name: AVERAGE_DELINQUENT_AMOUNT
+    expr: SUM(AVERAGE_DELINQUENT_AMOUNT)
+    data_type: NUMBER
+    description: 'Average delinquent amount (Unit: thousand KRW)'
+  - name: MEDIAN_DELINQUENT_AMOUNT
+    expr: SUM(MEDIAN_DELINQUENT_AMOUNT)
+    data_type: NUMBER
+    description: 'Median delinquent amount (Unit: thousand KRW)'
+  - name: AVERAGE_SCORE
+    expr: SUM(AVERAGE_SCORE)
+    data_type: NUMBER
+    description: 'Average credit score (Unit: grade)'
+  - name: RATE_SCORE1
+    expr: SUM(RATE_SCORE1)
+    data_type: FLOAT
+    description: 'Ratio of high credit score holders (Unit: %)'
+  - name: RATE_SCORE2
+    expr: SUM(RATE_SCORE2)
+    data_type: FLOAT
+    description: 'Ratio of medium credit score holders (Unit: %)'
+  - name: RATE_SCORE3
+    expr: SUM(RATE_SCORE3)
+    data_type: FLOAT
+    description: 'Ratio of low credit score holders (Unit: %)'
+  - name: AVERAGE_LOAN_POTENTIAL1
+    expr: SUM(AVERAGE_LOAN_POTENTIAL1)
+    data_type: NUMBER
+    description: 'Deposit capacity amount 1 (Unit: thousand KRW)'
+  - name: AVERAGE_LOAN_POTENTIAL2
+    expr: SUM(AVERAGE_LOAN_POTENTIAL2)
+    data_type: NUMBER
+    description: 'Deposit capacity amount 2 (Unit: thousand KRW)'
+  - name: OWN_HOUSING_COUNT
+    expr: SUM(OWN_HOUSING_COUNT)
+    data_type: NUMBER
+    description: 'Number of homeowners (Unit: persons)'
+  - name: MULTIPLE_HOUSING_COUNT
+    expr: SUM(MULTIPLE_HOUSING_COUNT)
+    data_type: NUMBER
+    description: 'Number of multiple property owners (Unit: persons)'
+  - name: AVERAGE_ASSET_AMOUNT
+    expr: SUM(AVERAGE_ASSET_AMOUNT)
+    data_type: NUMBER
+    description: 'Average total asset valuation amount (Unit: thousand KRW)'
+  - name: RATE_HIGHEND
+    expr: SUM(RATE_HIGHEND)
+    data_type: FLOAT
+    description: 'Ratio of highend target customers (Unit: %)'
+- name: CARD_SALES_INFO
+  description: Monthly Card Sales Information
+  base_table:
+    database: SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS
+    schema: GRANDATA
+    table: CARD_SALES_INFO
+  primary_key:
+    columns:
+    - AGE_GROUP
+    - CITY_CODE
+    - DISTRICT_CODE
+    - GENDER
+    - PROVINCE_CODE
+    - STANDARD_YEAR_MONTH
+    - TIME_SLOT
+    - WEEKDAY_WEEKEND
+  dimensions:
+  - name: PROVINCE_CODE
+    expr: PROVINCE_CODE
+    data_type: VARCHAR
+    description: Province code
+    sample_values:
+    - '11'
+  - name: CITY_CODE
+    expr: CITY_CODE
+    data_type: VARCHAR
+    description: City code
+    sample_values:
+    - '11560'
+    - '11140'
+    - '11650'
+  - name: DISTRICT_CODE
+    expr: DISTRICT_CODE
+    data_type: VARCHAR
+    description: District code
+    sample_values:
+    - '11560132'
+    - '11140156'
+    - '11140159'
+    - '11140128'
+    - '11140146'
+  - name: STANDARD_YEAR_MONTH
+    expr: STANDARD_YEAR_MONTH
+    data_type: VARCHAR
+    description: Standard year and month (YYYYMM)
+    sample_values:
+    - '202204'
+    - '202108'
+    - '202406'
+    - '202308'
+    - '202407'
+  - name: CARD_TYPE
+    expr: CARD_TYPE
+    data_type: VARCHAR
+    description: Individual or corporate
+    sample_values:
+    - '1'
+    - '0'
+  - name: WEEKDAY_WEEKEND
+    expr: WEEKDAY_WEEKEND
+    data_type: VARCHAR
+    description: Weekday or weekend indicator
+    sample_values:
+    - H
+    - W
+  - name: GENDER
+    expr: GENDER
+    data_type: VARCHAR
+    description: Gender
+    sample_values:
+    - M
+    - F
+    - '*'
+  - name: AGE_GROUP
+    expr: AGE_GROUP
+    data_type: VARCHAR
+    description: Age group
+    sample_values:
+    - '25'
+    - '60'
+    - '45'
+    - '50'
+    - '55'
+  - name: TIME_SLOT
+    expr: TIME_SLOT
+    data_type: VARCHAR
+    description: Time slot
+    sample_values:
+    - T21
+    - T09
+    - T15
+    - T18
+    - T06
+  - name: LIFESTYLE
+    expr: LIFESTYLE
+    data_type: VARCHAR
+    description: Lifestyle category
+    sample_values:
+    - L01
+    - L05
+    - L03
+    - L04
+    - L06
+  measures:
+  - name: TOTAL_SALES
+    expr: SUM(TOTAL_SALES)
+    data_type: NUMBER
+    description: 'Total sales amount (Unit: KRW)'
+  - name: FOOD_SALES
+    expr: SUM(FOOD_SALES)
+    data_type: NUMBER
+    description: 'Food sales amount (Unit: KRW)'
+  - name: COFFEE_SALES
+    expr: SUM(COFFEE_SALES)
+    data_type: NUMBER
+    description: 'Coffee sales amount (Unit: KRW)'
+  - name: ENTERTAINMENT_SALES
+    expr: SUM(ENTERTAINMENT_SALES)
+    data_type: NUMBER
+    description: 'Entertainment sales amount (Unit: KRW)'
+  - name: DEPARTMENT_STORE_SALES
+    expr: SUM(DEPARTMENT_STORE_SALES)
+    data_type: NUMBER
+    description: 'Department store sales amount (Unit: KRW)'
+  - name: LARGE_DISCOUNT_STORE_SALES
+    expr: SUM(LARGE_DISCOUNT_STORE_SALES)
+    data_type: NUMBER
+    description: 'Large discount store sales amount (Unit: KRW)'
+  - name: SMALL_RETAIL_STORE_SALES
+    expr: SUM(SMALL_RETAIL_STORE_SALES)
+    data_type: NUMBER
+    description: 'Small retail store sales amount (Unit: KRW)'
+  - name: CLOTHING_ACCESSORIES_SALES
+    expr: SUM(CLOTHING_ACCESSORIES_SALES)
+    data_type: NUMBER
+    description: 'Clothing and accessories sales amount (Unit: KRW)'
+  - name: SPORTS_CULTURE_LEISURE_SALES
+    expr: SUM(SPORTS_CULTURE_LEISURE_SALES)
+    data_type: NUMBER
+    description: 'Sports, culture, and leisure sales amount (Unit: KRW)'
+  - name: ACCOMMODATION_SALES
+    expr: SUM(ACCOMMODATION_SALES)
+    data_type: NUMBER
+    description: 'Accommodation sales amount (Unit: KRW)'
+  - name: TRAVEL_SALES
+    expr: SUM(TRAVEL_SALES)
+    data_type: NUMBER
+    description: 'Travel sales amount (Unit: KRW)'
+  - name: BEAUTY_SALES
+    expr: SUM(BEAUTY_SALES)
+    data_type: NUMBER
+    description: 'Beauty sales amount (Unit: KRW)'
+  - name: HOME_LIFE_SERVICE_SALES
+    expr: SUM(HOME_LIFE_SERVICE_SALES)
+    data_type: NUMBER
+    description: 'Home and life service sales amount (Unit: KRW)'
+  - name: EDUCATION_ACADEMY_SALES
+    expr: SUM(EDUCATION_ACADEMY_SALES)
+    data_type: NUMBER
+    description: 'Education and academy sales amount (Unit: KRW)'
+  - name: MEDICAL_SALES
+    expr: SUM(MEDICAL_SALES)
+    data_type: NUMBER
+    description: 'Medical sales amount (Unit: KRW)'
+  - name: ELECTRONICS_FURNITURE_SALES
+    expr: SUM(ELECTRONICS_FURNITURE_SALES)
+    data_type: NUMBER
+    description: 'Electronics and furniture sales amount (Unit: KRW)'
+  - name: CAR_SALES
+    expr: SUM(CAR_SALES)
+    data_type: NUMBER
+    description: 'Car sales amount (Unit: KRW)'
+  - name: CAR_SERVICE_SUPPLIES_SALES
+    expr: SUM(CAR_SERVICE_SUPPLIES_SALES)
+    data_type: NUMBER
+    description: 'Car service and supplies sales amount (Unit: KRW)'
+  - name: GAS_STATION_SALES
+    expr: SUM(GAS_STATION_SALES)
+    data_type: NUMBER
+    description: 'Gas station sales amount (Unit: KRW)'
+  - name: E_COMMERCE_SALES
+    expr: SUM(E_COMMERCE_SALES)
+    data_type: NUMBER
+    description: 'E-commerce sales amount (Unit: KRW)'
+  - name: TOTAL_COUNT
+    expr: SUM(TOTAL_COUNT)
+    data_type: FLOAT
+    description: 'Total transaction count (Unit: cases)'
+  - name: FOOD_COUNT
+    expr: SUM(FOOD_COUNT)
+    data_type: FLOAT
+    description: 'Food transaction count (Unit: cases)'
+  - name: COFFEE_COUNT
+    expr: SUM(COFFEE_COUNT)
+    data_type: FLOAT
+    description: 'Coffee transaction count (Unit: cases)'
+  - name: ENTERTAINMENT_COUNT
+    expr: SUM(ENTERTAINMENT_COUNT)
+    data_type: FLOAT
+    description: 'Entertainment transaction count (Unit: cases)'
+  - name: DEPARTMENT_STORE_COUNT
+    expr: SUM(DEPARTMENT_STORE_COUNT)
+    data_type: FLOAT
+    description: 'Department store transaction count (Unit: cases)'
+  - name: LARGE_DISCOUNT_STORE_COUNT
+    expr: SUM(LARGE_DISCOUNT_STORE_COUNT)
+    data_type: FLOAT
+    description: 'Large discount store transaction count (Unit: cases)'
+  - name: SMALL_RETAIL_STORE_COUNT
+    expr: SUM(SMALL_RETAIL_STORE_COUNT)
+    data_type: FLOAT
+    description: 'Small retail store transaction count (Unit: cases)'
+  - name: CLOTHING_ACCESSORIES_COUNT
+    expr: SUM(CLOTHING_ACCESSORIES_COUNT)
+    data_type: FLOAT
+    description: 'Clothing and accessories transaction count (Unit: cases)'
+  - name: SPORTS_CULTURE_LEISURE_COUNT
+    expr: SUM(SPORTS_CULTURE_LEISURE_COUNT)
+    data_type: FLOAT
+    description: 'Sports, culture, and leisure transaction count (Unit: cases)'
+  - name: ACCOMMODATION_COUNT
+    expr: SUM(ACCOMMODATION_COUNT)
+    data_type: FLOAT
+    description: 'Accommodation transaction count (Unit: cases)'
+  - name: TRAVEL_COUNT
+    expr: SUM(TRAVEL_COUNT)
+    data_type: FLOAT
+    description: 'Travel transaction count (Unit: cases)'
+  - name: BEAUTY_COUNT
+    expr: SUM(BEAUTY_COUNT)
+    data_type: FLOAT
+    description: 'Beauty transaction count (Unit: cases)'
+  - name: HOME_LIFE_SERVICE_COUNT
+    expr: SUM(HOME_LIFE_SERVICE_COUNT)
+    data_type: FLOAT
+    description: 'Home and life service transaction count (Unit: cases)'
+  - name: EDUCATION_ACADEMY_COUNT
+    expr: SUM(EDUCATION_ACADEMY_COUNT)
+    data_type: FLOAT
+    description: 'Education and academy transaction count (Unit: cases)'
+  - name: MEDICAL_COUNT
+    expr: SUM(MEDICAL_COUNT)
+    data_type: FLOAT
+    description: 'Medical transaction count (Unit: cases)'
+  - name: ELECTRONICS_FURNITURE_COUNT
+    expr: SUM(ELECTRONICS_FURNITURE_COUNT)
+    data_type: FLOAT
+    description: 'Electronics and furniture transaction count (Unit: cases)'
+  - name: CAR_SALES_COUNT
+    expr: SUM(CAR_SALES_COUNT)
+    data_type: FLOAT
+    description: 'Car sales transaction count (Unit: cases)'
+  - name: CAR_SERVICE_SUPPLIES_COUNT
+    expr: SUM(CAR_SERVICE_SUPPLIES_COUNT)
+    data_type: FLOAT
+    description: 'Car service and supplies transaction count (Unit: cases)'
+  - name: GAS_STATION_COUNT
+    expr: SUM(GAS_STATION_COUNT)
+    data_type: FLOAT
+    description: 'Gas station transaction count (Unit: cases)'
+  - name: E_COMMERCE_COUNT
+    expr: SUM(E_COMMERCE_COUNT)
+    data_type: FLOAT
+    description: 'E-commerce transaction count (Unit: cases)'
+- name: CODE_MASTER
+  description: Common Code Master Table
+  base_table:
+    database: SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS
+    schema: GRANDATA
+    table: CODE_MASTER
+  dimensions:
+  - name: CODE_ID
+    expr: CODE_ID
+    data_type: VARCHAR
+    description: Code ID
+    sample_values:
+    - M01
+    - M02
+    - M03
+    - M04
+    - M08
+  - name: CODE_NAME
+    expr: CODE_NAME
+    data_type: VARCHAR
+    description: Code Name
+    sample_values:
+    - 성별
+    - 연령대
+    - 시간대
+    - 주중/주말
+    - 카드사_파일구분
+  - name: SUB_CODE
+    expr: SUB_CODE
+    data_type: VARCHAR
+    description: Sub Code
+    sample_values:
+    - M
+    - F
+    - '10'
+    - '15'
+    - '20'
+  - name: SUB_CODE_NAME
+    expr: SUB_CODE_NAME
+    data_type: VARCHAR
+    description: Sub Code Name
+    sample_values:
+    - 남
+    - 여
+    - 00-14
+    - 15-19
+    - 20-24
+  - name: USE_YN
+    expr: USE_YN
+    data_type: VARCHAR
+    description: 'Use Flag (Y: Use, N: Not Use)'
+    sample_values:
+    - Y
+  - name: REMARKS
+    expr: REMARKS
+    data_type: VARCHAR
+    description: Remarks/Description
+  measures:
+  - name: SORT_ORDER
+    expr: SUM(SORT_ORDER)
+    data_type: NUMBER
+    description: Sort Order
+- name: FLOATING_POPULATION_INFO
+  description: Monthly pedestrian traffic data by location, time, and demographics (residential, working, and visiting populations)
+  base_table:
+    database: SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS
+    schema: GRANDATA
+    table: FLOATING_POPULATION_INFO
+  primary_key:
+    columns:
+    - AGE_GROUP
+    - CITY_CODE
+    - DISTRICT_CODE
+    - GENDER
+    - PROVINCE_CODE
+    - STANDARD_YEAR_MONTH
+    - TIME_SLOT
+    - WEEKDAY_WEEKEND
+  dimensions:
+  - name: PROVINCE_CODE
+    expr: PROVINCE_CODE
+    data_type: VARCHAR
+    description: Province code
+    sample_values:
+    - '11'
+  - name: CITY_CODE
+    expr: CITY_CODE
+    data_type: VARCHAR
+    description: City code
+    sample_values:
+    - '11560'
+    - '11140'
+    - '11650'
+  - name: DISTRICT_CODE
+    expr: DISTRICT_CODE
+    data_type: VARCHAR
+    description: District code
+    sample_values:
+    - '11560128'
+    - '11140152'
+    - '11560122'
+    - '11140165'
+    - '11650103'
+  - name: STANDARD_YEAR_MONTH
+    expr: STANDARD_YEAR_MONTH
+    data_type: VARCHAR
+    description: Standard year and month (YYYYMM)
+    sample_values:
+    - '202306'
+    - '202311'
+    - '202305'
+    - '202111'
+    - '202310'
+  - name: WEEKDAY_WEEKEND
+    expr: WEEKDAY_WEEKEND
+    data_type: VARCHAR
+    description: Weekday or weekend indicator
+    sample_values:
+    - W
+    - H
+  - name: GENDER
+    expr: GENDER
+    data_type: VARCHAR
+    description: Gender
+    sample_values:
+    - M
+    - F
+  - name: AGE_GROUP
+    expr: AGE_GROUP
+    data_type: VARCHAR
+    description: Age group
+    sample_values:
+    - '35'
+    - '20'
+    - '55'
+    - '50'
+    - '60'
+  - name: TIME_SLOT
+    expr: TIME_SLOT
+    data_type: VARCHAR
+    description: Time slot
+    sample_values:
+    - T18
+    - T21
+    - T24
+    - T06
+    - T15
+  measures:
+  - name: RESIDENTIAL_POPULATION
+    expr: SUM(RESIDENTIAL_POPULATION)
+    data_type: FLOAT
+    description: 'Residential population (Unit: persons)'
+  - name: WORKING_POPULATION
+    expr: SUM(WORKING_POPULATION)
+    data_type: FLOAT
+    description: 'Working population (Unit: persons)'
+  - name: VISITING_POPULATION
+    expr: SUM(VISITING_POPULATION)
+    data_type: FLOAT
+    description: 'Visiting population (Unit: persons)'
+- name: M_SCCO_MST
+  description: Administrative boundary (legal district) master
+  base_table:
+    database: SEOUL_DISTRICTLEVEL_DATA_FLOATING_POPULATION_CONSUMPTION_AND_ASSETS
+    schema: GRANDATA
+    table: M_SCCO_MST
+  primary_key:
+    columns:
+    - CITY_CODE
+    - DISTRICT_CODE
+    - PROVINCE_CODE
+  dimensions:
+  - name: PROVINCE_CODE
+    expr: PROVINCE_CODE
+    data_type: VARCHAR
+    description: Province code
+    sample_values:
+    - '11'
+  - name: CITY_CODE
+    expr: CITY_CODE
+    data_type: VARCHAR
+    description: City/County/District code
+    sample_values:
+    - '11260'
+    - '11590'
+    - '11290'
+    - '11560'
+    - '11710'
+  - name: DISTRICT_CODE
+    expr: DISTRICT_CODE
+    data_type: VARCHAR
+    description: Town/Township/Neighborhood (legal district) code
+    sample_values:
+    - '11260103'
+    - '11590105'
+    - '11290101'
+    - '11290103'
+    - '11560113'
+  - name: PROVINCE_KOR_NAME
+    expr: PROVINCE_KOR_NAME
+    data_type: VARCHAR
+    description: Province name
+    sample_values:
+    - 서울특별시
+  - name: CITY_KOR_NAME
+    expr: CITY_KOR_NAME
+    data_type: VARCHAR
+    description: City/County/District name
+    sample_values:
+    - 중랑구
+    - 동작구
+    - 성북구
+    - 영등포구
+    - 송파구
+  - name: DISTRICT_KOR_NAME
+    expr: DISTRICT_KOR_NAME
+    data_type: VARCHAR
+    description: Town/Township/Neighborhood (legal district) name
+    sample_values:
+    - 중화동
+    - 흑석동
+    - 성북동
+    - 돈암동
+    - 당산동3가
+  - name: PROVINCE_ENG_NAME
+    expr: PROVINCE_ENG_NAME
+    data_type: VARCHAR
+    description: Province name (English)
+    sample_values:
+    - Seoul
+  - name: CITY_ENG_NAME
+    expr: CITY_ENG_NAME
+    data_type: VARCHAR
+    description: City/County/District name (English)
+    sample_values:
+    - Jungnang-gu
+    - Dongjak-gu
+    - Seongbuk-gu
+    - Yeongdeungpo-gu
+    - Songpa-gu
+  - name: DISTRICT_ENG_NAME
+    expr: DISTRICT_ENG_NAME
+    data_type: VARCHAR
+    description: Town/Township/Neighborhood (legal district) name (English)
+    sample_values:
+    - Junghwa-dong
+    - Heukseok-dong
+    - Seongbuk-dong
+    - Donam-dong
+    - Dangsan-dong 3(sam)-ga
+  - name: DISTRICT_GEOM
+    expr: DISTRICT_GEOM
+    data_type: VARCHAR
+    description: Town/Township/Neighborhood (legal district) polygon
+relationships:
+- name: ASSET_INCOME_INFO_to_CARD_SALES_INFO
+  left_table: ASSET_INCOME_INFO
+  right_table: CARD_SALES_INFO
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: PROVINCE_CODE
+    right_column: PROVINCE_CODE
+- name: ASSET_INCOME_INFO_to_FLOATING_POPULATION_INFO
+  left_table: ASSET_INCOME_INFO
+  right_table: FLOATING_POPULATION_INFO
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: PROVINCE_CODE
+    right_column: PROVINCE_CODE
+- name: ASSET_INCOME_INFO_to_M_SCCO_MST
+  left_table: ASSET_INCOME_INFO
+  right_table: M_SCCO_MST
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: PROVINCE_CODE
+    right_column: PROVINCE_CODE
+- name: CARD_SALES_INFO_to_FLOATING_POPULATION_INFO
+  left_table: CARD_SALES_INFO
+  right_table: FLOATING_POPULATION_INFO
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: PROVINCE_CODE
+    right_column: PROVINCE_CODE
+- name: CARD_SALES_INFO_to_M_SCCO_MST
+  left_table: CARD_SALES_INFO
+  right_table: M_SCCO_MST
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: PROVINCE_CODE
+    right_column: PROVINCE_CODE
+- name: FLOATING_POPULATION_INFO_to_M_SCCO_MST
+  left_table: FLOATING_POPULATION_INFO
+  right_table: M_SCCO_MST
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: PROVINCE_CODE
+    right_column: PROVINCE_CODE

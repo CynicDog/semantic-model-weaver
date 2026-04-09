@@ -1,0 +1,126 @@
+{
+  "golden_set": [
+    {
+      "query": "What is the average annual income of residents in Seoul in the year 2023?",
+      "expected_response": "[{\"AVG(AVERAGE_INCOME)\": \"40492.335546\"}]"
+    },
+    {
+      "query": "What is the total number of cardholders in each district for the month of April 2021?",
+      "expected_response": "[{\"DISTRICT_CODE\": \"11140135\", \"SUM(CARD_COUNT)\": 3160}, {\"DISTRICT_CODE\": \"11560111\", \"SUM(CARD_COUNT)\": 10862}, {\"DISTRICT_CODE\": \"11140115\", \"SUM(CARD_COUNT)\": 2113}] (showing 3 of 117 rows)"
+    },
+    {
+      "query": "What is the average number of loans per person in each city for the year 2022?",
+      "expected_response": "[{\"CITY_CODE\": \"11140\", \"AVG(AVERAGE_BALANCE_COUNT)\": \"2.036955\"}, {\"CITY_CODE\": \"11560\", \"AVG(AVERAGE_BALANCE_COUNT)\": \"2.042972\"}, {\"CITY_CODE\": \"11650\", \"AVG(AVERAGE_BALANCE_COUNT)\": \"2.084025\"}]"
+    },
+    {
+      "query": "What is the total loan balance for each district in Seoul for the year 2021?",
+      "expected_response": "[{\"DISTRICT_CODE\": \"11140147\", \"SUM(TOTAL_BALANCE_AMOUNT)\": 7423165825}, {\"DISTRICT_CODE\": \"11560131\", \"SUM(TOTAL_BALANCE_AMOUNT)\": 356407}, {\"DISTRICT_CODE\": \"11140112\", \"SUM(TOTAL_BALANCE_AMOUNT)\": 8756698616}] (showing 3 of 117 rows)"
+    },
+    {
+      "query": "What is the average credit score of residents in each district for the year 2023?",
+      "expected_response": "[{\"DISTRICT_CODE\": \"11140157\", \"AVG(AVERAGE_SCORE)\": \"3.427536\"}, {\"DISTRICT_CODE\": \"11140153\", \"AVG(AVERAGE_SCORE)\": \"3.159184\"}, {\"DISTRICT_CODE\": \"11140117\", \"AVG(AVERAGE_SCORE)\": \"3.427461\"}] (showing 3 of 118 rows)"
+    },
+    {
+      "query": "What is the total sales amount for each age group in the year 2022?",
+      "expected_response": "[{\"AGE_GROUP\": \"*\", \"TOTAL_SALES\": 23404732272745}, {\"AGE_GROUP\": \"50\", \"TOTAL_SALES\": 23507602119971}, {\"AGE_GROUP\": \"55\", \"TOTAL_SALES\": 16479133688244}] (showing 3 of 13 rows)"
+    },
+    {
+      "query": "What is the average food sales amount on weekends in the city with code '11140'?",
+      "expected_response": "[{\"AVERAGE_FOOD_SALES\": \"983383.588777\"}]"
+    },
+    {
+      "query": "What is the total transaction count for each lifestyle category in the month of April 2022?",
+      "expected_response": "[{\"LIFESTYLE\": \"L04\", \"TOTAL_TRANSACTION_COUNT\": 65324623.05}, {\"LIFESTYLE\": \"L01\", \"TOTAL_TRANSACTION_COUNT\": 82568138.95}, {\"LIFESTYLE\": \"L03\", \"TOTAL_TRANSACTION_COUNT\": 25685437.490000002}] (showing 3 of 7 rows)"
+    },
+    {
+      "query": "What is the total sales amount for each district in Seoul for the year 2021?",
+      "expected_response": "[{\"DISTRICT_CODE\": \"11140151\", \"TOTAL_SALES\": 22795894379}, {\"DISTRICT_CODE\": \"11560124\", \"TOTAL_SALES\": 2811316884343}, {\"DISTRICT_CODE\": \"11140162\", \"TOTAL_SALES\": 446952737843}] (showing 3 of 118 rows)"
+    },
+    {
+      "query": "What is the total sales amount for each gender in the city with code '11650' for the year 2023?",
+      "expected_response": "[{\"GENDER\": \"F\", \"TOTAL_SALES\": 14122188909807}, {\"GENDER\": \"*\", \"TOTAL_SALES\": 7098854417572}, {\"GENDER\": \"M\", \"TOTAL_SALES\": 14950149682303}]"
+    },
+    {
+      "query": "How many unique code names are there in the table?",
+      "expected_response": "[{\"COUNT(DISTINCT CODE_NAME)\": 7}]"
+    },
+    {
+      "query": "What are the top 5 code names with the highest sort order?",
+      "expected_response": "[{\"CODE_NAME\": \"\\uc5f0\\ub839\\ub300\", \"SORT_ORDER\": 16}, {\"CODE_NAME\": \"\\uc5f0\\ub839\\ub300\", \"SORT_ORDER\": 15}, {\"CODE_NAME\": \"\\uc5f0\\ub839\\ub300\", \"SORT_ORDER\": 14}] (showing 3 of 5 rows)"
+    },
+    {
+      "query": "How many sub codes are marked as 'Y' for use?",
+      "expected_response": "[{\"COUNT(*)\": 37}]"
+    },
+    {
+      "query": "What is the sub code name for the code ID 'M01'?",
+      "expected_response": "[{\"SUB_CODE_NAME\": \"\\ub0a8\"}, {\"SUB_CODE_NAME\": \"\\uc5ec\"}]"
+    },
+    {
+      "query": "What are the distinct remarks in the table?",
+      "expected_response": "[{\"REMARKS\": null}]"
+    },
+    {
+      "query": "What is the total residential population for each district in Seoul for the month of June 2023?",
+      "expected_response": "[{\"DISTRICT_CODE\": \"11650108\", \"TOTAL_RESIDENTIAL_POPULATION\": 1832913.13}, {\"DISTRICT_CODE\": \"11650110\", \"TOTAL_RESIDENTIAL_POPULATION\": 27326.82}, {\"DISTRICT_CODE\": \"11560122\", \"TOTAL_RESIDENTIAL_POPULATION\": 22138.79}] (showing 3 of 118 rows)"
+    },
+    {
+      "query": "What is the average visiting population on weekends for males aged 35 in Seoul in 2023?",
+      "expected_response": "[{\"AVERAGE_VISITING_POPULATION\": 196.7192231638418}]"
+    },
+    {
+      "query": "What is the total working population for each time slot in Seoul for the month of November 2023?",
+      "expected_response": "[{\"TIME_SLOT\": \"T18\", \"TOTAL_WORKING_POPULATION\": 325827.16000000003}, {\"TIME_SLOT\": \"T21\", \"TOTAL_WORKING_POPULATION\": 135841.69}, {\"TIME_SLOT\": \"T06\", \"TOTAL_WORKING_POPULATION\": 378736.14999999997}] (showing 3 of 7 rows)"
+    },
+    {
+      "query": "What is the total residential population for each district in Seoul, joined with the district names, for the month of May 2023?",
+      "expected_response": "[{\"DISTRICT_CODE\": \"11140171\", \"DISTRICT_KOR_NAME\": \"\\uc911\\ub9bc\\ub3d9\", \"TOTAL_RESIDENTIAL_POPULATION\": 44879.37}, {\"DISTRICT_CODE\": \"11560108\", \"DISTRICT_KOR_NAME\": \"\\uc601\\ub4f1\\ud3ec\\ub3d97\\uac00\", \"TOTAL_RESIDENTIAL_POPULATION\": 110861.77}, {\"DISTRICT_CODE\": \"11140167\", \"DISTRICT_KOR_NAME\": \"\\uc815\\ub3d9\", \"TOTAL_RESIDENTIAL_POPULATION\": 22093.66}] (showing 3 of 118 rows)"
+    },
+    {
+      "query": "What is the total visiting population for each age group in Seoul on weekdays in 2023, joined with the customer count from the asset income info?",
+      "expected_response": "[{\"AGE_GROUP\": \"55\", \"TOTAL_VISITING_POPULATION\": 137966764.02000263, \"TOTAL_CUSTOMER_COUNT\": 434138950}, {\"AGE_GROUP\": \"35\", \"TOTAL_VISITING_POPULATION\": 166043875.03000015, \"TOTAL_CUSTOMER_COUNT\": 434138950}, {\"AGE_GROUP\": \"65\", \"TOTAL_VISITING_POPULATION\": 87647135.78999975, \"TOTAL_CUSTOMER_COUNT\": 434138950}] (showing 3 of 13 rows)"
+    },
+    {
+      "query": "What is the total number of districts in Seoul?",
+      "expected_response": "[{\"TOTAL_DISTRICTS\": 467}]"
+    },
+    {
+      "query": "List the top 5 districts in Seoul with the highest residential population in 2023.",
+      "expected_response": "[{\"DISTRICT_ENG_NAME\": \"Seocho-dong\", \"RESIDENTIAL_POPULATION\": 11469.449999999999}, {\"DISTRICT_ENG_NAME\": \"Seocho-dong\", \"RESIDENTIAL_POPULATION\": 11018.720000000001}, {\"DISTRICT_ENG_NAME\": \"Seocho-dong\", \"RESIDENTIAL_POPULATION\": 10931.550000000001}] (showing 3 of 5 rows)"
+    },
+    {
+      "query": "What is the average income of general employees in Seongbuk-gu in 2023?",
+      "expected_response": "[{\"AVG_INCOME\": null}]"
+    },
+    {
+      "query": "What is the total card sales in Jungnang-gu for males aged 20-29 during evening hours in 2023?",
+      "expected_response": "[{\"TOTAL_CARD_SALES\": null}]"
+    }
+  ],
+  "questions": [
+    "What is the average annual income of residents in Seoul in the year 2023?",
+    "What is the total number of cardholders in each district for the month of April 2021?",
+    "What is the average number of loans per person in each city for the year 2022?",
+    "What is the total loan balance for each district in Seoul for the year 2021?",
+    "What is the average credit score of residents in each district for the year 2023?",
+    "What is the total sales amount for each age group in the year 2022?",
+    "What is the average food sales amount on weekends in the city with code '11140'?",
+    "What is the total transaction count for each lifestyle category in the month of April 2022?",
+    "What is the total sales amount for each district in Seoul for the year 2021?",
+    "What is the total sales amount for each gender in the city with code '11650' for the year 2023?",
+    "How many unique code names are there in the table?",
+    "What are the top 5 code names with the highest sort order?",
+    "How many sub codes are marked as 'Y' for use?",
+    "What is the sub code name for the code ID 'M01'?",
+    "What are the distinct remarks in the table?",
+    "What is the total residential population for each district in Seoul for the month of June 2023?",
+    "What is the average visiting population on weekends for males aged 35 in Seoul in 2023?",
+    "What is the total working population for each time slot in Seoul for the month of November 2023?",
+    "What is the total residential population for each district in Seoul, joined with the district names, for the month of May 2023?",
+    "What is the total visiting population for each age group in Seoul on weekdays in 2023, joined with the customer count from the asset income info?",
+    "What is the total number of districts in Seoul?",
+    "List the top 5 districts in Seoul with the highest residential population in 2023.",
+    "What is the average income of general employees in Seongbuk-gu in 2023?",
+    "What is the total card sales in Jungnang-gu for males aged 20-29 during evening hours in 2023?"
+  ]
+}

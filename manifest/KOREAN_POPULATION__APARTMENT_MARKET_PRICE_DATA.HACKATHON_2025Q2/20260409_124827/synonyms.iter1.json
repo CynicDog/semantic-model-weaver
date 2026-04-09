@@ -1,0 +1,226 @@
+{
+  "REGION_APT_RICHGO_MARKET_PRICE_M_H": {
+    "REGION_LEVEL": [
+      "region level",
+      "지역레벨",
+      "지역 수준",
+      "지역 단계"
+    ],
+    "BJD_CODE": [
+      "legal district code",
+      "법정동코드",
+      "법정동 코드",
+      "법정동 번호"
+    ],
+    "SD": [
+      "province name",
+      "시도명",
+      "시도 이름",
+      "도 이름"
+    ],
+    "SGG": [
+      "city name",
+      "county name",
+      "district name",
+      "시군구명",
+      "시군구 이름",
+      "시군구 명칭",
+      "district",
+      "area",
+      "region"
+    ],
+    "EMD": [
+      "town name",
+      "township name",
+      "neighborhood name",
+      "읍면동명",
+      "읍면동 이름",
+      "읍면동 명칭"
+    ],
+    "YYYYMMDD": [
+      "날짜",
+      "일자",
+      "date",
+      "latest date",
+      "most recent date"
+    ],
+    "TOTAL_HOUSEHOLDS": [
+      "total households",
+      "단지전체세대수",
+      "단지 전체 세대수",
+      "전체 세대수"
+    ],
+    "MEME_PRICE_PER_SUPPLY_PYEONG": [
+      "sale price per supply pyeong",
+      "공급평당 매매가격",
+      "공급평당 매매 가격",
+      "매매 가격"
+    ],
+    "JEONSE_PRICE_PER_SUPPLY_PYEONG": [
+      "jeonse price per supply pyeong",
+      "공급평당 전세가격",
+      "공급평당 전세 가격",
+      "전세 가격",
+      "jeonse price",
+      "jeonse cost"
+    ]
+  },
+  "REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H": {
+    "REGION_LEVEL": [
+      "region level",
+      "administrative level",
+      "지역 레벨",
+      "행정 구역 레벨"
+    ],
+    "BJD_CODE": [
+      "legal district code",
+      "district code",
+      "법정동 코드",
+      "행정구역 코드"
+    ],
+    "SD": [
+      "province name",
+      "state name",
+      "시도명",
+      "도명"
+    ],
+    "SGG": [
+      "city name",
+      "county name",
+      "시군구명",
+      "시군명",
+      "district"
+    ],
+    "EMD": [
+      "town name",
+      "village name",
+      "읍면동명",
+      "읍면명"
+    ],
+    "YYYYMMDD": [
+      "날짜",
+      "기록 날짜",
+      "latest date",
+      "most recent date"
+    ],
+    "AGE_UNDER5": [
+      "population under 5",
+      "children under 5",
+      "5세 미만 인구수",
+      "어린이 인구수"
+    ],
+    "FEMALE_20TO40": [
+      "female population 20 to 40",
+      "women aged 20 to 40",
+      "20~40세 여성 인구수",
+      "20~40세 여성"
+    ],
+    "AGE_UNDER5_PER_FEMALE_20TO40": [
+      "ratio of children under 5 to women 20 to 40",
+      "children under 5 per women 20 to 40",
+      "20~40세 여성 대비 5세 미만 인구수 비율",
+      "20~40세 여성 대비 어린이 인구수 비율",
+      "ratio of children under 5 to females aged 20 to 40"
+    ]
+  },
+  "REGION_MOIS_POPULATION_GENDER_AGE_M_H": {
+    "REGION_LEVEL": [
+      "region level",
+      "administrative level",
+      "지역 레벨",
+      "행정 구역 레벨"
+    ],
+    "BJD_CODE": [
+      "legal district code",
+      "법정동 코드",
+      "행정구역 코드"
+    ],
+    "SD": [
+      "province name",
+      "시도명",
+      "도시 이름"
+    ],
+    "SGG": [
+      "city name",
+      "county name",
+      "district name",
+      "시군구명",
+      "시군구 이름",
+      "districts of Seoul",
+      "서울 구"
+    ],
+    "EMD": [
+      "town name",
+      "village name",
+      "neighborhood name",
+      "읍면동명",
+      "읍면동 이름"
+    ],
+    "YYYYMMDD": [
+      "날짜",
+      "기록 날짜"
+    ],
+    "TOTAL": [
+      "total population",
+      "전체 인구수",
+      "총 인구수"
+    ],
+    "MALE": [
+      "total male population",
+      "전체 남성 인구수",
+      "총 남성 인구수"
+    ],
+    "FEMALE": [
+      "total female population",
+      "전체 여성 인구수",
+      "총 여성 인구수"
+    ],
+    "AGE_UNDER20": [
+      "population under 20",
+      "20세 미만 인구수",
+      "20세 미만 인구",
+      "children under 5",
+      "5세 미만 인구수",
+      "5세 미만 인구"
+    ],
+    "AGE_20S": [
+      "population in 20s",
+      "20대 인구수",
+      "20대 인구",
+      "females aged 20 to 40",
+      "20대 여성 인구수",
+      "20대 여성 인구"
+    ],
+    "AGE_30S": [
+      "population in 30s",
+      "30대 인구수",
+      "30대 인구",
+      "females aged 20 to 40",
+      "30대 여성 인구수",
+      "30대 여성 인구"
+    ],
+    "AGE_40S": [
+      "population in 40s",
+      "40대 인구수",
+      "40대 인구",
+      "females aged 20 to 40",
+      "40대 여성 인구수",
+      "40대 여성 인구"
+    ],
+    "AGE_50S": [
+      "population in 50s",
+      "50대 인구수",
+      "50대 인구"
+    ],
+    "AGE_60S": [
+      "population in 60s",
+      "60대 인구수",
+      "60대 인구"
+    ],
+    "AGE_OVER70": [
+      "population over 70",
+      "70세 이상 인구수",
+      "70세 이상 인구"
+    ]
+  }
+}

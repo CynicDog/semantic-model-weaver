@@ -1,0 +1,2353 @@
+name: south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region_telecom_insights
+description: Semantic model for SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION.TELECOM_INSIGHTS
+tables:
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  description: Monthly regional contract statistics
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - CONSULT_REQUEST_COUNT
+    - CONTRACT_COUNT
+    - INSTALL_CITY
+    - INSTALL_STATE
+    - MAIN_CATEGORY_NAME
+    - OPEN_COUNT
+    - OPEN_CVR
+    - PAYEND_COUNT
+    - PAYEND_CVR
+    - REGISTEND_COUNT
+    - TOTAL_NET_SALES
+    - YEAR_MONTH
+  dimensions:
+  - name: INSTALL_STATE
+    expr: INSTALL_STATE
+    data_type: VARCHAR
+    description: Installation address state (e.g., Seoul, Gyeonggi-do)
+    synonyms:
+    - 'installation state'
+    - 'installation province'
+    - '설치 주소 시도'
+    - '설치 주소 도'
+    - 'state'
+    - 'province'
+    sample_values:
+    - 경북
+    - 전남
+    - 강원특별자치도
+    - 서울
+    - 대전
+  - name: INSTALL_CITY
+    expr: INSTALL_CITY
+    data_type: VARCHAR
+    description: Installation address city (e.g., Gangnam-gu, Suwon-si)
+    synonyms:
+    - 'installation city'
+    - 'installation district'
+    - '설치 주소 시군구'
+    - '설치 주소 시'
+    - 'city'
+    - 'district'
+    sample_values:
+    - 예천군
+    - 여수시
+    - 양구군
+    - 도봉구
+    - 동구
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: Main product type (e.g., internet, rental, mobile, discount plan)
+    synonyms:
+    - 'main product type'
+    - 'main category'
+    - '주 상품 유형'
+    - '주 상품 종류'
+    - 'product type'
+    - 'category'
+    sample_values:
+    - 렌탈
+    - 인터넷
+    - 유심만
+    - 모바일
+    - 알뜰 요금제
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: Total number of contracts created
+    synonyms:
+    - 'total contracts'
+    - 'contract count'
+    - '총 계약서 생성 건수'
+    - '총 계약 건수'
+    - 'contracts'
+    - 'total contract count'
+  - name: CONSULT_REQUEST_COUNT
+    expr: CONSULT_REQUEST_COUNT
+    data_type: NUMBER
+    description: Number of contracts created from consultation requests
+    synonyms:
+    - 'consultation requests'
+    - 'consultation contracts'
+    - '상담 요청 계약 건수'
+    - '상담 요청 계약'
+    - 'consultation request count'
+    - 'consultation contracts count'
+  - name: REGISTEND_COUNT
+    expr: REGISTEND_COUNT
+    data_type: NUMBER
+    description: Number of completed registrations
+    synonyms:
+    - 'completed registrations'
+    - 'registration count'
+    - '접수 완료 건수'
+    - '접수 완료'
+    - 'registration completion count'
+    - 'registration completions'
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: Number of completed activations
+    synonyms:
+    - 'completed activations'
+    - 'activation count'
+    - '개통 완료 건수'
+    - '개통 완료'
+    - 'activation completion count'
+    - 'activation completions'
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: Number of completed payments
+    synonyms:
+    - 'completed payments'
+    - 'payment count'
+    - '지급 완료 건수'
+    - '지급 완료'
+    - 'payment completion count'
+    - 'payment completions'
+  - name: OPEN_CVR
+    expr: OPEN_CVR
+    data_type: NUMBER
+    description: Activation completion conversion rate (%)
+    synonyms:
+    - 'activation conversion rate'
+    - 'open conversion rate'
+    - '개통 완료 전환율'
+    - '개통 전환율'
+    - 'activation rate'
+    - 'open rate'
+  - name: PAYEND_CVR
+    expr: PAYEND_CVR
+    data_type: NUMBER
+    description: Payment completion conversion rate (%)
+    synonyms:
+    - 'payment conversion rate'
+    - 'payend conversion rate'
+    - '지급 완료 전환율'
+    - '지급 전환율'
+    - 'payment rate'
+    - 'payend rate'
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: Average net sales excluding zero (in won)
+    synonyms:
+    - 'average net sales'
+    - 'average sales'
+    - '평균 순매출'
+    - '평균 매출'
+    - 'average net sales amount'
+    - 'average sales amount'
+  - name: TOTAL_NET_SALES
+    expr: TOTAL_NET_SALES
+    data_type: NUMBER
+    description: Total net sales (in won)
+    synonyms:
+    - 'total net sales'
+    - 'total sales'
+    - '총 순매출'
+    - '총 매출'
+    - 'total net sales amount'
+    - 'total sales amount'
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation basis year-month (first day of the month)
+    synonyms:
+    - 'year-month'
+    - 'aggregation month'
+    - '집계 기준 연월'
+    - '집계 연월'
+    - 'year and month'
+    - 'aggregation year-month'
+  measures:
+  - name: REGISTEND_CVR
+    expr: SUM(REGISTEND_CVR)
+    data_type: NUMBER
+    description: Registration completion conversion rate (%)
+    synonyms:
+    - 'registration conversion rate'
+    - 'registend conversion rate'
+    - '접수 완료 전환율'
+    - '접수 전환율'
+    - 'registration rate'
+    - 'registend rate'
+- name: V02_SERVICE_BUNDLE_PATTERNS
+  description: Service bundle patterns for various product types and combinations
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V02_SERVICE_BUNDLE_PATTERNS
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - AVG_POLICY_AMOUNT
+    - CONTRACT_COUNT
+    - MAIN_CATEGORY_NAME
+    - PAYEND_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: Product type or category
+    synonyms:
+    - 'product type'
+    - 'product category'
+    - '상품 유형'
+    - '상품 종류'
+    - 'main category'
+    - 'category'
+    sample_values:
+    - 인터넷
+  - name: BUNDLE_COMBINATION
+    expr: BUNDLE_COMBINATION
+    data_type: VARCHAR
+    description: Combination discount type (standalone or combined type name)
+    synonyms:
+    - 'combination discount type'
+    - 'bundle type'
+    - '결합 할인 유형'
+    - '결합 종류명'
+    - 'discount type'
+    - 'bundle combination'
+    sample_values:
+    - 패밀리
+    - 선납할인(pop)
+    - 모바일 알뜰결합
+    - 요즘가족결합
+    - 프리미엄싱글결합
+  - name: HAS_TV
+    expr: HAS_TV
+    data_type: VARCHAR
+    description: TV combination availability (Y/N)
+    synonyms:
+    - 'TV availability'
+    - 'TV combination'
+    - 'TV 결합 여부'
+    - 'TV 포함 여부'
+    - 'TV included'
+    - 'TV availability status'
+    sample_values:
+    - N
+    - Y
+  - name: HAS_PHONE
+    expr: HAS_PHONE
+    data_type: VARCHAR
+    description: Internet phone combination availability (Y/N)
+    synonyms:
+    - 'internet phone availability'
+    - 'phone combination'
+    - '인터넷전화 결합 여부'
+    - '전화 포함 여부'
+    - 'phone included'
+    - 'internet phone availability status'
+    sample_values:
+    - Y
+    - N
+  - name: HAS_WIFI
+    expr: HAS_WIFI
+    data_type: VARCHAR
+    description: WiFi combination availability (Y/N)
+    synonyms:
+    - 'WiFi availability'
+    - 'WiFi combination'
+    - 'WiFi 결합 여부'
+    - 'WiFi 포함 여부'
+    - 'WiFi included'
+    - 'WiFi availability status'
+    sample_values:
+    - Y
+    - N
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: Number of contracts for the combination pattern
+    synonyms:
+    - 'contract count'
+    - 'number of contracts'
+    - '계약 건수'
+    - '계약 수'
+    - 'total contracts'
+    - 'contracts'
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: Number of completed payments
+    synonyms:
+    - 'completed payments'
+    - 'payment completion count'
+    - '지급 완료 건수'
+    - '지급 완료 수'
+    - 'completed payment count'
+    - 'payments completed'
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: Average net sales excluding zero (in won)
+    synonyms:
+    - 'average net sales'
+    - 'net sales average'
+    - '평균 순매출'
+    - '순매출 평균'
+    - 'average sales'
+    - 'net sales'
+  - name: AVG_POLICY_AMOUNT
+    expr: AVG_POLICY_AMOUNT
+    data_type: NUMBER
+    description: Average total policy amount excluding zero (in won)
+    synonyms:
+    - 'average policy amount'
+    - 'policy amount average'
+    - '평균 정책금 총액'
+    - '정책금 평균'
+    - 'average policy total'
+    - 'policy amount'
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation base year and month
+    synonyms:
+    - 'year and month'
+    - 'aggregation period'
+    - '집계 기준 연월'
+    - '기준 연월'
+    - 'year-month'
+    - 'aggregation base'
+- name: V03_CONTRACT_FUNNEL_CONVERSION
+  description: Contract funnel conversion data
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V03_CONTRACT_FUNNEL_CONVERSION
+  primary_key:
+    columns:
+    - CONSULT_REQUEST_COUNT
+    - MAIN_CATEGORY_NAME
+    - OPEN_COUNT
+    - PAYEND_COUNT
+    - REGISTEND_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: Product type or category
+    synonyms:
+    - 'product type'
+    - 'product category'
+    - '상품 유형'
+    - '상품 카테고리'
+    - 'main category'
+    - 'category'
+    sample_values:
+    - 모바일
+    - 렌탈
+    - 인터넷
+    - 유심만
+    - 기업용인터넷
+  - name: CONSULT_REQUEST_COUNT
+    expr: CONSULT_REQUEST_COUNT
+    data_type: NUMBER
+    description: Number of consultation requests
+    synonyms:
+    - 'consultation requests'
+    - 'consultation count'
+    - '상담 요청 건수'
+    - '상담 요청 수'
+  - name: REGISTEND_COUNT
+    expr: REGISTEND_COUNT
+    data_type: NUMBER
+    description: Number of completed registrations
+    synonyms:
+    - 'completed registrations'
+    - 'registration count'
+    - '접수 완료 건수'
+    - '접수 완료 수'
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: Number of completed activations
+    synonyms:
+    - 'completed activations'
+    - 'activation count'
+    - '개통 완료 건수'
+    - '개통 완료 수'
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: Number of completed payments or contracts
+    synonyms:
+    - 'completed payments'
+    - 'payment count'
+    - '지급 완료 건수'
+    - '지급 완료 수'
+    - 'completed contracts'
+    - 'contracts completed'
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation base year-month or time period
+    synonyms:
+    - 'year-month'
+    - 'aggregation period'
+    - '집계 기준 연월'
+    - '집계 기간'
+    - 'time period'
+    - 'month'
+    - 'year'
+  measures:
+  - name: TOTAL_COUNT
+    expr: SUM(TOTAL_COUNT)
+    data_type: NUMBER
+    description: Total number of contracts (top of the funnel)
+    synonyms:
+    - 'total contracts'
+    - 'total count'
+    - '총 계약서 수'
+    - '총 계약 수'
+    - 'total contract count'
+    - 'total number of contracts'
+  - name: SUBSCRIPTION_COUNT
+    expr: SUM(SUBSCRIPTION_COUNT)
+    data_type: NUMBER
+    description: Number of subscriptions
+    synonyms:
+    - 'subscriptions'
+    - 'subscription count'
+    - '청약 건수'
+    - '청약 수'
+  - name: CVR_CONSULT_REQUEST
+    expr: SUM(CVR_CONSULT_REQUEST)
+    data_type: NUMBER
+    description: Consultation request conversion rate (%)
+    synonyms:
+    - 'consultation request conversion rate'
+    - 'consultation request CVR'
+    - '상담 요청 전환율'
+    - '상담 요청 CVR'
+  - name: CVR_SUBSCRIPTION
+    expr: SUM(CVR_SUBSCRIPTION)
+    data_type: NUMBER
+    description: Subscription conversion rate (%)
+    synonyms:
+    - 'subscription conversion rate'
+    - 'subscription CVR'
+    - '청약 전환율'
+    - '청약 CVR'
+  - name: CVR_REGISTEND
+    expr: SUM(CVR_REGISTEND)
+    data_type: NUMBER
+    description: Completed registration conversion rate (%)
+    synonyms:
+    - 'completed registration conversion rate'
+    - 'registration CVR'
+    - '접수 완료 전환율'
+    - '접수 완료 CVR'
+  - name: CVR_OPEN
+    expr: SUM(CVR_OPEN)
+    data_type: NUMBER
+    description: Completed activation conversion rate (%)
+    synonyms:
+    - 'completed activation conversion rate'
+    - 'activation CVR'
+    - '개통 완료 전환율'
+    - '개통 완료 CVR'
+    - 'open conversion rate'
+    - 'open CVR'
+  - name: CVR_PAYEND
+    expr: SUM(CVR_PAYEND)
+    data_type: NUMBER
+    description: Completed payment conversion rate (%)
+    synonyms:
+    - 'completed payment conversion rate'
+    - 'payment CVR'
+    - '지급 완료 전환율'
+    - '지급 완료 CVR'
+  - name: OVERALL_CVR
+    expr: SUM(OVERALL_CVR)
+    data_type: NUMBER
+    description: Overall conversion rate (%)
+    synonyms:
+    - 'overall conversion rate'
+    - 'overall CVR'
+    - '전체 전환율'
+    - '전체 CVR'
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE
+  description: Channel contract performance data
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - CONTRACT_COUNT
+    - MAIN_CATEGORY_NAME
+    - OPEN_COUNT
+    - OPEN_CVR
+    - PAYEND_COUNT
+    - PAYEND_CVR
+    - REGISTEND_COUNT
+    - TOTAL_NET_SALES
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: Product type or category
+    synonyms:
+    - 'product type'
+    - 'product category'
+    - '상품 유형'
+    - '상품 카테고리'
+    - 'main category'
+    - 'category'
+    sample_values:
+    - 렌탈
+    - 인터넷
+    - 모바일
+    - 유심만
+    - 알뜰 요금제
+  - name: RECEIVE_PATH_NAME
+    expr: RECEIVE_PATH_NAME
+    data_type: VARCHAR
+    description: Reception path or channel name
+    synonyms:
+    - 'reception path'
+    - 'reception channel'
+    - '접수 경로'
+    - '접수 채널'
+    - 'receive path'
+    - 'channel'
+    sample_values:
+    - 인바운드
+    - 아정당랜딩
+    - 플랫폼
+    - 카톡
+    - 기타
+  - name: INFLOW_PATH_NAME
+    expr: INFLOW_PATH_NAME
+    data_type: VARCHAR
+    description: Marketing inflow path or channel name
+    synonyms:
+    - 'marketing inflow path'
+    - 'marketing channel'
+    - '마케팅 유입 경로'
+    - '마케팅 채널'
+    - 'inflow path'
+    - 'marketing path'
+    sample_values:
+    - TV광고
+    - 전화예약상담
+    - 플랫폼
+    - 기타
+    - 유튜브(PPL)
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: Total number of contracts for the channel
+    synonyms:
+    - 'total contracts'
+    - 'contract count'
+    - '채널 총 계약 건수'
+    - '계약 건수'
+    - 'contracts'
+    - 'total contract count'
+  - name: REGISTEND_COUNT
+    expr: REGISTEND_COUNT
+    data_type: NUMBER
+    description: Number of completed registrations
+    synonyms:
+    - 'completed registrations'
+    - 'registration count'
+    - '접수 완료 건수'
+    - '접수 건수'
+    - 'registrations'
+    - 'completed registration count'
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: Number of completed activations
+    synonyms:
+    - 'completed activations'
+    - 'activation count'
+    - '개통 완료 건수'
+    - '개통 건수'
+    - 'activations'
+    - 'completed activation count'
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: Number of completed payments
+    synonyms:
+    - 'completed payments'
+    - 'payment count'
+    - '지급 완료 건수'
+    - '지급 건수'
+    - 'payments'
+    - 'completed payment count'
+  - name: OPEN_CVR
+    expr: OPEN_CVR
+    data_type: NUMBER
+    description: Activation completion conversion rate (%)
+    synonyms:
+    - 'activation conversion rate'
+    - 'open conversion rate'
+    - '개통 완료 전환율'
+    - '개통 전환율'
+    - 'open CVR'
+    - 'activation CVR'
+  - name: PAYEND_CVR
+    expr: PAYEND_CVR
+    data_type: NUMBER
+    description: Payment completion conversion rate (%)
+    synonyms:
+    - 'payment conversion rate'
+    - 'payend conversion rate'
+    - '지급 완료 전환율'
+    - '지급 전환율'
+    - 'payend CVR'
+    - 'payment CVR'
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: Average net sales excluding zero
+    synonyms:
+    - 'average net sales'
+    - 'net sales average'
+    - '평균 순매출'
+    - '순매출 평균'
+    - 'average sales'
+    - 'net sales'
+  - name: TOTAL_NET_SALES
+    expr: TOTAL_NET_SALES
+    data_type: NUMBER
+    description: Total net sales
+    synonyms:
+    - 'total net sales'
+    - 'net sales total'
+    - '총 순매출'
+    - '순매출 총액'
+    - 'total sales'
+    - 'net sales'
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation basis year-month
+    synonyms:
+    - 'year-month'
+    - 'aggregation period'
+    - '집계 기준 연월'
+    - '연월'
+    - 'year and month'
+    - 'monthly period'
+- name: V05_REGIONAL_NEW_INSTALL
+  description: Regional new install data for analytics
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V05_REGIONAL_NEW_INSTALL
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - CONTRACT_COUNT
+    - INSTALL_CITY
+    - INSTALL_STATE
+    - OPEN_COUNT
+    - PAYEND_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: INSTALL_STATE
+    expr: INSTALL_STATE
+    data_type: VARCHAR
+    description: Installation address state
+    synonyms:
+    - 'installation state'
+    - 'state of installation'
+    - '설치 주소 시도'
+    - '설치 주소 도'
+    - 'state'
+    - 'region'
+    sample_values:
+    - 전남
+    - 인천
+    - 충북
+    - 전북특별자치도
+    - 충남
+  - name: INSTALL_CITY
+    expr: INSTALL_CITY
+    data_type: VARCHAR
+    description: Installation address city
+    synonyms:
+    - 'installation city'
+    - 'city of installation'
+    - '설치 주소 시군구'
+    - '설치 주소 시'
+    - 'city'
+    - 'district'
+    sample_values:
+    - 영암군
+    - 부평구
+    - 옥천군
+    - 무주군
+    - 태안군
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: Total number of internet contracts
+    synonyms:
+    - 'internet contract count'
+    - 'total contracts'
+    - '인터넷 계약 총 건수'
+    - '계약 총 건수'
+    - 'contracts'
+    - 'total contract count'
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: Number of completed installations
+    synonyms:
+    - 'completed installations'
+    - 'open count'
+    - '개통 완료 건수'
+    - '개통 건수'
+    - 'open contracts'
+    - 'completed contracts'
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: Number of completed payments
+    synonyms:
+    - 'completed payments'
+    - 'payment completion count'
+    - '지급 완료 건수'
+    - '지급 건수'
+    - 'payments'
+    - 'completed payment count'
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: Average net sales excluding zero
+    synonyms:
+    - 'average net sales'
+    - 'net sales average'
+    - '0 제외 평균 순매출'
+    - '평균 순매출'
+    - 'average sales'
+    - 'net sales'
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation base year and month
+    synonyms:
+    - 'year and month'
+    - 'aggregation period'
+    - '집계 기준 연월'
+    - '연월'
+    - 'date'
+    - 'period'
+  measures:
+  - name: BUNDLE_COUNT
+    expr: SUM(BUNDLE_COUNT)
+    data_type: NUMBER
+    description: Number of bundled product contracts
+    synonyms:
+    - 'bundled contracts'
+    - 'bundle count'
+    - 'TV/전화 등 결합 상품 계약 건수'
+    - '결합 상품 계약 건수'
+    - 'bundled product contracts'
+    - 'bundle contracts'
+  - name: STANDALONE_COUNT
+    expr: SUM(STANDALONE_COUNT)
+    data_type: NUMBER
+    description: Number of standalone internet contracts
+    synonyms:
+    - 'standalone contracts'
+    - 'standalone count'
+    - '인터넷 단독 계약 건수'
+    - '단독 계약 건수'
+    - 'standalone internet contracts'
+    - 'standalone contract count'
+- name: V06_RENTAL_CATEGORY_TRENDS
+  description: Trends in rental categories
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V06_RENTAL_CATEGORY_TRENDS
+  primary_key:
+    columns:
+    - AVG_NET_SALES
+    - AVG_POLICY_AMOUNT
+    - CONTRACT_COUNT
+    - INSTALL_STATE
+    - OPEN_COUNT
+    - OPEN_CVR
+    - PAYEND_COUNT
+    - PAYEND_CVR
+    - YEAR_MONTH
+  dimensions:
+  - name: INSTALL_STATE
+    expr: INSTALL_STATE
+    data_type: VARCHAR
+    description: Installation address state
+    synonyms:
+    - 'installation state'
+    - 'address state'
+    - '설치 주소 시도'
+    - '주소 상태'
+    - 'state'
+    - 'region'
+    sample_values:
+    - 대구
+    - 서울
+    - 충북
+    - 경기
+    - 부산
+  - name: RENTAL_MAIN_CATEGORY
+    expr: RENTAL_MAIN_CATEGORY
+    data_type: VARCHAR
+    description: Main rental category (e.g., water purifier, air purifier)
+    synonyms:
+    - 'main rental category'
+    - 'rental main category'
+    - '렌탈 대분류'
+    - '주요 렌탈 카테고리'
+    - 'main category'
+    - 'category'
+    sample_values:
+    - 생활가전
+    - 계절가전
+    - TV/디지털
+    - 주방가전
+    - 미분류
+  - name: RENTAL_SUB_CATEGORY
+    expr: RENTAL_SUB_CATEGORY
+    data_type: VARCHAR
+    description: Sub-category of rental (brand/model series)
+    synonyms:
+    - 'rental sub-category'
+    - 'sub-category of rental'
+    - '렌탈 소분류'
+    - '브랜드/모델 계열'
+    - 'sub-category'
+    - 'brand'
+    - 'model'
+    sample_values:
+    - 안마의자
+    - 공기청정기
+    - TV
+    - 전기레인지
+    - 식기세척기
+  - name: CONTRACT_COUNT
+    expr: CONTRACT_COUNT
+    data_type: NUMBER
+    description: Number of contracts
+    synonyms:
+    - 'contract count'
+    - 'number of contracts'
+    - '계약 건수'
+    - '계약 수'
+    - 'total contracts'
+    - 'contracts'
+  - name: OPEN_COUNT
+    expr: OPEN_COUNT
+    data_type: NUMBER
+    description: Number of completed activations
+    synonyms:
+    - 'open count'
+    - 'completed activations'
+    - '개통 완료 건수'
+    - '개통 완료 수'
+    - 'activations'
+    - 'open contracts'
+  - name: PAYEND_COUNT
+    expr: PAYEND_COUNT
+    data_type: NUMBER
+    description: Number of completed payments
+    synonyms:
+    - 'payend count'
+    - 'completed payments'
+    - '지급 완료 건수'
+    - '지급 완료 수'
+    - 'payments'
+    - 'completed contracts'
+  - name: OPEN_CVR
+    expr: OPEN_CVR
+    data_type: NUMBER
+    description: Activation completion conversion rate (%)
+    synonyms:
+    - 'open conversion rate'
+    - 'activation completion rate'
+    - '개통 완료 전환율'
+    - '개통 전환율'
+    - 'conversion rate'
+    - 'open rate'
+  - name: PAYEND_CVR
+    expr: PAYEND_CVR
+    data_type: NUMBER
+    description: Payment completion conversion rate (%)
+    synonyms:
+    - 'payend conversion rate'
+    - 'payment completion rate'
+    - '지급 완료 전환율'
+    - '지급 전환율'
+    - 'payment rate'
+    - 'completion rate'
+  - name: AVG_NET_SALES
+    expr: AVG_NET_SALES
+    data_type: NUMBER
+    description: Average net sales excluding zero (won)
+    synonyms:
+    - 'average net sales'
+    - 'net sales average'
+    - '평균 순매출'
+    - '순매출 평균'
+    - 'net sales'
+    - 'average sales'
+  - name: AVG_POLICY_AMOUNT
+    expr: AVG_POLICY_AMOUNT
+    data_type: NUMBER
+    description: Average total policy amount excluding zero (won)
+    synonyms:
+    - 'average policy amount'
+    - 'policy amount average'
+    - '평균 정책금 총액'
+    - '정책금 평균'
+    - 'policy amount'
+    - 'average policy'
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation standard year-month
+    synonyms:
+    - 'year month'
+    - 'aggregation year-month'
+    - '집계 기준 연월'
+    - '연월'
+    - 'month'
+    - 'year'
+    - 'date'
+- name: V07_GA4_MARKETING_ATTRIBUTION
+  description: Marketing attribution data for GA4
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V07_GA4_MARKETING_ATTRIBUTION
+  primary_key:
+    columns:
+    - YEAR_MONTH
+  dimensions:
+  - name: UTM_SOURCE
+    expr: UTM_SOURCE
+    data_type: VARCHAR
+    description: UTM source (e.g., google, naver, facebook, (direct))
+    synonyms:
+    - 'UTM source'
+    - 'traffic source'
+    - '소스'
+    - '트래픽 소스'
+    sample_values:
+    - dbdbdeep.com
+    - b2513a35d988ca3ff7e55067a685e1ce.safeframe.googlesyndication.com
+    - brunch.co.kr
+    - nb_influencer_it
+    - booksterhouse.com
+  - name: UTM_MEDIUM
+    expr: UTM_MEDIUM
+    data_type: VARCHAR
+    description: UTM medium (e.g., cpc, organic, referral, (none))
+    synonyms:
+    - 'UTM medium'
+    - 'traffic medium'
+    - '매체'
+    - '트래픽 매체'
+    sample_values:
+    - referral
+    - 건빵이
+    - 아재식당_250401_250926_sp_ppl_csm
+    - 인스
+    - 꾸준_250502_250712_n_ppl_jjy
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation basis year-month
+    synonyms:
+    - 'year month'
+    - 'aggregation period'
+    - '연월'
+    - '집계 기준 연월'
+    - 'month'
+    - 'year'
+  measures:
+  - name: TOTAL_SESSIONS
+    expr: SUM(TOTAL_SESSIONS)
+    data_type: NUMBER
+    description: Total number of sessions
+    synonyms:
+    - 'total sessions'
+    - 'session count'
+    - '총 세션 수'
+    - '세션 수'
+    - 'total call count'
+  - name: TOTAL_USERS
+    expr: SUM(TOTAL_USERS)
+    data_type: NUMBER
+    description: Total number of users
+    synonyms:
+    - 'total users'
+    - 'user count'
+    - '총 사용자 수'
+    - '사용자 수'
+  - name: TOTAL_CONSULT_REQUESTS
+    expr: SUM(TOTAL_CONSULT_REQUESTS)
+    data_type: NUMBER
+    description: Total number of consultation request events
+    synonyms:
+    - 'total consult requests'
+    - 'consultation requests'
+    - '상담 요청 수'
+    - '상담 요청 이벤트 수'
+  - name: TOTAL_CONSULT_PHONE
+    expr: SUM(TOTAL_CONSULT_PHONE)
+    data_type: NUMBER
+    description: Total number of phone consultation clicks
+    synonyms:
+    - 'total phone consults'
+    - 'phone consultation clicks'
+    - '전화 상담 클릭 수'
+    - '전화 상담 수'
+  - name: TOTAL_CONSULT_KAKAO
+    expr: SUM(TOTAL_CONSULT_KAKAO)
+    data_type: NUMBER
+    description: Total number of Kakao consultation clicks
+    synonyms:
+    - 'total Kakao consults'
+    - 'Kakao consultation clicks'
+    - '카카오 상담 클릭 수'
+    - '카카오 상담 수'
+  - name: TOTAL_CONSULT_CHANNELTALK
+    expr: SUM(TOTAL_CONSULT_CHANNELTALK)
+    data_type: NUMBER
+    description: Total number of ChannelTalk consultation clicks
+    synonyms:
+    - 'total ChannelTalk consults'
+    - 'ChannelTalk consultation clicks'
+    - '채널톡 상담 클릭 수'
+    - '채널톡 상담 수'
+  - name: TOTAL_CONTRACTS
+    expr: SUM(TOTAL_CONTRACTS)
+    data_type: NUMBER
+    description: Total number of contracts completed
+    synonyms:
+    - 'total contracts'
+    - 'contract count'
+    - '계약 수'
+    - '계약 건수'
+    - 'PAYEND_COUNT'
+    - 'payend'
+  - name: CONSULT_CVR
+    expr: SUM(CONSULT_CVR)
+    data_type: NUMBER
+    description: Consultation request conversion rate (%)
+    synonyms:
+    - 'consult CVR'
+    - 'consultation conversion rate'
+    - '상담 요청 전환율'
+    - '상담 전환율'
+    - 'open conversion rate'
+    - 'OPEN_CVR'
+  - name: CONTRACT_CVR
+    expr: SUM(CONTRACT_CVR)
+    data_type: NUMBER
+    description: Contract conversion rate (%)
+    synonyms:
+    - 'contract CVR'
+    - 'contract conversion rate'
+    - '계약 전환율'
+    - '계약 전환율'
+  - name: TOTAL_REVENUE
+    expr: SUM(TOTAL_REVENUE)
+    data_type: NUMBER
+    description: Total revenue (in won)
+    synonyms:
+    - 'total revenue'
+    - 'revenue amount'
+    - '총 매출'
+    - '매출액'
+    - 'total net sales'
+    - 'average net sales'
+- name: V08_GA4_DEVICE_STATS
+  description: Device statistics for GA4 analytics
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V08_GA4_DEVICE_STATS
+  primary_key:
+    columns:
+    - YEAR_MONTH
+  dimensions:
+  - name: DEVICE_CATEGORY
+    expr: DEVICE_CATEGORY
+    data_type: VARCHAR
+    description: Device type (mobile, desktop, tablet)
+    synonyms:
+    - 'device type'
+    - 'device category'
+    - '디바이스 유형'
+    - '디바이스 종류'
+    - '기기 유형'
+    - 'main category'
+    - 'main categories'
+    sample_values:
+    - smart tv
+    - desktop
+    - mobile
+    - tablet
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation basis year-month (data after 2025-01-01)
+    synonyms:
+    - 'year month'
+    - 'aggregation period'
+    - '연월'
+    - '집계 기준 연월'
+    - '기준 연월'
+    - 'last quarter'
+    - 'last 6 months'
+    - 'month of January 2023'
+    - 'last year'
+    - 'last quarter of 2022'
+    - 'each month of 2022'
+    - 'January 2025'
+  measures:
+  - name: SESSION_COUNT
+    expr: SUM(SESSION_COUNT)
+    data_type: NUMBER
+    description: Total number of sessions based on session_start event
+    synonyms:
+    - 'session count'
+    - 'total sessions'
+    - '세션 수'
+    - '총 세션 수'
+    - '세션 총 수'
+    - 'total number of sessions'
+    - 'total sessions for each UTM source and medium combination'
+    - 'total number of sessions for each device category'
+  - name: USER_COUNT
+    expr: SUM(USER_COUNT)
+    data_type: NUMBER
+    description: Number of unique users based on sessions
+    synonyms:
+    - 'user count'
+    - 'unique users'
+    - '사용자 수'
+    - '순 사용자 수'
+    - '사용자 총 수'
+  - name: CONVERSION_EVENT_COUNT
+    expr: SUM(CONVERSION_EVENT_COUNT)
+    data_type: NUMBER
+    description: Total number of conversion events
+    synonyms:
+    - 'conversion event count'
+    - 'total conversions'
+    - '전환 이벤트 수'
+    - '전환 이벤트 총 수'
+    - '전환 총 수'
+    - 'contracts completed'
+    - 'PAYEND_COUNT'
+    - 'payend'
+    - 'open contracts'
+    - 'OPEN_CVR'
+    - 'open conversion rate'
+  - name: CONVERSION_RATE
+    expr: AVG(CONVERSION_RATE)
+    data_type: NUMBER
+    description: Conversion rate (%) = conversion events / sessions
+    synonyms:
+    - 'conversion rate'
+    - 'conversion percentage'
+    - '전환율'
+    - '전환률'
+    - '전환 비율'
+    - 'average conversion rate'
+    - 'conversion rate for open contracts'
+- name: V09_MONTHLY_CALL_STATS
+  description: Monthly call statistics for different divisions and product categories
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V09_MONTHLY_CALL_STATS
+  primary_key:
+    columns:
+    - AVG_BILL_MINUTE
+    - AVG_BILL_SECOND
+    - CALL_COUNT
+    - CONNECTED_COUNT
+    - CONNECTION_RATE
+    - DIVISION_NAME
+    - MAIN_CATEGORY_NAME
+    - UNCONNECTED_COUNT
+    - YEAR_MONTH
+  dimensions:
+  - name: DIVISION_NAME
+    expr: DIVISION_NAME
+    data_type: VARCHAR
+    description: Call direction (inbound/outbound)
+    synonyms:
+    - 'call direction'
+    - 'inbound/outbound'
+    - '통화 방향'
+    - '수신/발신'
+    - 'contract direction'
+    - 'contract type'
+    sample_values:
+    - 발신
+    - 수신
+    - 미분류
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: Consultation product type (internet, rental, mobile, etc.)
+    synonyms:
+    - 'product type'
+    - 'consultation category'
+    - '상담 상품 유형'
+    - '인터넷'
+    - '렌탈'
+    - '모바일'
+    - 'main category'
+    - 'category'
+    - 'product category'
+    sample_values:
+    - 유심만
+    - 인터넷
+    - 알뜰 요금제
+    - 다이렉트자보
+    - 기업용인터넷
+  - name: CALL_COUNT
+    expr: CALL_COUNT
+    data_type: NUMBER
+    description: Total number of call attempts
+    synonyms:
+    - 'total calls'
+    - 'call attempts'
+    - '총 통화 시도 건수'
+    - '통화 시도'
+    - 'total call count'
+    - 'call count'
+  - name: AVG_BILL_SECOND
+    expr: AVG_BILL_SECOND
+    data_type: NUMBER
+    description: Average billing time excluding zero (seconds)
+    synonyms:
+    - 'average billing time'
+    - 'average call duration'
+    - '평균 과금 시간'
+    - '평균 통화 시간'
+    - 'average billing time in seconds'
+    - 'average call duration in seconds'
+  - name: AVG_BILL_MINUTE
+    expr: AVG_BILL_MINUTE
+    data_type: NUMBER
+    description: Average billing time excluding zero (minutes)
+    synonyms:
+    - 'average billing time in minutes'
+    - 'average call duration in minutes'
+    - '평균 과금 시간 (분)'
+    - '평균 통화 시간 (분)'
+  - name: CONNECTED_COUNT
+    expr: CONNECTED_COUNT
+    data_type: NUMBER
+    description: Number of successful call connections
+    synonyms:
+    - 'successful calls'
+    - 'connected calls'
+    - '통화 연결 성공 건수'
+    - '연결 성공'
+    - 'successful connections'
+    - 'connected count'
+  - name: UNCONNECTED_COUNT
+    expr: UNCONNECTED_COUNT
+    data_type: NUMBER
+    description: Number of failed call connections
+    synonyms:
+    - 'failed calls'
+    - 'unconnected calls'
+    - '통화 연결 실패 건수'
+    - '연결 실패'
+    - 'failed connections'
+    - 'unconnected count'
+  - name: CONNECTION_RATE
+    expr: CONNECTION_RATE
+    data_type: NUMBER
+    description: Call connection rate (%)
+    synonyms:
+    - 'connection rate'
+    - 'call success rate'
+    - '통화 연결률'
+    - '연결률'
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation basis year-month
+    synonyms:
+    - 'year-month'
+    - 'aggregation period'
+    - '집계 기준 연월'
+    - '연월'
+    - 'year and month'
+    - 'monthly period'
+  measures:
+  - name: MAX_BILL_SECOND
+    expr: SUM(MAX_BILL_SECOND)
+    data_type: NUMBER
+    description: Maximum call duration (seconds)
+    synonyms:
+    - 'maximum call time'
+    - 'longest call duration'
+    - '최장 통화 시간'
+    - '최장 통화 시간 (초)'
+    - 'maximum call duration (seconds)'
+    - 'maximum call duration in seconds'
+    - 'longest call duration in seconds'
+  - name: TOTAL_BILL_SECOND
+    expr: SUM(TOTAL_BILL_SECOND)
+    data_type: NUMBER
+    description: Total call duration (seconds)
+    synonyms:
+    - 'total call time'
+    - 'total call duration'
+    - '총 통화 시간 합계'
+    - '총 통화 시간 (초)'
+    - 'total call duration (seconds)'
+    - 'total call duration in seconds'
+    - 'total call time in seconds'
+- name: V10_HOURLY_CALL_DISTRIBUTION
+  description: Hourly distribution of call data
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V10_HOURLY_CALL_DISTRIBUTION
+  primary_key:
+    columns:
+    - AVG_BILL_MINUTE
+    - AVG_BILL_SECOND
+    - CALL_COUNT
+    - CONNECTED_COUNT
+    - CONNECTION_RATE
+    - DIVISION_NAME
+    - UNCONNECTED_COUNT
+  dimensions:
+  - name: DAY_OF_WEEK_NAME
+    expr: DAY_OF_WEEK_NAME
+    data_type: VARCHAR
+    description: Name of the day of the week
+    synonyms:
+    - 'day of the week'
+    - 'weekday name'
+    - '요일명'
+    - '요일 이름'
+    - 'contract day'
+    - 'session day'
+    sample_values:
+    - 월
+    - 화
+    - 금
+    - 수
+    - 목
+  - name: DIVISION_NAME
+    expr: DIVISION_NAME
+    data_type: VARCHAR
+    description: Direction of the call (incoming/outgoing)
+    synonyms:
+    - 'call direction'
+    - 'call type'
+    - '통화 방향'
+    - '통화 유형'
+    - 'contract type'
+    - 'session type'
+    sample_values:
+    - 발신
+    - 수신
+  - name: CALL_COUNT
+    expr: CALL_COUNT
+    data_type: NUMBER
+    description: Total number of calls for the given time period and day
+    synonyms:
+    - 'total calls'
+    - 'call volume'
+    - '통화 건수'
+    - '총 통화 건수'
+    - 'contract count'
+    - 'session count'
+  - name: CONNECTED_COUNT
+    expr: CONNECTED_COUNT
+    data_type: NUMBER
+    description: Number of successful call connections
+    synonyms:
+    - 'connected calls'
+    - 'successful calls'
+    - '통화 연결 성공 건수'
+    - '연결된 통화 건수'
+    - 'completed contracts'
+    - 'successful sessions'
+  - name: UNCONNECTED_COUNT
+    expr: UNCONNECTED_COUNT
+    data_type: NUMBER
+    description: Number of failed call connections
+    synonyms:
+    - 'failed calls'
+    - 'unconnected calls'
+    - '통화 연결 실패 건수'
+    - '연결 실패 통화 건수'
+    - 'failed contracts'
+    - 'failed sessions'
+  - name: CONNECTION_RATE
+    expr: CONNECTION_RATE
+    data_type: NUMBER
+    description: Call connection rate (%)
+    synonyms:
+    - 'connection rate'
+    - 'call success rate'
+    - '통화 연결률'
+    - '연결률'
+    - 'conversion rate'
+    - 'success rate'
+  - name: AVG_BILL_SECOND
+    expr: AVG_BILL_SECOND
+    data_type: NUMBER
+    description: Average billing time in seconds excluding zero
+    synonyms:
+    - 'average billing seconds'
+    - 'average call duration in seconds'
+    - '평균 과금 시간 (초)'
+    - '평균 통화 시간 (초)'
+    - 'average session duration in seconds'
+  - name: AVG_BILL_MINUTE
+    expr: AVG_BILL_MINUTE
+    data_type: NUMBER
+    description: Average billing time in minutes excluding zero
+    synonyms:
+    - 'average billing minutes'
+    - 'average call duration in minutes'
+    - '평균 과금 시간 (분)'
+    - '평균 통화 시간 (분)'
+    - 'average session duration in minutes'
+  measures:
+  - name: HOUR_OF_DAY
+    expr: SUM(HOUR_OF_DAY)
+    data_type: NUMBER
+    description: Hour of the day when the call started (0-23)
+    synonyms:
+    - 'hour of day'
+    - 'call start hour'
+    - '통화 시작 시각'
+    - '시작 시간'
+    - 'contract start hour'
+    - 'session start hour'
+  - name: DAY_OF_WEEK
+    expr: SUM(DAY_OF_WEEK)
+    data_type: NUMBER
+    description: Day of the week number (1=Sunday, 2=Monday, ..., 7=Saturday)
+    synonyms:
+    - 'day of week number'
+    - 'weekday number'
+    - '요일 번호'
+    - '요일 숫자'
+    - 'contract day number'
+    - 'session day number'
+- name: V11_CALL_TO_CONTRACT_CONVERSION
+  description: Table containing call to contract conversion data
+  base_table:
+    database: SOUTH_KOREA_TELECOM_SUBSCRIPTION_ANALYTICS__CONTRACTS_MARKETING_AND_CALL_CENTER_INSIGHTS_BY_REGION
+    schema: TELECOM_INSIGHTS
+    table: V11_CALL_TO_CONTRACT_CONVERSION
+  primary_key:
+    columns:
+    - DIVISION_NAME
+    - MAIN_CATEGORY_NAME
+    - YEAR_MONTH
+  dimensions:
+  - name: MAIN_CATEGORY_NAME
+    expr: MAIN_CATEGORY_NAME
+    data_type: VARCHAR
+    description: Category of the consultation product (e.g., internet, rental, mobile)
+    synonyms:
+    - 'product category'
+    - 'consultation type'
+    - '상담 상품 유형'
+    - '상품 카테고리'
+    - '상담 유형'
+    - 'main category'
+    - 'category'
+    - 'product type'
+    sample_values:
+    - 렌탈
+    - 모바일
+    - 인터넷
+    - 유심만
+    - 알뜰 요금제
+  - name: DIVISION_NAME
+    expr: DIVISION_NAME
+    data_type: VARCHAR
+    description: Direction of the call (incoming/outgoing)
+    synonyms:
+    - 'call direction'
+    - 'call type'
+    - '통화 방향'
+    - '통화 유형'
+    - '수신/발신'
+    - 'call division'
+    - 'call path'
+    - 'receive path'
+    sample_values:
+    - 수신
+    - 발신
+    - 미분류
+  time_dimensions:
+  - name: YEAR_MONTH
+    expr: YEAR_MONTH
+    data_type: DATE
+    description: Aggregation basis year-month (based on call request date)
+    synonyms:
+    - 'year-month'
+    - 'aggregation period'
+    - '집계 기준 연월'
+    - '연월'
+    - '통화 요청일 기준'
+    - 'month'
+    - 'year'
+    - 'date'
+    - 'time period'
+  measures:
+  - name: TOTAL_CALLS
+    expr: SUM(TOTAL_CALLS)
+    data_type: NUMBER
+    description: Total number of calls
+    synonyms:
+    - 'total calls'
+    - 'total call count'
+    - '총 통화 건수'
+    - '총 통화 수'
+    - '통화 건수'
+    - 'call count'
+    - 'total sessions'
+    - 'total call sessions'
+  - name: LINKED_CONTRACTS
+    expr: SUM(LINKED_CONTRACTS)
+    data_type: NUMBER
+    description: Number of linked unique contracts
+    synonyms:
+    - 'linked contracts'
+    - 'unique contracts'
+    - '연결된 고유 계약서 수'
+    - '고유 계약서 수'
+    - '연결된 계약서'
+    - 'contract count'
+    - 'total contracts'
+    - 'completed contracts'
+    - 'payend count'
+  - name: CALLS_PER_CONTRACT
+    expr: SUM(CALLS_PER_CONTRACT)
+    data_type: NUMBER
+    description: Average number of calls per contract
+    synonyms:
+    - 'calls per contract'
+    - 'average calls per contract'
+    - '계약 1건당 평균 통화 횟수'
+    - '계약당 통화 횟수'
+    - '평균 통화 횟수'
+    - 'average call count per contract'
+  - name: CALL_TO_CONTRACT_CVR
+    expr: SUM(CALL_TO_CONTRACT_CVR)
+    data_type: NUMBER
+    description: Call to contract conversion rate (%)
+    synonyms:
+    - 'call to contract conversion rate'
+    - 'conversion rate'
+    - '통화 → 계약 전환율'
+    - '전환율'
+    - '계약 전환율'
+    - 'open conversion rate'
+    - 'open cvr'
+    - 'contract conversion rate'
+  - name: AVG_LEADTIME_DAYS
+    expr: SUM(AVG_LEADTIME_DAYS)
+    data_type: NUMBER
+    description: Average lead time from call request to contract creation (days)
+    synonyms:
+    - 'average lead time'
+    - 'lead time days'
+    - '통화 요청일 → 계약서 생성일 평균 리드타임'
+    - '평균 리드타임'
+    - '리드타임 평균'
+    - 'average lead time in days'
+  - name: MEDIAN_LEADTIME_DAYS
+    expr: SUM(MEDIAN_LEADTIME_DAYS)
+    data_type: NUMBER
+    description: Median lead time from call request to contract creation (days)
+    synonyms:
+    - 'median lead time'
+    - 'lead time median'
+    - '통화 요청일 → 계약서 생성일 중앙값 리드타임'
+    - '중앙값 리드타임'
+    - '리드타임 중앙값'
+    - 'median lead time in days'
+relationships:
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V02_SERVICE_BUNDLE_PATTERNS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V02_SERVICE_BUNDLE_PATTERNS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V03_CONTRACT_FUNNEL_CONVERSION
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V03_CONTRACT_FUNNEL_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V04_CHANNEL_CONTRACT_PERFORMANCE
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V08_GA4_DEVICE_STATS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V09_MONTHLY_CALL_STATS
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V01_MONTHLY_REGIONAL_CONTRACT_STATS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V01_MONTHLY_REGIONAL_CONTRACT_STATS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V03_CONTRACT_FUNNEL_CONVERSION
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V03_CONTRACT_FUNNEL_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V04_CHANNEL_CONTRACT_PERFORMANCE
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V08_GA4_DEVICE_STATS
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V09_MONTHLY_CALL_STATS
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V02_SERVICE_BUNDLE_PATTERNS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V02_SERVICE_BUNDLE_PATTERNS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V04_CHANNEL_CONTRACT_PERFORMANCE
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V08_GA4_DEVICE_STATS
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V09_MONTHLY_CALL_STATS
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V03_CONTRACT_FUNNEL_CONVERSION_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V03_CONTRACT_FUNNEL_CONVERSION
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V05_REGIONAL_NEW_INSTALL
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V05_REGIONAL_NEW_INSTALL
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V08_GA4_DEVICE_STATS
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V09_MONTHLY_CALL_STATS
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V04_CHANNEL_CONTRACT_PERFORMANCE_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V04_CHANNEL_CONTRACT_PERFORMANCE
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V06_RENTAL_CATEGORY_TRENDS
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V06_RENTAL_CATEGORY_TRENDS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V08_GA4_DEVICE_STATS
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V09_MONTHLY_CALL_STATS
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V05_REGIONAL_NEW_INSTALL_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V05_REGIONAL_NEW_INSTALL
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V07_GA4_MARKETING_ATTRIBUTION
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V07_GA4_MARKETING_ATTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V08_GA4_DEVICE_STATS
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V09_MONTHLY_CALL_STATS
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V06_RENTAL_CATEGORY_TRENDS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V06_RENTAL_CATEGORY_TRENDS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V07_GA4_MARKETING_ATTRIBUTION_to_V08_GA4_DEVICE_STATS
+  left_table: V07_GA4_MARKETING_ATTRIBUTION
+  right_table: V08_GA4_DEVICE_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V07_GA4_MARKETING_ATTRIBUTION_to_V09_MONTHLY_CALL_STATS
+  left_table: V07_GA4_MARKETING_ATTRIBUTION
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V07_GA4_MARKETING_ATTRIBUTION_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V07_GA4_MARKETING_ATTRIBUTION
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V08_GA4_DEVICE_STATS_to_V09_MONTHLY_CALL_STATS
+  left_table: V08_GA4_DEVICE_STATS
+  right_table: V09_MONTHLY_CALL_STATS
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V08_GA4_DEVICE_STATS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V08_GA4_DEVICE_STATS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V09_MONTHLY_CALL_STATS_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V09_MONTHLY_CALL_STATS
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: YEAR_MONTH
+    right_column: YEAR_MONTH
+- name: V09_MONTHLY_CALL_STATS_to_V10_HOURLY_CALL_DISTRIBUTION
+  left_table: V09_MONTHLY_CALL_STATS
+  right_table: V10_HOURLY_CALL_DISTRIBUTION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DIVISION_NAME
+    right_column: DIVISION_NAME
+- name: V10_HOURLY_CALL_DISTRIBUTION_to_V11_CALL_TO_CONTRACT_CONVERSION
+  left_table: V10_HOURLY_CALL_DISTRIBUTION
+  right_table: V11_CALL_TO_CONTRACT_CONVERSION
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DIVISION_NAME
+    right_column: DIVISION_NAME
+verified_queries:
+- name: how_many_calls_were_made_on_weekends_saturday_an
+  question: How many calls were made on weekends (Saturday and Sunday) and what is the average billing time in minutes?
+  sql: "WITH __v10_hourly_call_distribution AS (\n  SELECT\n    day_of_week_name,\n    call_count,\n    avg_bill_minute\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v10_hourly_call_distribution\n\
+    )\nSELECT\n  SUM(v10.call_count) AS total_calls,\n  AVG(v10.avg_bill_minute) AS avg_billing_minutes\nFROM __v10_hourly_call_distribution\
+    \ AS v10\nWHERE\n  v10.day_of_week_name IN ('토', '일')\n -- Generated by Cortex Analyst (request_id: 942d3ef1-2a41-475d-b907-cdf4dfa21c87)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: how_many_total_calls_were_made_in_the_category_i
+  question: How many total calls were made in the '모바일' category in the last 6 months?
+  sql: "WITH __v11_call_to_contract_conversion AS (\n  SELECT\n    main_category_name,\n    year_month,\n    total_calls\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v11_call_to_contract_conversion\n\
+    )\nSELECT\n  SUM(v11.total_calls) AS total_calls\nFROM __v11_call_to_contract_conversion AS v11\nWHERE\n  v11.main_category_name\
+    \ = '모바일'\n  AND v11.year_month >= DATE_TRUNC('MONTH', DATEADD(MONTH, -6, CURRENT_DATE))\n  AND v11.year_month < DATE_TRUNC('MONTH',\
+    \ CURRENT_DATE)\n -- Generated by Cortex Analyst (request_id: a334c462-a9f4-46a6-80c9-f9e0b913ce83)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: how_many_unique_users_used_desktop_devices_in_ja
+  question: How many unique users used desktop devices in January 2025?
+  sql: "WITH __v08_ga4_device_stats AS (\n  SELECT\n    device_category,\n    year_month,\n    user_count\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v08_ga4_device_stats\n\
+    )\nSELECT\n  SUM(user_count) AS total_users\nFROM __v08_ga4_device_stats\nWHERE\n  device_category = 'desktop' AND DATE_TRUNC('MONTH',\
+    \ year_month) = '2025-01-01'\n -- Generated by Cortex Analyst (request_id: 5bccf4fa-0e35-4371-acc2-fb37b49a7f2f)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_billing_time_in_minutes_for
+  question: What is the average billing time in minutes for connected calls in the '인터넷' category for the year 2023?
+  sql: "WITH __v09_monthly_call_stats AS (\n  SELECT\n    main_category_name,\n    avg_bill_minute,\n    connected_count,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v09_monthly_call_stats\n\
+    )\nSELECT\n  SUM(cs.avg_bill_minute * cs.connected_count) / NULLIF(NULLIF(SUM(cs.connected_count), 0), 0) AS avg_billing_time_minutes\n\
+    FROM __v09_monthly_call_stats AS cs\nWHERE\n  cs.main_category_name = '인터넷' AND DATE_PART('year', cs.year_month) = 2023\n\
+    \ -- Generated by Cortex Analyst (request_id: 49d87202-8371-444d-8c68-4eeb30d91484)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_call_to_contract_conversion
+  question: What is the average call-to-contract conversion rate (CALL_TO_CONTRACT_CVR) for mobile contracts in 2023?
+  sql: "WITH __v11_call_to_contract_conversion AS (\n  SELECT\n    main_category_name,\n    year_month,\n    call_to_contract_cvr\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v11_call_to_contract_conversion\n\
+    )\nSELECT\n  AVG(call_to_contract_cvr) AS avg_call_to_contract_cvr\nFROM __v11_call_to_contract_conversion\nWHERE\n  main_category_name\
+    \ = '모바일' AND DATE_PART('YEAR', year_month) = 2023\n -- Generated by Cortex Analyst (request_id: 6cd3a379-8a10-4c07-b2aa-8f27890809d3)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_call_to_contract_conversion
+  question: What is the average call-to-contract conversion rate for each main category in 2023?
+  sql: "WITH __v11_call_to_contract_conversion AS (\n  SELECT\n    main_category_name,\n    year_month,\n    call_to_contract_cvr\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v11_call_to_contract_conversion\n\
+    )\nSELECT\n  main_category_name,\n  SUM(call_to_contract_cvr) AS avg_call_to_contract_cvr\nFROM __v11_call_to_contract_conversion\n\
+    WHERE\n  DATE_PART('YEAR', year_month) = 2023\nGROUP BY\n  main_category_name\nORDER BY\n  avg_call_to_contract_cvr DESC\
+    \ NULLS LAST\n -- Generated by Cortex Analyst (request_id: d0df4a31-b499-4c8a-a560-2303eb08f1d5)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_call_to_contract_conversion
+  question: What is the average call-to-contract conversion rate for the '모바일' category in regions with more than 1000 contracts
+    in 2023?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    install_state,\n    install_city,\n    contract_count,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    ), __v11_call_to_contract_conversion AS (\n  SELECT\n    main_category_name,\n    division_name,\n    year_month,\n  \
+    \  call_to_contract_cvr\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v11_call_to_contract_conversion\n\
+    ), regional_contracts_2023 AS (\n  SELECT\n    install_state,\n    install_city,\n    SUM(contract_count) AS total_contracts\n\
+    \  FROM __v01_monthly_regional_contract_stats\n  WHERE\n    DATE_PART('year', year_month) = 2023\n  GROUP BY\n    install_state,\n\
+    \    install_city\n  HAVING\n    SUM(contract_count) > 1000\n), qualifying_months AS (\n  SELECT DISTINCT\n    v01.year_month\n\
+    \  FROM __v01_monthly_regional_contract_stats AS v01\n  INNER JOIN regional_contracts_2023 AS r\n    ON v01.install_state\
+    \ = r.install_state AND v01.install_city = r.install_city\n  WHERE\n    DATE_PART('year', v01.year_month) = 2023\n), mobile_cvr\
+    \ AS (\n  SELECT DISTINCT\n    v11.year_month,\n    v11.division_name,\n    v11.call_to_contract_cvr\n  FROM __v11_call_to_contract_conversion\
+    \ AS v11\n  WHERE\n    v11.main_category_name = '모바일' AND DATE_PART('year', v11.year_month) = 2023\n)\nSELECT\n  AVG(mc.call_to_contract_cvr)\
+    \ AS avg_call_to_contract_cvr\nFROM mobile_cvr AS mc\nINNER JOIN qualifying_months AS qm\n  ON mc.year_month = qm.year_month\n\
+    \ -- Generated by Cortex Analyst (request_id: b35385cb-c207-4e21-862a-c1e535757d45)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_connection_rate_for_calls_on
+  question: What is the average connection rate for calls on weekdays (Monday to Friday) between 9 AM and 5 PM?
+  sql: "WITH __v10_hourly_call_distribution AS (\n  SELECT\n    day_of_week_name,\n    connection_rate,\n    hour_of_day\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v10_hourly_call_distribution\n\
+    )\nSELECT\n  AVG(hcd.connection_rate) AS avg_connection_rate\nFROM (\n  SELECT\n    connection_rate,\n    day_of_week_name,\n\
+    \    hour_of_day\n  FROM __v10_hourly_call_distribution\n) AS hcd\nWHERE\n  hcd.day_of_week_name IN ('월', '화', '수', '목',\
+    \ '금')\n  AND hcd.hour_of_day >= 9\n  AND hcd.hour_of_day < 17\n -- Generated by Cortex Analyst (request_id: fa14cd1f-d77b-4a80-b970-26e4e2675501)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_contract_conversion_rate_con
+  question: What is the average contract conversion rate (CONTRACT_CVR) for each UTM medium in the last 6 months?
+  sql: "WITH __v07_ga4_marketing_attribution AS (\n  SELECT\n    utm_medium,\n    year_month,\n    contract_cvr\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v07_ga4_marketing_attribution\n\
+    )\nSELECT\n  utm_medium,\n  SUM(contract_cvr) AS total_contract_cvr,\n  COUNT(*) AS month_count,\n  SUM(contract_cvr)\
+    \ / NULLIF(NULLIF(COUNT(*), 0), 0) AS avg_contract_cvr\nFROM __v07_ga4_marketing_attribution\nWHERE\n  year_month >= DATE_TRUNC('MONTH',\
+    \ DATEADD(MONTH, -6, CURRENT_DATE))\n  AND year_month < DATE_TRUNC('MONTH', CURRENT_DATE)\nGROUP BY\n  utm_medium\nORDER\
+    \ BY\n  avg_contract_cvr DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: dbe64676-436c-4e5f-a1d5-9f21bf0cfe85)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_conversion_rate_for_mobile_d
+  question: What is the average conversion rate for mobile devices in the last 6 months?
+  sql: "WITH __v08_ga4_device_stats AS (\n  SELECT\n    device_category,\n    year_month,\n    conversion_rate\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v08_ga4_device_stats\n\
+    )\nSELECT\n  AVG(conversion_rate) AS avg_conversion_rate,\n  MIN(year_month) AS start_date,\n  MAX(year_month) AS end_date\n\
+    FROM __v08_ga4_device_stats\nWHERE\n  device_category = 'mobile'\n  AND year_month >= DATE_TRUNC('MONTH', DATEADD(MONTH,\
+    \ -6, CURRENT_DATE))\n  AND year_month < DATE_TRUNC('MONTH', CURRENT_DATE)\n -- Generated by Cortex Analyst (request_id:\
+    \ 50767a53-6085-4cc9-a0e0-ffe7c202d409)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_net_sales_for_contracts_that
+  question: What is the average net sales for contracts that were received via '인바운드' and inflow path 'TV광고' in 2023?
+  sql: "WITH __v04_channel_contract_performance AS (\n  SELECT\n    receive_path_name,\n    inflow_path_name,\n    avg_net_sales,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v04_channel_contract_performance\n\
+    )\nSELECT\n  AVG(v04.avg_net_sales) AS average_net_sales\nFROM __v04_channel_contract_performance AS v04\nWHERE\n  v04.receive_path_name\
+    \ = '인바운드'\n  AND v04.inflow_path_name = 'TV광고'\n  AND DATE_PART('year', v04.year_month) = 2023\n -- Generated by Cortex\
+    \ Analyst (request_id: f6a4b3c3-4525-4812-9bb6-19af5526e310)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_net_sales_for_contracts_with
+  question: What is the average net sales for contracts with TV and Phone in the last 6 months?
+  sql: "WITH __v02_service_bundle_patterns AS (\n  SELECT\n    has_tv,\n    has_phone,\n    avg_net_sales,\n    year_month\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v02_service_bundle_patterns\n\
+    )\nSELECT\n  AVG(v02.avg_net_sales) AS avg_net_sales\nFROM __v02_service_bundle_patterns AS v02\nWHERE\n  v02.has_tv =\
+    \ 'Y'\n  AND v02.has_phone = 'Y'\n  AND v02.year_month >= DATE_TRUNC('MONTH', DATEADD(MONTH, -6, CURRENT_DATE))\n  AND\
+    \ v02.year_month < DATE_TRUNC('MONTH', CURRENT_DATE)\n -- Generated by Cortex Analyst (request_id: e1451b02-01e5-40f6-9fc9-de1d6bf58a0b)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_net_sales_for_each_region_in
+  question: What is the average net sales for each region in the last 6 months?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    install_state,\n    install_city,\n    avg_net_sales,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    )\nSELECT\n  v01.install_state,\n  v01.install_city,\n  MIN(v01.year_month) AS start_date,\n  MAX(v01.year_month) AS end_date,\n\
+    \  AVG(v01.avg_net_sales) AS avg_net_sales\nFROM __v01_monthly_regional_contract_stats AS v01\nWHERE\n  v01.year_month\
+    \ >= DATE_TRUNC('MONTH', DATEADD(MONTH, -6, CURRENT_DATE))\n  AND v01.year_month < DATE_TRUNC('MONTH', CURRENT_DATE)\n\
+    GROUP BY\n  v01.install_state,\n  v01.install_city\nORDER BY\n  avg_net_sales DESC NULLS LAST\n -- Generated by Cortex\
+    \ Analyst (request_id: ab366e6d-3626-4411-af3e-39ec206a884e)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_net_sales_for_standalone_con
+  question: What is the average net sales for standalone contracts in the city of '부평구'?
+  sql: "WITH __v05_regional_new_install AS (\n  SELECT\n    install_city,\n    avg_net_sales,\n    year_month,\n    standalone_count\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v05_regional_new_install\n\
+    )\nSELECT\n  v05.install_city,\n  MIN(v05.year_month) AS start_date,\n  MAX(v05.year_month) AS end_date,\n  SUM(v05.standalone_count)\
+    \ AS total_standalone_count,\n  AVG(v05.avg_net_sales) AS avg_net_sales\nFROM __v05_regional_new_install AS v05\nWHERE\n\
+    \  v05.install_city = '부평구'\nGROUP BY\n  v05.install_city\n -- Generated by Cortex Analyst (request_id: 78046b4f-0a7a-4f7e-90f6-033eb7357273)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_average_overall_conversion_rate_over
+  question: What is the average overall conversion rate (OVERALL_CVR) for mobile contracts in 2023?
+  sql: "WITH __v03_contract_funnel_conversion AS (\n  SELECT\n    main_category_name,\n    year_month,\n    overall_cvr\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v03_contract_funnel_conversion\n\
+    )\nSELECT\n  AVG(overall_cvr) AS avg_overall_cvr\nFROM __v03_contract_funnel_conversion\nWHERE\n  main_category_name =\
+    \ '모바일' AND DATE_PART('YEAR', year_month) = 2023\n -- Generated by Cortex Analyst (request_id: 6b712a93-3bbf-4180-a82f-86c5a18b97ec)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_maximum_billing_time_in_seconds_for
+  question: What is the maximum billing time in seconds for each main category and division in the month of December 2022?
+  sql: "WITH __v09_monthly_call_stats AS (\n  SELECT\n    division_name,\n    main_category_name,\n    year_month,\n    max_bill_second\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v09_monthly_call_stats\n\
+    )\nSELECT\n  v09.main_category_name,\n  v09.division_name,\n  SUM(v09.max_bill_second) AS max_bill_second\nFROM __v09_monthly_call_stats\
+    \ AS v09\nWHERE\n  v09.year_month >= '2022-12-01' AND v09.year_month < '2023-01-01'\nGROUP BY\n  v09.main_category_name,\n\
+    \  v09.division_name\nORDER BY\n  max_bill_second DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: 02962841-f416-42b1-b0ac-f8d78a6cfb5e)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_median_lead_time_in_days_for_contrac
+  question: What is the median lead time in days for contracts in the '인터넷' category for the year 2022?
+  sql: "WITH __v11_call_to_contract_conversion AS (\n  SELECT\n    main_category_name,\n    year_month,\n    median_leadtime_days\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v11_call_to_contract_conversion\n\
+    )\nSELECT\n  SUM(median_leadtime_days) AS median_leadtime_days\nFROM __v11_call_to_contract_conversion\nWHERE\n  main_category_name\
+    \ = '인터넷' AND DATE_PART('YEAR', year_month) = 2022\n -- Generated by Cortex Analyst (request_id: 37b3aad0-5345-459f-8dde-3e7852381a5f)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_net_sales_for_contracts_that_i
+  question: What is the total net sales for contracts that include TV services in the '전남' state?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    install_state,\n    total_net_sales,\n    year_month\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    ), __v02_service_bundle_patterns AS (\n  SELECT\n    has_tv,\n    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v02_service_bundle_patterns\n\
+    ), regional_tv AS (\n  SELECT\n    v01.install_state,\n    v01.total_net_sales,\n    v01.year_month\n  FROM __v01_monthly_regional_contract_stats\
+    \ AS v01\n  LEFT OUTER JOIN __v02_service_bundle_patterns AS v02\n    ON v01.year_month = v02.year_month\n  WHERE\n  \
+    \  v01.install_state = '전남' AND v02.has_tv = 'Y'\n)\nSELECT\n  install_state,\n  MIN(year_month) AS start_date,\n  MAX(year_month)\
+    \ AS end_date,\n  SUM(total_net_sales) AS total_net_sales\nFROM regional_tv\nGROUP BY\n  install_state\n -- Generated\
+    \ by Cortex Analyst (request_id: 22b3dc2a-c2e2-4bc7-9510-443458903afa)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_call_attempts_and_th
+  question: What is the total number of call attempts and the average billing time in seconds for each division in the year
+    2023?
+  sql: "WITH __v09_monthly_call_stats AS (\n  SELECT\n    division_name,\n    call_count,\n    avg_bill_second,\n    year_month\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v09_monthly_call_stats\n\
+    )\nSELECT\n  division_name,\n  SUM(call_count) AS total_call_attempts,\n  AVG(avg_bill_second) AS avg_billing_time_seconds\n\
+    FROM __v09_monthly_call_stats\nWHERE\n  DATE_PART('YEAR', year_month) = 2023\nGROUP BY\n  division_name\nORDER BY\n  total_call_attempts\
+    \ DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: 240e42f6-c221-488e-a04d-ed56c590e0a3)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_call_attempts_and_th
+  question: What is the total number of call attempts and the total billing time in seconds for each division, joined with
+    the total contract count from the regional contract stats for the year 2023?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    contract_count,\n    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    ), __v09_monthly_call_stats AS (\n  SELECT\n    division_name,\n    call_count,\n    year_month,\n    total_bill_second\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v09_monthly_call_stats\n\
+    ), joined_data AS (\n  SELECT\n    rc.year_month,\n    cs.division_name,\n    cs.call_count,\n    cs.total_bill_second,\n\
+    \    rc.contract_count\n  FROM __v01_monthly_regional_contract_stats AS rc\n  LEFT OUTER JOIN __v09_monthly_call_stats\
+    \ AS cs\n    ON rc.year_month = cs.year_month\n  WHERE\n    DATE_PART('year', rc.year_month) = 2023\n)\nSELECT\n  division_name,\n\
+    \  SUM(call_count) AS total_call_attempts,\n  SUM(total_bill_second) AS total_billing_seconds,\n  SUM(contract_count)\
+    \ AS total_contract_count\nFROM joined_data\nGROUP BY\n  division_name\nORDER BY\n  division_name\n -- Generated by Cortex\
+    \ Analyst (request_id: 34df8acb-e24a-4842-aa5f-72ffff34784f)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_connected_and_unconn
+  question: What is the total number of connected and unconnected calls for each division (발신, 수신) on Mondays?
+  sql: "WITH __v10_hourly_call_distribution AS (\n  SELECT\n    day_of_week_name,\n    division_name,\n    connected_count,\n\
+    \    unconnected_count\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v10_hourly_call_distribution\n\
+    )\nSELECT\n  v10.division_name,\n  SUM(v10.connected_count) AS total_connected_calls,\n  SUM(v10.unconnected_count) AS\
+    \ total_unconnected_calls\nFROM __v10_hourly_call_distribution AS v10\nWHERE\n  v10.day_of_week_name = '월' AND v10.division_name\
+    \ IN ('발신', '수신')\nGROUP BY\n  v10.division_name\nORDER BY\n  v10.division_name\n -- Generated by Cortex Analyst (request_id:\
+    \ e873fc3a-ef20-413b-827b-ba6991875810)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_consult_requests_and
+  question: What is the total number of consult requests and contracts for each UTM source in the last quarter?
+  sql: "WITH __v07_ga4_marketing_attribution AS (\n  SELECT\n    utm_source,\n    year_month,\n    total_contracts,\n    total_consult_requests\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v07_ga4_marketing_attribution\n\
+    )\nSELECT\n  utm_source,\n  SUM(total_consult_requests) AS total_consult_requests,\n  SUM(total_contracts) AS total_contracts\n\
+    FROM __v07_ga4_marketing_attribution\nWHERE\n  year_month >= DATE_TRUNC('QUARTER', DATEADD(QUARTER, -1, CURRENT_DATE))\n\
+    \  AND year_month < DATE_TRUNC('QUARTER', CURRENT_DATE)\nGROUP BY\n  utm_source\nORDER BY\n  total_contracts DESC NULLS\
+    \ LAST\n -- Generated by Cortex Analyst (request_id: a3adef69-96e8-48ff-ba81-789288836e33)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_and_averag
+  question: What is the total number of contracts and average net sales for each main category in 2023?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    main_category_name,\n    contract_count,\n    avg_net_sales,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    )\nSELECT\n  main_category_name,\n  SUM(contract_count) AS total_contracts,\n  AVG(avg_net_sales) AS average_net_sales\n\
+    FROM __v01_monthly_regional_contract_stats\nWHERE\n  DATE_PART('YEAR', year_month) = 2023\nGROUP BY\n  main_category_name\n\
+    ORDER BY\n  total_contracts DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: 169dd758-d9b1-4d11-97c4-9741f7a60b1f)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_and_the_av
+  question: What is the total number of contracts and the average net sales for each main category, joined with regional contract
+    stats for 2023?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    main_category_name,\n    contract_count,\n    avg_net_sales,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    )\nSELECT\n  v01.main_category_name,\n  SUM(v01.contract_count) AS total_contracts,\n  AVG(v01.avg_net_sales) AS average_net_sales,\n\
+    \  MIN(v01.year_month) AS start_date,\n  MAX(v01.year_month) AS end_date\nFROM __v01_monthly_regional_contract_stats AS\
+    \ v01\nWHERE\n  DATE_PART('year', v01.year_month) = 2023\nGROUP BY\n  v01.main_category_name\nORDER BY\n  total_contracts\
+    \ DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: e44d222f-f4f0-4048-aa57-31c6668f1ef9)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_by_bundle
+  question: What is the total number of contracts by bundle combination for the '인터넷' category in 2023?
+  sql: "WITH __v02_service_bundle_patterns AS (\n  SELECT\n    main_category_name,\n    bundle_combination,\n    contract_count,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v02_service_bundle_patterns\n\
+    )\nSELECT\n  v02.bundle_combination,\n  SUM(v02.contract_count) AS total_contracts\nFROM __v02_service_bundle_patterns\
+    \ AS v02\nWHERE\n  v02.main_category_name = '인터넷' AND DATE_PART('year', v02.year_month) = 2023\nGROUP BY\n  v02.bundle_combination\n\
+    ORDER BY\n  total_contracts DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: cf309f47-66b0-4775-965c-7ac4912434b9)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_created_in
+  question: What is the total number of contracts created in the year 2023?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    contract_count,\n    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    )\nSELECT\n  SUM(contract_count) AS total_contracts\nFROM __v01_monthly_regional_contract_stats\nWHERE\n  DATE_PART('YEAR',\
+    \ year_month) = 2023\n -- Generated by Cortex Analyst (request_id: 4f3663ec-6161-4586-bb53-450de0cea45a)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_for_each_m
+  question: What is the total number of contracts for each main category in 2023?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    main_category_name,\n    contract_count,\n    year_month\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    )\nSELECT\n  main_category_name,\n  SUM(contract_count) AS total_contracts\nFROM __v01_monthly_regional_contract_stats\n\
+    WHERE\n  DATE_PART('YEAR', year_month) = 2023\nGROUP BY\n  main_category_name\nORDER BY\n  total_contracts DESC NULLS\
+    \ LAST\n -- Generated by Cortex Analyst (request_id: 28701395-2e4b-43ab-b670-d28e8f68820a)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_for_each_r
+  question: What is the total number of contracts for each region and rental main category in the last year?
+  sql: "WITH __v06_rental_category_trends AS (\n  SELECT\n    install_state,\n    rental_main_category,\n    contract_count,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v06_rental_category_trends\n\
+    )\nSELECT\n  v06.install_state,\n  v06.rental_main_category,\n  SUM(v06.contract_count) AS total_contracts\nFROM __v06_rental_category_trends\
+    \ AS v06\nWHERE\n  v06.year_month >= DATE_TRUNC('YEAR', DATEADD(YEAR, -1, CURRENT_DATE))\n  AND v06.year_month < DATE_TRUNC('YEAR',\
+    \ CURRENT_DATE)\nGROUP BY\n  v06.install_state,\n  v06.rental_main_category\nORDER BY\n  v06.install_state,\n  v06.rental_main_category\n\
+    \ -- Generated by Cortex Analyst (request_id: 4e7a61d6-74da-4ea4-991a-7b253afc9d8c)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_for_each_r
+  question: What is the total number of contracts for each rental main category in 2023?
+  sql: "WITH __v06_rental_category_trends AS (\n  SELECT\n    rental_main_category,\n    contract_count,\n    year_month\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v06_rental_category_trends\n\
+    )\nSELECT\n  rental_main_category,\n  SUM(contract_count) AS total_contracts\nFROM __v06_rental_category_trends\nWHERE\n\
+    \  DATE_PART('YEAR', year_month) = 2023\nGROUP BY\n  rental_main_category\nORDER BY\n  total_contracts DESC NULLS LAST\n\
+    \ -- Generated by Cortex Analyst (request_id: 27b8e87d-a5b5-4703-8b28-795af1162ff8)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_contracts_for_each_r
+  question: What is the total number of contracts for each rental main category that have been paid in full?
+  sql: "WITH __v06_rental_category_trends AS (\n  SELECT\n    rental_main_category,\n    payend_count,\n    year_month\n \
+    \ FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v06_rental_category_trends\n\
+    )\nSELECT\n  v6.rental_main_category,\n  SUM(v6.payend_count) AS total_payend_count,\n  MIN(v6.year_month) AS start_date,\n\
+    \  MAX(v6.year_month) AS end_date\nFROM __v06_rental_category_trends AS v6\nGROUP BY\n  v6.rental_main_category\nORDER\
+    \ BY\n  total_payend_count DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: c9599e6c-eb28-4709-b0b3-e2829aa5f8a5)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_conversion_events_fo
+  question: What is the total number of conversion events for each device category in 2025?
+  sql: "WITH __v08_ga4_device_stats AS (\n  SELECT\n    device_category,\n    year_month,\n    conversion_event_count\n  FROM\
+    \ south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v08_ga4_device_stats\n\
+    )\nSELECT\n  device_category,\n  SUM(conversion_event_count) AS total_conversion_events\nFROM __v08_ga4_device_stats\n\
+    WHERE\n  DATE_PART('YEAR', year_month) = 2025\nGROUP BY\n  device_category\nORDER BY\n  total_conversion_events DESC NULLS\
+    \ LAST\n -- Generated by Cortex Analyst (request_id: 47d34f07-e71f-402a-b353-1eb4345d05ad)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_linked_contracts_for
+  question: What is the total number of linked contracts for each division in the last quarter?
+  sql: "WITH __v11_call_to_contract_conversion AS (\n  SELECT\n    division_name,\n    year_month,\n    linked_contracts\n\
+    \  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v11_call_to_contract_conversion\n\
+    )\nSELECT\n  v11.division_name,\n  SUM(v11.linked_contracts) AS total_linked_contracts\nFROM __v11_call_to_contract_conversion\
+    \ AS v11\nWHERE\n  v11.year_month >= DATE_TRUNC('QUARTER', DATEADD(QUARTER, -1, CURRENT_DATE))\n  AND v11.year_month <\
+    \ DATE_TRUNC('QUARTER', CURRENT_DATE)\nGROUP BY\n  v11.division_name\nORDER BY\n  total_linked_contracts DESC NULLS LAST\n\
+    \ -- Generated by Cortex Analyst (request_id: ca61e17a-5f06-4586-be69-2128b0a68b75)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_new_installations_fo
+  question: What is the total number of new installations for each state in the year 2023?
+  sql: "WITH __v05_regional_new_install AS (\n  SELECT\n    install_state,\n    contract_count,\n    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v05_regional_new_install\n\
+    )\nSELECT\n  v05.install_state,\n  SUM(v05.contract_count) AS total_new_installations\nFROM __v05_regional_new_install\
+    \ AS v05\nWHERE\n  DATE_PART('YEAR', v05.year_month) = 2023\nGROUP BY\n  v05.install_state\nORDER BY\n  total_new_installations\
+    \ DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: bedba6d2-2129-4c28-b70e-708dff87d90d)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_open_contracts_in_th
+  question: What is the total number of open contracts in the state of '충북' for the year 2023, and what is the corresponding
+    average net sales?
+  sql: "WITH __v01_monthly_regional_contract_stats AS (\n  SELECT\n    install_state,\n    open_count,\n    avg_net_sales,\n\
+    \    year_month\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v01_monthly_regional_contract_stats\n\
+    )\nSELECT\n  SUM(open_count) AS total_open_count,\n  AVG(avg_net_sales) AS average_net_sales\nFROM __v01_monthly_regional_contract_stats\n\
+    WHERE\n  install_state = '충북' AND DATE_PART('year', year_month) = 2023\n -- Generated by Cortex Analyst (request_id: c36cacae-421c-442c-8300-02b565c8f588)\n\
+    ;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1
+- name: what_is_the_total_number_of_sessions_for_each_de
+  question: What is the total number of sessions for each device category in the year 2025?
+  sql: "WITH __v08_ga4_device_stats AS (\n  SELECT\n    device_category,\n    year_month,\n    session_count\n  FROM south_korea_telecom_subscription_analytics__contracts_marketing_and_call_center_insights_by_region.telecom_insights.v08_ga4_device_stats\n\
+    )\nSELECT\n  device_category,\n  SUM(session_count) AS total_sessions\nFROM __v08_ga4_device_stats\nWHERE\n  DATE_PART('YEAR',\
+    \ year_month) = 2025\nGROUP BY\n  device_category\nORDER BY\n  total_sessions DESC NULLS LAST\n -- Generated by Cortex\
+    \ Analyst (request_id: eb0d8c91-0d7f-48d9-b9b7-d39103324bdf)\n;"
+  verified_at: 1775708156
+  verified_by: weaver/v1.20260409_125005.iter1

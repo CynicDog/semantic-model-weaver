@@ -1,0 +1,181 @@
+{
+  "golden_set": [
+    {
+      "query": "What is the total number of unique stocks (ISU_CD) listed in the table?",
+      "expected_response": "[{\"COUNT(DISTINCT ISU_CD)\": 2680}]"
+    },
+    {
+      "query": "What is the average base price (BASE_PRC) of stocks that are marked as small and medium-sized enterprises (SMSC_YN = 'Y')?",
+      "expected_response": "[{\"AVG(BASE_PRC)\": \"12326.054340\"}]"
+    },
+    {
+      "query": "How many stocks have a listing date (LIST_DD) after January 1, 2020?",
+      "expected_response": "[{\"COUNT(*)\": 17952}]"
+    },
+    {
+      "query": "What is the total capital amount (CAPT_AMT) for stocks that are not under trade suspension (TDHL_YN = 'N')?",
+      "expected_response": "[{\"SUM(CAPT_AMT)\": 4033194791670814}]"
+    },
+    {
+      "query": "What is the total number of stocks that are marked as investment caution stocks (IVWR_ISU_YN = 'Y') and have a market alert risk warning (MKT_ALRT_RISK_ADNT_YN = 'Y')?",
+      "expected_response": "[{\"COUNT(*)\": 0}]"
+    },
+    {
+      "query": "What is the average trading price (TD_PRC) for each market (MKT_ID) on the latest date (DWDD)?",
+      "expected_response": "[{\"MKT_ID\": \"KSQ\", \"AVG_TD_PRC\": \"77566.832562\"}, {\"MKT_ID\": \"STK\", \"AVG_TD_PRC\": \"187869.579372\"}]"
+    },
+    {
+      "query": "What is the total trading quantity (TRD_QTY) for each stock (ISU_CD) in the last 7 days?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the highest trading price (TD_PRC) for each board (BRD_ID) in the last month?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total trading quantity (TRD_QTY) for each stock (ISU_CD) where the stock name (ISU_ABWD_NM) contains 'Samsung'?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the average trading price (TD_PRC) for each session (SESS_ID) on the latest date (DWDD)?",
+      "expected_response": "[{\"SESS_ID\": \"40\", \"AVG_TD_PRC\": \"143135.376265\"}, {\"SESS_ID\": \"41\", \"AVG_TD_PRC\": \"131586.298823\"}, {\"SESS_ID\": \"42\", \"AVG_TD_PRC\": \"139361.407080\"}] (showing 3 of 5 rows)"
+    },
+    {
+      "query": "What is the average ask price for the first step across all records in the table?",
+      "expected_response": "[{\"AVG(ASK_STEP1_BSOD_PRC)\": \"144359.267343\"}]"
+    },
+    {
+      "query": "How many records are there for the market ID 'KSQ' on the date '2023-10-01'?",
+      "expected_response": "[{\"COUNT(*)\": 0}]"
+    },
+    {
+      "query": "What is the total bid quantity for the first step for the board ID 'G1'?",
+      "expected_response": "[{\"SUM(BID_STEP1_BSOD_RQTY)\": 1591002759809}]"
+    },
+    {
+      "query": "What is the maximum ask price for the fifth step for the session ID '42'?",
+      "expected_response": "[{\"MAX(ASK_STEP5_BSOD_PRC)\": 2377000}]"
+    },
+    {
+      "query": "What is the total ask quantity for the first step for each market ID and board ID?",
+      "expected_response": "[{\"MKT_ID\": \"STK\", \"BRD_ID\": \"G1\", \"SUM(ASK_STEP1_BSOD_RQTY)\": 1264490406885}, {\"MKT_ID\": \"KSQ\", \"BRD_ID\": \"G1\", \"SUM(ASK_STEP1_BSOD_RQTY)\": 234832024354}]"
+    },
+    {
+      "query": "What is the total sell and buy order quantity for each market ID on the latest date?",
+      "expected_response": "[{\"MKT_ID\": \"STK\", \"TOTAL_SELL_QTY\": 367594, \"TOTAL_BUY_QTY\": 1474246}, {\"MKT_ID\": \"KSQ\", \"TOTAL_SELL_QTY\": 26778, \"TOTAL_BUY_QTY\": 338078}]"
+    },
+    {
+      "query": "What is the average buy order quantity for each stock code in the last 7 days?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "How many unique stock codes are there for each market ID and board ID combination?",
+      "expected_response": "[{\"MKT_ID\": \"STK\", \"BRD_ID\": \"G3\", \"UNIQUE_STOCK_CODES\": 420}, {\"MKT_ID\": \"KSQ\", \"BRD_ID\": \"G3\", \"UNIQUE_STOCK_CODES\": 430}]"
+    },
+    {
+      "query": "What is the total sell order quantity for each stock code that has a specific product group ID ('G3')?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the maximum buy order quantity for each market ID on a specific date ('2023-10-01')?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the average number of upward trending stocks (FLUC_UP_CT) per day for the market 'KSQ'?",
+      "expected_response": "[{\"AVG(FLUC_UP_CT)\": \"138.682644\"}]"
+    },
+    {
+      "query": "How many records are there for the 'STK' market where the data calculation time is after '150000'?",
+      "expected_response": "[{\"COUNT(*)\": 48600}]"
+    },
+    {
+      "query": "What is the sum of the number of stocks hitting the upper limit (FLUC_UPLM_CT) and the number of stocks hitting the lower limit (FLUC_LWLM_CT) for each day?",
+      "expected_response": "[{\"DWDD\": \"2026-01-02\", \"TOTAL_LIMIT_HITS\": 4649}, {\"DWDD\": \"2025-12-19\", \"TOTAL_LIMIT_HITS\": 4093}, {\"DWDD\": \"2025-12-23\", \"TOTAL_LIMIT_HITS\": 0}] (showing 3 of 27 rows)"
+    },
+    {
+      "query": "What is the total number of downward trending stocks (FLUC_DN_CT) for the 'KSQ' market on the latest date available?",
+      "expected_response": "[{\"FLUC_DN_CT\": 57}, {\"FLUC_DN_CT\": 57}, {\"FLUC_DN_CT\": 134}] (showing 3 of 4321 rows)"
+    },
+    {
+      "query": "What is the total number of upward trending stocks (FLUC_UP_CT) for each market (MKT_ID) on '2023-10-01'?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total 매도차익잔량 (ASK_ARB_RQTY) for the market 'STK' on the latest date?",
+      "expected_response": "[{\"SUM(ASK_ARB_RQTY)\": 357132}]"
+    },
+    {
+      "query": "What is the average 매수비차익잔량 (BID_NARB_RQTY) for each market (MKT_ID) over the past 7 days?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total 위탁매도차익체결수량 (TRAK_ARB_TD_QTY) for each 종목코드 (ISU_CD) on '2023-10-01'?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total 위탁매수차익거래대금 (TRBD_ARB_TRVAL) for each market (MKT_ID) and 종목코드 (ISU_CD) on the latest date?",
+      "expected_response": "[{\"MKT_ID\": \"STK\", \"ISU_CD\": \"KR7000100008\", \"SUM(TRBD_ARB_TRVAL)\": 0}, {\"MKT_ID\": \"KSQ\", \"ISU_CD\": \"KR7190510008\", \"SUM(TRBD_ARB_TRVAL)\": 0}, {\"MKT_ID\": \"KSQ\", \"ISU_CD\": \"KR7171090004\", \"SUM(TRBD_ARB_TRVAL)\": 0}] (showing 3 of 692 rows)"
+    },
+    {
+      "query": "What is the total 매도차익잔량 (ASK_ARB_RQTY) for each 종목코드 (ISU_CD) joined with its 종목명 (ISU_ABWD_NM) from NX_HT_BAT_REFER_A0 on the latest date?",
+      "expected_response": "[{\"ISU_CD\": \"KR7005610001\", \"ISU_ABWD_NM\": \"SPC\\uc0bc\\ub9bd\", \"SUM(A.ASK_ARB_RQTY)\": 0}, {\"ISU_CD\": \"KR7051360006\", \"ISU_ABWD_NM\": \"\\ud1a0\\ube44\\uc2a4\", \"SUM(A.ASK_ARB_RQTY)\": 0}, {\"ISU_CD\": \"KR7007810005\", \"ISU_ABWD_NM\": \"\\ucf54\\ub9ac\\uc544\\uc368\\ud0a4\\ud2b8\", \"SUM(A.ASK_ARB_RQTY)\": 0}] (showing 3 of 693 rows)"
+    },
+    {
+      "query": "What is the total ask arbitrage transaction value for the market 'STK' on the latest date?",
+      "expected_response": "[{\"SUM(ASK_ARB_TRVAL)\": 6910981316015}]"
+    },
+    {
+      "query": "What is the average bid non-arbitrage transaction quantity for each investor type code on '2023-01-01'?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total ask arbitrage transaction value for each market ID over the last 7 days?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total bid arbitrage transaction value for each market ID and investor type code on the latest calculation time for each date?",
+      "expected_response": "[{\"DWDD\": \"2026-01-07\", \"MKT_ID\": \"KSQ\", \"IVTR_TP_CD\": \"3100\", \"SUM(BID_ARB_TRVAL)\": 0}, {\"DWDD\": \"2026-01-14\", \"MKT_ID\": \"KSQ\", \"IVTR_TP_CD\": \"3100\", \"SUM(BID_ARB_TRVAL)\": 0}, {\"DWDD\": \"2026-01-16\", \"MKT_ID\": \"KSQ\", \"IVTR_TP_CD\": \"3100\", \"SUM(BID_ARB_TRVAL)\": 0}] (showing 3 of 377 rows)"
+    },
+    {
+      "query": "What is the total ask non-arbitrage transaction quantity for each market ID, joined with the corresponding market price data for the same date?",
+      "expected_response": "[{\"MKT_ID\": \"KSQ\", \"SUM(P0.ASK_NARB_TD_QTY)\": 5586300908, \"TD_PRC\": 3677}, {\"MKT_ID\": \"STK\", \"SUM(P0.ASK_NARB_TD_QTY)\": 8700264927, \"TD_PRC\": 1663500}, {\"MKT_ID\": \"STK\", \"SUM(P0.ASK_NARB_TD_QTY)\": 9111569734, \"TD_PRC\": 1549500}] (showing 3 of 21718 rows)"
+    }
+  ],
+  "questions": [
+    "What is the total number of unique stocks (ISU_CD) listed in the table?",
+    "What is the average base price (BASE_PRC) of stocks that are marked as small and medium-sized enterprises (SMSC_YN = 'Y')?",
+    "How many stocks have a listing date (LIST_DD) after January 1, 2020?",
+    "What is the total capital amount (CAPT_AMT) for stocks that are not under trade suspension (TDHL_YN = 'N')?",
+    "What is the total number of stocks that are marked as investment caution stocks (IVWR_ISU_YN = 'Y') and have a market alert risk warning (MKT_ALRT_RISK_ADNT_YN = 'Y')?",
+    "What is the average trading price (TD_PRC) for each market (MKT_ID) on the latest date (DWDD)?",
+    "What is the total trading quantity (TRD_QTY) for each stock (ISU_CD) in the last 7 days?",
+    "What is the highest trading price (TD_PRC) for each board (BRD_ID) in the last month?",
+    "What is the total trading quantity (TRD_QTY) for each stock (ISU_CD) where the stock name (ISU_ABWD_NM) contains 'Samsung'?",
+    "What is the average trading price (TD_PRC) for each session (SESS_ID) on the latest date (DWDD)?",
+    "What is the average ask price for the first step across all records in the table?",
+    "How many records are there for the market ID 'KSQ' on the date '2023-10-01'?",
+    "What is the total bid quantity for the first step for the board ID 'G1'?",
+    "What is the maximum ask price for the fifth step for the session ID '42'?",
+    "What is the total ask quantity for the first step for each market ID and board ID?",
+    "What is the total sell and buy order quantity for each market ID on the latest date?",
+    "What is the average buy order quantity for each stock code in the last 7 days?",
+    "How many unique stock codes are there for each market ID and board ID combination?",
+    "What is the total sell order quantity for each stock code that has a specific product group ID ('G3')?",
+    "What is the maximum buy order quantity for each market ID on a specific date ('2023-10-01')?",
+    "What is the average number of upward trending stocks (FLUC_UP_CT) per day for the market 'KSQ'?",
+    "How many records are there for the 'STK' market where the data calculation time is after '150000'?",
+    "What is the sum of the number of stocks hitting the upper limit (FLUC_UPLM_CT) and the number of stocks hitting the lower limit (FLUC_LWLM_CT) for each day?",
+    "What is the total number of downward trending stocks (FLUC_DN_CT) for the 'KSQ' market on the latest date available?",
+    "What is the total number of upward trending stocks (FLUC_UP_CT) for each market (MKT_ID) on '2023-10-01'?",
+    "What is the total 매도차익잔량 (ASK_ARB_RQTY) for the market 'STK' on the latest date?",
+    "What is the average 매수비차익잔량 (BID_NARB_RQTY) for each market (MKT_ID) over the past 7 days?",
+    "What is the total 위탁매도차익체결수량 (TRAK_ARB_TD_QTY) for each 종목코드 (ISU_CD) on '2023-10-01'?",
+    "What is the total 위탁매수차익거래대금 (TRBD_ARB_TRVAL) for each market (MKT_ID) and 종목코드 (ISU_CD) on the latest date?",
+    "What is the total 매도차익잔량 (ASK_ARB_RQTY) for each 종목코드 (ISU_CD) joined with its 종목명 (ISU_ABWD_NM) from NX_HT_BAT_REFER_A0 on the latest date?",
+    "What is the total ask arbitrage transaction value for the market 'STK' on the latest date?",
+    "What is the average bid non-arbitrage transaction quantity for each investor type code on '2023-01-01'?",
+    "What is the total ask arbitrage transaction value for each market ID over the last 7 days?",
+    "What is the total bid arbitrage transaction value for each market ID and investor type code on the latest calculation time for each date?",
+    "What is the total ask non-arbitrage transaction quantity for each market ID, joined with the corresponding market price data for the same date?"
+  ]
+}

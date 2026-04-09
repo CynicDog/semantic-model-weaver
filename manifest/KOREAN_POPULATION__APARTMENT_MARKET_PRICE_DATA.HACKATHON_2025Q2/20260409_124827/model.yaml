@@ -1,0 +1,276 @@
+name: korean_population__apartment_market_price_data_hackathon_2025q2
+description: Semantic model for KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA.HACKATHON_2025Q2
+tables:
+- name: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  description: 서울특별시 서초구, 영등포구, 중구의 리치고 실거래기반 AI 매매/전세 시세
+  base_table:
+    database: KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA
+    schema: HACKATHON_2025Q2
+    table: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  primary_key:
+    columns:
+    - BJD_CODE
+    - EMD
+    - REGION_LEVEL
+    - SD
+    - SGG
+    - YYYYMMDD
+  dimensions:
+  - name: REGION_LEVEL
+    expr: REGION_LEVEL
+    data_type: VARCHAR
+    description: 지역레벨
+    sample_values:
+    - emd
+    - sgg
+  - name: BJD_CODE
+    expr: BJD_CODE
+    data_type: VARCHAR
+    description: 법정동코드
+    sample_values:
+    - '1156010900'
+    - '1156010800'
+    - '1156010100'
+    - '1114017400'
+    - '1114016200'
+  - name: SD
+    expr: SD
+    data_type: VARCHAR
+    description: 시도명
+    sample_values:
+    - 서울
+  - name: SGG
+    expr: SGG
+    data_type: VARCHAR
+    description: 시군구명
+    sample_values:
+    - 영등포구
+    - 중구
+    - 서초구
+  - name: EMD
+    expr: EMD
+    data_type: VARCHAR
+    description: 읍면동명
+    sample_values:
+    - 영등포동8가
+    - 영등포동7가
+    - 영등포동
+    - 만리동2가
+    - 신당동
+  time_dimensions:
+  - name: YYYYMMDD
+    expr: YYYYMMDD
+    data_type: DATE
+    description: 날짜
+  measures:
+  - name: TOTAL_HOUSEHOLDS
+    expr: SUM(TOTAL_HOUSEHOLDS)
+    data_type: NUMBER
+    description: 단지전체세대수(세대)
+  - name: MEME_PRICE_PER_SUPPLY_PYEONG
+    expr: SUM(MEME_PRICE_PER_SUPPLY_PYEONG)
+    data_type: FLOAT
+    description: 공급평당 매매가격(만원)
+  - name: JEONSE_PRICE_PER_SUPPLY_PYEONG
+    expr: SUM(JEONSE_PRICE_PER_SUPPLY_PYEONG)
+    data_type: FLOAT
+    description: 공급평당 전세가격(만원)
+- name: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  description: 서울특별시 서초구, 영등포구, 중구의 20~40세 여성인구수 대비 5세미만 인구수
+  base_table:
+    database: KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA
+    schema: HACKATHON_2025Q2
+    table: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  primary_key:
+    columns:
+    - BJD_CODE
+    - EMD
+    - REGION_LEVEL
+    - SD
+    - SGG
+    - YYYYMMDD
+  dimensions:
+  - name: REGION_LEVEL
+    expr: REGION_LEVEL
+    data_type: VARCHAR
+    description: 지역레벨(sgg, emd)
+    sample_values:
+    - emd
+  - name: BJD_CODE
+    expr: BJD_CODE
+    data_type: VARCHAR
+    description: 법정동코드
+    sample_values:
+    - '1114013000'
+    - '1114013100'
+    - '1114013200'
+    - '1114013300'
+    - '1114013400'
+  - name: SD
+    expr: SD
+    data_type: VARCHAR
+    description: 시도명
+    sample_values:
+    - 서울
+  - name: SGG
+    expr: SGG
+    data_type: VARCHAR
+    description: 시군구명
+    sample_values:
+    - 중구
+    - 영등포구
+    - 서초구
+  - name: EMD
+    expr: EMD
+    data_type: VARCHAR
+    description: 읍면동명
+    sample_values:
+    - 남산동3가
+    - 저동1가
+    - 충무로4가
+    - 충무로5가
+    - 인현동2가
+  time_dimensions:
+  - name: YYYYMMDD
+    expr: YYYYMMDD
+    data_type: DATE
+    description: 날짜
+  measures:
+  - name: AGE_UNDER5
+    expr: SUM(AGE_UNDER5)
+    data_type: NUMBER
+    description: 5세미만 인구수
+  - name: FEMALE_20TO40
+    expr: SUM(FEMALE_20TO40)
+    data_type: NUMBER
+    description: 20~40세 인구수
+  - name: AGE_UNDER5_PER_FEMALE_20TO40
+    expr: SUM(AGE_UNDER5_PER_FEMALE_20TO40)
+    data_type: FLOAT
+    description: 20~40세 여성인구수 대비 5세미만 인구수 비율
+- name: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  description: 서울특별시 서초구, 영등포구, 중구의 성별 연령별 주민등록 인구수
+  base_table:
+    database: KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA
+    schema: HACKATHON_2025Q2
+    table: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  primary_key:
+    columns:
+    - BJD_CODE
+    - EMD
+    - REGION_LEVEL
+    - SD
+    - SGG
+    - YYYYMMDD
+  dimensions:
+  - name: REGION_LEVEL
+    expr: REGION_LEVEL
+    data_type: VARCHAR
+    description: 지역레벨(cty, sd, sgg, emd)
+    sample_values:
+    - emd
+  - name: BJD_CODE
+    expr: BJD_CODE
+    data_type: VARCHAR
+    description: 법정동코드
+    sample_values:
+    - '1114010100'
+    - '1114010200'
+    - '1114010300'
+    - '1114010400'
+    - '1114010500'
+  - name: SD
+    expr: SD
+    data_type: VARCHAR
+    description: 시도명
+    sample_values:
+    - 서울
+  - name: SGG
+    expr: SGG
+    data_type: VARCHAR
+    description: 시군구명
+    sample_values:
+    - 중구
+    - 영등포구
+    - 서초구
+  - name: EMD
+    expr: EMD
+    data_type: VARCHAR
+    description: 읍면동명
+    sample_values:
+    - 무교동
+    - 다동
+    - 태평로1가
+    - 을지로1가
+    - 을지로2가
+  time_dimensions:
+  - name: YYYYMMDD
+    expr: YYYYMMDD
+    data_type: DATE
+    description: 날짜
+  measures:
+  - name: TOTAL
+    expr: SUM(TOTAL)
+    data_type: NUMBER
+    description: 전체 인구수
+  - name: MALE
+    expr: SUM(MALE)
+    data_type: NUMBER
+    description: 전체 남성 인구수
+  - name: FEMALE
+    expr: SUM(FEMALE)
+    data_type: NUMBER
+    description: 전체 여성 인구수
+  - name: AGE_UNDER20
+    expr: SUM(AGE_UNDER20)
+    data_type: NUMBER
+    description: 20세 미만 인구수
+  - name: AGE_20S
+    expr: SUM(AGE_20S)
+    data_type: NUMBER
+    description: 20대 인구수
+  - name: AGE_30S
+    expr: SUM(AGE_30S)
+    data_type: NUMBER
+    description: 30대 인구수
+  - name: AGE_40S
+    expr: SUM(AGE_40S)
+    data_type: NUMBER
+    description: 40대 인구수
+  - name: AGE_50S
+    expr: SUM(AGE_50S)
+    data_type: NUMBER
+    description: 50대 인구수
+  - name: AGE_60S
+    expr: SUM(AGE_60S)
+    data_type: NUMBER
+    description: 60대 인구수
+  - name: AGE_OVER70
+    expr: SUM(AGE_OVER70)
+    data_type: NUMBER
+    description: 70세 이상 인구수
+relationships:
+- name: REGION_APT_RICHGO_MARKET_PRICE_M_H_to_REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  left_table: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  right_table: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: REGION_LEVEL
+    right_column: REGION_LEVEL
+- name: REGION_APT_RICHGO_MARKET_PRICE_M_H_to_REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  left_table: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  right_table: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: REGION_LEVEL
+    right_column: REGION_LEVEL
+- name: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H_to_REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  left_table: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  right_table: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: REGION_LEVEL
+    right_column: REGION_LEVEL

@@ -1,0 +1,599 @@
+name: korean_population__apartment_market_price_data_hackathon_2025q2
+description: Semantic model for KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA.HACKATHON_2025Q2
+tables:
+- name: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  description: Market price data for apartments in different regions
+  base_table:
+    database: KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA
+    schema: HACKATHON_2025Q2
+    table: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  primary_key:
+    columns:
+    - BJD_CODE
+    - EMD
+    - REGION_LEVEL
+    - SD
+    - SGG
+    - YYYYMMDD
+  dimensions:
+  - name: REGION_LEVEL
+    expr: REGION_LEVEL
+    data_type: VARCHAR
+    description: The level of the region
+    synonyms:
+    - 'region level'
+    - '지역레벨'
+    - '지역 수준'
+    - '지역 단계'
+    sample_values:
+    - emd
+    - sgg
+  - name: BJD_CODE
+    expr: BJD_CODE
+    data_type: VARCHAR
+    description: The legal district code
+    synonyms:
+    - 'legal district code'
+    - '법정동코드'
+    - '법정동 코드'
+    - '법정동 번호'
+    sample_values:
+    - '1156010900'
+    - '1156010800'
+    - '1156010100'
+    - '1114017400'
+    - '1114016200'
+  - name: SD
+    expr: SD
+    data_type: VARCHAR
+    description: The name of the province
+    synonyms:
+    - 'province name'
+    - '시도명'
+    - '시도 이름'
+    - '도 이름'
+    sample_values:
+    - 서울
+  - name: SGG
+    expr: SGG
+    data_type: VARCHAR
+    description: The name of the city, county, or district
+    synonyms:
+    - 'city name'
+    - 'county name'
+    - 'district name'
+    - '시군구명'
+    - '시군구 이름'
+    - '시군구 명칭'
+    - 'district'
+    - 'area'
+    - 'region'
+    sample_values:
+    - 영등포구
+    - 중구
+    - 서초구
+  - name: EMD
+    expr: EMD
+    data_type: VARCHAR
+    description: The name of the town, township, or neighborhood
+    synonyms:
+    - 'town name'
+    - 'township name'
+    - 'neighborhood name'
+    - '읍면동명'
+    - '읍면동 이름'
+    - '읍면동 명칭'
+    sample_values:
+    - 영등포동8가
+    - 영등포동7가
+    - 영등포동
+    - 만리동2가
+    - 신당동
+  time_dimensions:
+  - name: YYYYMMDD
+    expr: YYYYMMDD
+    data_type: DATE
+    description: The date
+    synonyms:
+    - '날짜'
+    - '일자'
+    - 'date'
+    - 'latest date'
+    - 'most recent date'
+  measures:
+  - name: TOTAL_HOUSEHOLDS
+    expr: SUM(TOTAL_HOUSEHOLDS)
+    data_type: NUMBER
+    description: The total number of households in the complex
+    synonyms:
+    - 'total households'
+    - '단지전체세대수'
+    - '단지 전체 세대수'
+    - '전체 세대수'
+  - name: MEME_PRICE_PER_SUPPLY_PYEONG
+    expr: SUM(MEME_PRICE_PER_SUPPLY_PYEONG)
+    data_type: FLOAT
+    description: The sale price per supply pyeong
+    synonyms:
+    - 'sale price per supply pyeong'
+    - '공급평당 매매가격'
+    - '공급평당 매매 가격'
+    - '매매 가격'
+  - name: JEONSE_PRICE_PER_SUPPLY_PYEONG
+    expr: SUM(JEONSE_PRICE_PER_SUPPLY_PYEONG)
+    data_type: FLOAT
+    description: The jeonse price per supply pyeong
+    synonyms:
+    - 'jeonse price per supply pyeong'
+    - '공급평당 전세가격'
+    - '공급평당 전세 가격'
+    - '전세 가격'
+    - 'jeonse price'
+    - 'jeonse cost'
+- name: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  description: Population statistics for children under 5 per female aged 20 to 40 by region and date
+  base_table:
+    database: KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA
+    schema: HACKATHON_2025Q2
+    table: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  primary_key:
+    columns:
+    - BJD_CODE
+    - EMD
+    - REGION_LEVEL
+    - SD
+    - SGG
+    - YYYYMMDD
+  dimensions:
+  - name: REGION_LEVEL
+    expr: REGION_LEVEL
+    data_type: VARCHAR
+    description: Level of the region (sgg, emd)
+    synonyms:
+    - 'region level'
+    - 'administrative level'
+    - '지역 레벨'
+    - '행정 구역 레벨'
+    sample_values:
+    - emd
+  - name: BJD_CODE
+    expr: BJD_CODE
+    data_type: VARCHAR
+    description: Legal district code
+    synonyms:
+    - 'legal district code'
+    - 'district code'
+    - '법정동 코드'
+    - '행정구역 코드'
+    sample_values:
+    - '1114013000'
+    - '1114013100'
+    - '1114013200'
+    - '1114013300'
+    - '1114013400'
+  - name: SD
+    expr: SD
+    data_type: VARCHAR
+    description: Province name
+    synonyms:
+    - 'province name'
+    - 'state name'
+    - '시도명'
+    - '도명'
+    sample_values:
+    - 서울
+  - name: SGG
+    expr: SGG
+    data_type: VARCHAR
+    description: City/county name
+    synonyms:
+    - 'city name'
+    - 'county name'
+    - '시군구명'
+    - '시군명'
+    - 'district'
+    sample_values:
+    - 중구
+    - 영등포구
+    - 서초구
+  - name: EMD
+    expr: EMD
+    data_type: VARCHAR
+    description: Town/village name
+    synonyms:
+    - 'town name'
+    - 'village name'
+    - '읍면동명'
+    - '읍면명'
+    sample_values:
+    - 남산동3가
+    - 저동1가
+    - 충무로4가
+    - 충무로5가
+    - 인현동2가
+  time_dimensions:
+  - name: YYYYMMDD
+    expr: YYYYMMDD
+    data_type: DATE
+    description: Date
+    synonyms:
+    - '날짜'
+    - '기록 날짜'
+    - 'latest date'
+    - 'most recent date'
+  measures:
+  - name: AGE_UNDER5
+    expr: SUM(AGE_UNDER5)
+    data_type: NUMBER
+    description: Population under 5 years old
+    synonyms:
+    - 'population under 5'
+    - 'children under 5'
+    - '5세 미만 인구수'
+    - '어린이 인구수'
+  - name: FEMALE_20TO40
+    expr: SUM(FEMALE_20TO40)
+    data_type: NUMBER
+    description: Female population aged 20 to 40
+    synonyms:
+    - 'female population 20 to 40'
+    - 'women aged 20 to 40'
+    - '20~40세 여성 인구수'
+    - '20~40세 여성'
+  - name: AGE_UNDER5_PER_FEMALE_20TO40
+    expr: SUM(AGE_UNDER5_PER_FEMALE_20TO40)
+    data_type: FLOAT
+    description: Ratio of population under 5 to female population aged 20 to 40
+    synonyms:
+    - 'ratio of children under 5 to women 20 to 40'
+    - 'children under 5 per women 20 to 40'
+    - '20~40세 여성 대비 5세 미만 인구수 비율'
+    - '20~40세 여성 대비 어린이 인구수 비율'
+    - 'ratio of children under 5 to females aged 20 to 40'
+- name: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  description: Population statistics by region, gender, and age in Korea
+  base_table:
+    database: KOREAN_POPULATION__APARTMENT_MARKET_PRICE_DATA
+    schema: HACKATHON_2025Q2
+    table: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  primary_key:
+    columns:
+    - BJD_CODE
+    - EMD
+    - REGION_LEVEL
+    - SD
+    - SGG
+    - YYYYMMDD
+  dimensions:
+  - name: REGION_LEVEL
+    expr: REGION_LEVEL
+    data_type: VARCHAR
+    description: Level of the region (city, province, district, neighborhood)
+    synonyms:
+    - 'region level'
+    - 'administrative level'
+    - '지역 레벨'
+    - '행정 구역 레벨'
+    sample_values:
+    - emd
+  - name: BJD_CODE
+    expr: BJD_CODE
+    data_type: VARCHAR
+    description: Legal district code
+    synonyms:
+    - 'legal district code'
+    - '법정동 코드'
+    - '행정구역 코드'
+    sample_values:
+    - '1114010100'
+    - '1114010200'
+    - '1114010300'
+    - '1114010400'
+    - '1114010500'
+  - name: SD
+    expr: SD
+    data_type: VARCHAR
+    description: Province name
+    synonyms:
+    - 'province name'
+    - '시도명'
+    - '도시 이름'
+    sample_values:
+    - 서울
+  - name: SGG
+    expr: SGG
+    data_type: VARCHAR
+    description: City/County/District name, including districts of Seoul
+    synonyms:
+    - 'city name'
+    - 'county name'
+    - 'district name'
+    - '시군구명'
+    - '시군구 이름'
+    - 'districts of Seoul'
+    - '서울 구'
+    sample_values:
+    - 중구
+    - 영등포구
+    - 서초구
+  - name: EMD
+    expr: EMD
+    data_type: VARCHAR
+    description: Town/Village/Neighborhood name
+    synonyms:
+    - 'town name'
+    - 'village name'
+    - 'neighborhood name'
+    - '읍면동명'
+    - '읍면동 이름'
+    sample_values:
+    - 무교동
+    - 다동
+    - 태평로1가
+    - 을지로1가
+    - 을지로2가
+  time_dimensions:
+  - name: YYYYMMDD
+    expr: YYYYMMDD
+    data_type: DATE
+    description: 날짜
+    synonyms:
+    - '날짜'
+    - '기록 날짜'
+  measures:
+  - name: TOTAL
+    expr: SUM(TOTAL)
+    data_type: NUMBER
+    description: Total population
+    synonyms:
+    - 'total population'
+    - '전체 인구수'
+    - '총 인구수'
+  - name: MALE
+    expr: SUM(MALE)
+    data_type: NUMBER
+    description: Total male population
+    synonyms:
+    - 'total male population'
+    - '전체 남성 인구수'
+    - '총 남성 인구수'
+  - name: FEMALE
+    expr: SUM(FEMALE)
+    data_type: NUMBER
+    description: Total female population
+    synonyms:
+    - 'total female population'
+    - '전체 여성 인구수'
+    - '총 여성 인구수'
+  - name: AGE_UNDER20
+    expr: SUM(AGE_UNDER20)
+    data_type: NUMBER
+    description: Population under 20 years old, including children under 5
+    synonyms:
+    - 'population under 20'
+    - '20세 미만 인구수'
+    - '20세 미만 인구'
+    - 'children under 5'
+    - '5세 미만 인구수'
+    - '5세 미만 인구'
+  - name: AGE_20S
+    expr: SUM(AGE_20S)
+    data_type: NUMBER
+    description: Population in their 20s
+    synonyms:
+    - 'population in 20s'
+    - '20대 인구수'
+    - '20대 인구'
+    - 'females aged 20 to 40'
+    - '20대 여성 인구수'
+    - '20대 여성 인구'
+  - name: AGE_30S
+    expr: SUM(AGE_30S)
+    data_type: NUMBER
+    description: Population in their 30s
+    synonyms:
+    - 'population in 30s'
+    - '30대 인구수'
+    - '30대 인구'
+    - 'females aged 20 to 40'
+    - '30대 여성 인구수'
+    - '30대 여성 인구'
+  - name: AGE_40S
+    expr: SUM(AGE_40S)
+    data_type: NUMBER
+    description: Population in their 40s
+    synonyms:
+    - 'population in 40s'
+    - '40대 인구수'
+    - '40대 인구'
+    - 'females aged 20 to 40'
+    - '40대 여성 인구수'
+    - '40대 여성 인구'
+  - name: AGE_50S
+    expr: SUM(AGE_50S)
+    data_type: NUMBER
+    description: Population in their 50s
+    synonyms:
+    - 'population in 50s'
+    - '50대 인구수'
+    - '50대 인구'
+  - name: AGE_60S
+    expr: SUM(AGE_60S)
+    data_type: NUMBER
+    description: Population in their 60s
+    synonyms:
+    - 'population in 60s'
+    - '60대 인구수'
+    - '60대 인구'
+  - name: AGE_OVER70
+    expr: SUM(AGE_OVER70)
+    data_type: NUMBER
+    description: Population over 70 years old
+    synonyms:
+    - 'population over 70'
+    - '70세 이상 인구수'
+    - '70세 이상 인구'
+relationships:
+- name: REGION_APT_RICHGO_MARKET_PRICE_M_H_to_REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  left_table: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  right_table: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: REGION_LEVEL
+    right_column: REGION_LEVEL
+- name: REGION_APT_RICHGO_MARKET_PRICE_M_H_to_REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  left_table: REGION_APT_RICHGO_MARKET_PRICE_M_H
+  right_table: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: REGION_LEVEL
+    right_column: REGION_LEVEL
+- name: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H_to_REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  left_table: REGION_MOIS_POPULATION_AGE_UNDER5_PER_FEMALE_20TO40_M_H
+  right_table: REGION_MOIS_POPULATION_GENDER_AGE_M_H
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: REGION_LEVEL
+    right_column: REGION_LEVEL
+verified_queries:
+- name: what_is_the_average_meme_price_per_supply_pyeong
+  question: What is the average MEME_PRICE_PER_SUPPLY_PYEONG for apartments in '서울' in 2025?
+  sql: "WITH __region_apt_richgo_market_price_m_h AS (\n  SELECT\n    sd,\n    yyyymmdd,\n    meme_price_per_supply_pyeong\n\
+    \  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_apt_richgo_market_price_m_h\n)\nSELECT\n\
+    \  AVG(meme_price_per_supply_pyeong) AS avg_meme_price_per_supply_pyeong\nFROM __region_apt_richgo_market_price_m_h\n\
+    WHERE\n  sd = '서울' AND DATE_PART('year', yyyymmdd) = 2025\n -- Generated by Cortex Analyst (request_id: d32a6ac7-1b0f-4d3f-92a0-038f8010222e)\n\
+    ;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_average_male_population_in_sd_for_ea
+  question: What is the average male population in '서울' (SD) for each '시군구명' (SGG) in 2025?
+  sql: "WITH __region_mois_population_gender_age_m_h AS (\n  SELECT\n    sd,\n    sgg,\n    yyyymmdd,\n    male\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_gender_age_m_h\n\
+    )\nSELECT\n  sgg,\n  AVG(male) AS avg_male_population\nFROM __region_mois_population_gender_age_m_h\nWHERE\n  sd = '서울'\
+    \ AND DATE_PART('year', yyyymmdd) = 2025\nGROUP BY\n  sgg\nORDER BY\n  avg_male_population DESC NULLS LAST\n -- Generated\
+    \ by Cortex Analyst (request_id: a643be89-8bfb-4666-a0e0-9d8aac565b11)\n;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_average_market_price_per_supply_pyeo
+  question: What is the average market price per supply pyeong for apartments in districts (SGG) with the highest ratio of
+    children under 5 to females aged 20 to 40 for the latest date in the dataset?
+  sql: "WITH __region_mois_population_age_under5_per_female_20to40_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    age_under5,\n\
+    \    female_20to40\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_age_under5_per_female_20to40_m_h\n\
+    ), __region_apt_richgo_market_price_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    meme_price_per_supply_pyeong\n  FROM\
+    \ korean_population__apartment_market_price_data.hackathon_2025q2.region_apt_richgo_market_price_m_h\n), latest_pop_date\
+    \ AS (\n  SELECT\n    MAX(yyyymmdd) AS max_date\n  FROM __region_mois_population_age_under5_per_female_20to40_m_h\n),\
+    \ latest_price_date AS (\n  SELECT\n    MAX(yyyymmdd) AS max_date\n  FROM __region_apt_richgo_market_price_m_h\n), pop_by_sgg\
+    \ AS (\n  SELECT\n    p.sgg,\n    SUM(p.age_under5) AS total_age_under5,\n    SUM(p.female_20to40) AS total_female_20to40,\n\
+    \    CASE\n      WHEN SUM(p.female_20to40) <> 0\n      THEN SUM(p.age_under5) / NULLIF(SUM(p.female_20to40), 0)\n    \
+    \  ELSE NULL\n    END AS ratio_under5_per_female\n  FROM __region_mois_population_age_under5_per_female_20to40_m_h AS\
+    \ p\n  CROSS JOIN latest_pop_date AS lpd\n  WHERE\n    p.yyyymmdd = lpd.max_date\n  GROUP BY\n    p.sgg\n), ranked_sgg\
+    \ AS (\n  SELECT\n    sgg,\n    total_age_under5,\n    total_female_20to40,\n    ratio_under5_per_female,\n    RANK()\
+    \ OVER (ORDER BY ratio_under5_per_female DESC NULLS LAST) AS rnk\n  FROM pop_by_sgg\n), top_sgg AS (\n  SELECT\n    sgg\n\
+    \  FROM ranked_sgg\n  WHERE\n    rnk = 1\n), price_by_sgg AS (\n  SELECT\n    mp.sgg,\n    AVG(mp.meme_price_per_supply_pyeong)\
+    \ AS avg_meme_price_per_supply_pyeong\n  FROM __region_apt_richgo_market_price_m_h AS mp\n  CROSS JOIN latest_price_date\
+    \ AS lpd\n  WHERE\n    mp.yyyymmdd = lpd.max_date\n  GROUP BY\n    mp.sgg\n)\nSELECT\n  p.sgg,\n  rs.ratio_under5_per_female,\n\
+    \  pr.avg_meme_price_per_supply_pyeong\nFROM top_sgg AS p\nJOIN ranked_sgg AS rs\n  ON p.sgg = rs.sgg\nLEFT OUTER JOIN\
+    \ price_by_sgg AS pr\n  ON p.sgg = pr.sgg\nORDER BY\n  rs.ratio_under5_per_female DESC NULLS LAST\n -- Generated by Cortex\
+    \ Analyst (request_id: 2040169a-24bb-49f9-9b49-21ff30c57d2a)\n;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_average_ratio_of_children_under_5_to
+  question: What is the average ratio of children under 5 to females aged 20 to 40 in Seoul for the year 2025?
+  sql: "WITH __region_mois_population_age_under5_per_female_20to40_m_h AS (\n  SELECT\n    sd,\n    yyyymmdd,\n    age_under5_per_female_20to40\n\
+    \  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_age_under5_per_female_20to40_m_h\n\
+    )\nSELECT\n  AVG(age_under5_per_female_20to40) AS avg_ratio_under5_per_female_20to40\nFROM __region_mois_population_age_under5_per_female_20to40_m_h\n\
+    WHERE\n  sd = '서울' AND DATE_PART('year', yyyymmdd) = 2025\n -- Generated by Cortex Analyst (request_id: 676783ff-7d48-4b32-ba4e-6456dcb103f9)\n\
+    ;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_ratio_of_age_under5_to_female_20to40
+  question: What is the ratio of AGE_UNDER5 to FEMALE_20TO40 in '영등포동8가' as of the latest date?
+  sql: "WITH __region_mois_population_age_under5_per_female_20to40_m_h AS (\n  SELECT\n    emd,\n    yyyymmdd,\n    age_under5,\n\
+    \    age_under5_per_female_20to40,\n    female_20to40\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_age_under5_per_female_20to40_m_h\n\
+    )\nSELECT\n  p.emd,\n  p.yyyymmdd,\n  SUM(p.age_under5) AS total_age_under5,\n  SUM(p.female_20to40) AS total_female_20to40,\n\
+    \  SUM(p.age_under5_per_female_20to40) AS ratio_age_under5_per_female_20to40\nFROM __region_mois_population_age_under5_per_female_20to40_m_h\
+    \ AS p\nWHERE\n  p.emd = '영등포동8가'\n  AND p.yyyymmdd = (\n    SELECT\n      MAX(yyyymmdd)\n    FROM __region_mois_population_age_under5_per_female_20to40_m_h\n\
+    \    WHERE\n      emd = '영등포동8가'\n  )\nGROUP BY\n  p.emd,\n  p.yyyymmdd\nORDER BY\n  p.yyyymmdd DESC NULLS LAST\n -- Generated\
+    \ by Cortex Analyst (request_id: 21883e19-9215-4a5b-971e-907f779f01fd)\n;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_ratio_of_children_under_5_to_females
+  question: What is the ratio of children under 5 to females aged 20-40 in each '시군구명' (SGG) for the latest date available?
+  sql: "WITH __region_mois_population_age_under5_per_female_20to40_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    age_under5_per_female_20to40\n\
+    \  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_age_under5_per_female_20to40_m_h\n\
+    ), latest_date AS (\n  SELECT\n    MAX(yyyymmdd) AS max_date\n  FROM __region_mois_population_age_under5_per_female_20to40_m_h\n\
+    )\nSELECT\n  p.sgg,\n  SUM(p.age_under5_per_female_20to40) AS ratio_under5_per_female_20to40\nFROM __region_mois_population_age_under5_per_female_20to40_m_h\
+    \ AS p\nWHERE\n  p.yyyymmdd = (\n    SELECT\n      max_date\n    FROM latest_date\n  )\nGROUP BY\n  p.sgg\nORDER BY\n\
+    \  ratio_under5_per_female_20to40 DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: 55fd981a-dc39-4717-8782-0249657bf5cf)\n\
+    ;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_total_number_of_females_aged_20_to_4
+  question: What is the total number of females aged 20 to 40 in the '중구' district for the year 2025?
+  sql: "WITH __region_mois_population_age_under5_per_female_20to40_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    female_20to40\n\
+    \  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_age_under5_per_female_20to40_m_h\n\
+    )\nSELECT\n  SUM(female_20to40) AS total_female_20to40\nFROM __region_mois_population_age_under5_per_female_20to40_m_h\n\
+    WHERE\n  sgg = '중구' AND DATE_PART('year', yyyymmdd) = 2025\n -- Generated by Cortex Analyst (request_id: 283da369-4d2c-49bd-8a6e-95ec8b61a6bf)\n\
+    ;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_total_number_of_households_and_the_a
+  question: What is the total number of households and the average meme price per supply pyeong in '서초구' (SGG) for the latest
+    date available?
+  sql: "WITH __region_apt_richgo_market_price_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    meme_price_per_supply_pyeong,\n\
+    \    total_households\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_apt_richgo_market_price_m_h\n\
+    )\nSELECT\n  a.sgg,\n  a.yyyymmdd,\n  SUM(a.total_households) AS total_households,\n  AVG(a.meme_price_per_supply_pyeong)\
+    \ AS avg_meme_price_per_supply_pyeong\nFROM __region_apt_richgo_market_price_m_h AS a\nWHERE\n  a.sgg = '서초구'\n  AND a.yyyymmdd\
+    \ = (\n    SELECT\n      MAX(b.yyyymmdd)\n    FROM __region_apt_richgo_market_price_m_h AS b\n    WHERE\n      b.sgg =\
+    \ '서초구'\n  )\nGROUP BY\n  a.sgg,\n  a.yyyymmdd\nORDER BY\n  a.yyyymmdd DESC NULLS LAST\n -- Generated by Cortex Analyst\
+    \ (request_id: bf6c39ea-329a-4465-89b7-7414ac1c81af)\n;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_total_number_of_households_in_as_of
+  question: What is the total number of households in '영등포구' as of the latest date?
+  sql: "WITH __region_apt_richgo_market_price_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    total_households\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_apt_richgo_market_price_m_h\n\
+    )\nSELECT\n  mp.sgg,\n  mp.yyyymmdd,\n  SUM(mp.total_households) AS total_households\nFROM __region_apt_richgo_market_price_m_h\
+    \ AS mp\nWHERE\n  mp.sgg = '영등포구'\n  AND mp.yyyymmdd = (\n    SELECT\n      MAX(yyyymmdd)\n    FROM __region_apt_richgo_market_price_m_h\n\
+    \    WHERE\n      sgg = '영등포구'\n  )\nGROUP BY\n  mp.sgg,\n  mp.yyyymmdd\n -- Generated by Cortex Analyst (request_id:\
+    \ 13f8c404-095e-4f3c-8c1b-449509746104)\n;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_total_number_of_males_under_20_in_as
+  question: What is the total number of males under 20 in '중구' as of the latest date?
+  sql: "WITH __region_mois_population_gender_age_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    age_under20\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_gender_age_m_h\n\
+    )\nSELECT\n  p.sgg,\n  p.yyyymmdd,\n  SUM(p.age_under20) AS total_male_under20\nFROM __region_mois_population_gender_age_m_h\
+    \ AS p\nWHERE\n  p.sgg = '중구'\n  AND p.yyyymmdd = (\n    SELECT\n      MAX(yyyymmdd)\n    FROM __region_mois_population_gender_age_m_h\n\
+    \    WHERE\n      sgg = '중구'\n  )\nGROUP BY\n  p.sgg,\n  p.yyyymmdd\n -- Generated by Cortex Analyst (request_id: 04902563-57f2-4d4d-8c65-6db7ca37db3b)\n\
+    ;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_total_population_in_each_sd_for_the
+  question: What is the total population in each '시도명' (SD) for the latest date available?
+  sql: "WITH __region_mois_population_gender_age_m_h AS (\n  SELECT\n    sd,\n    yyyymmdd,\n    total\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_gender_age_m_h\n\
+    )\nSELECT\n  p.sd,\n  SUM(p.total) AS total_population\nFROM __region_mois_population_gender_age_m_h AS p\nWHERE\n  p.yyyymmdd\
+    \ = (\n    SELECT\n      MAX(yyyymmdd)\n    FROM __region_mois_population_gender_age_m_h\n  )\nGROUP BY\n  p.sd\nORDER\
+    \ BY\n  total_population DESC NULLS LAST\n -- Generated by Cortex Analyst (request_id: fd1f05e2-d571-400c-aa4f-b549c5b3232c)\n\
+    ;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: what_is_the_total_population_of_people_aged_20_2
+  question: What is the total population of people aged 20-29 in '중구' (SGG) for the latest date available?
+  sql: "WITH __region_mois_population_gender_age_m_h AS (\n  SELECT\n    sgg,\n    yyyymmdd,\n    age_20s\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_gender_age_m_h\n\
+    )\nSELECT\n  p.sgg,\n  p.yyyymmdd,\n  SUM(p.age_20s) AS total_age_20s\nFROM __region_mois_population_gender_age_m_h AS\
+    \ p\nWHERE\n  p.sgg = '중구'\n  AND p.yyyymmdd = (\n    SELECT\n      MAX(yyyymmdd)\n    FROM __region_mois_population_gender_age_m_h\n\
+    \    WHERE\n      sgg = '중구'\n  )\nGROUP BY\n  p.sgg,\n  p.yyyymmdd\n -- Generated by Cortex Analyst (request_id: 11000272-c1e8-4824-9a69-b583a2a3a1aa)\n\
+    ;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1
+- name: which_district_sgg_in_seoul_has_the_highest_numb
+  question: Which district (SGG) in Seoul has the highest number of children under 5 as of the latest date in the dataset?
+  sql: "WITH __region_mois_population_age_under5_per_female_20to40_m_h AS (\n  SELECT\n    sd,\n    sgg,\n    yyyymmdd,\n\
+    \    age_under5\n  FROM korean_population__apartment_market_price_data.hackathon_2025q2.region_mois_population_age_under5_per_female_20to40_m_h\n\
+    )\nSELECT\n  p.sgg,\n  SUM(p.age_under5) AS total_children_under5\nFROM __region_mois_population_age_under5_per_female_20to40_m_h\
+    \ AS p\nWHERE\n  p.sd = '서울'\n  AND p.yyyymmdd = (\n    SELECT\n      MAX(yyyymmdd)\n    FROM __region_mois_population_age_under5_per_female_20to40_m_h\n\
+    \    WHERE\n      sd = '서울'\n  )\nGROUP BY\n  p.sgg\nORDER BY\n  total_children_under5 DESC NULLS LAST\nLIMIT 1\n -- Generated\
+    \ by Cortex Analyst (request_id: ff7d22a3-efbb-450a-b4e6-098a912bb501)\n;"
+  verified_at: 1775707161
+  verified_by: weaver/v1.20260409_124827.iter1

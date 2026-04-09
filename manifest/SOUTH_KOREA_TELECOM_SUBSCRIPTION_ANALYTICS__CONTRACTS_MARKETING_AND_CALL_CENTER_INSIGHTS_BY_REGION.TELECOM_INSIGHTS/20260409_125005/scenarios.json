@@ -1,0 +1,266 @@
+{
+  "golden_set": [
+    {
+      "query": "What is the total number of contracts created in the year 2023?",
+      "expected_response": "[{\"SUM(CONTRACT_COUNT)\": 82197}]"
+    },
+    {
+      "query": "What is the average conversion rate for open contracts in the '인터넷' category in the '서울특별시' state?",
+      "expected_response": "[{\"AVG(OPEN_CVR)\": null}]"
+    },
+    {
+      "query": "How many contracts were completed in the '경기도' state in the last 6 months?",
+      "expected_response": "[{\"SUM(PAYEND_COUNT)\": null}]"
+    },
+    {
+      "query": "What is the total net sales for contracts that include TV services in the '전남' state?",
+      "expected_response": "[{\"SUM(TOTAL_NET_SALES)\": null}]"
+    },
+    {
+      "query": "What is the average lead time in days for contracts in the '모바일' category in 2023?",
+      "expected_response": "[{\"AVG(AVG_LEADTIME_DAYS)\": \"-1.4500000\"}]"
+    },
+    {
+      "query": "What is the total number of contracts for each main category in 2023?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\uc778\\ud130\\ub137\", \"TOTAL_CONTRACTS\": 65336}]"
+    },
+    {
+      "query": "What is the average net sales for contracts with TV and Phone in the last 6 months?",
+      "expected_response": "[{\"AVG_NET_SALES\": \"489257.779412\"}]"
+    },
+    {
+      "query": "How many contracts include WiFi and what is the total payend count for these contracts?",
+      "expected_response": "[{\"TOTAL_CONTRACTS\": 1547569, \"TOTAL_PAYEND_COUNT\": 660292}]"
+    },
+    {
+      "query": "What is the total number of contracts by bundle combination for the '인터넷' category in 2023?",
+      "expected_response": "[{\"BUNDLE_COMBINATION\": \"\\ucc38\\uc26c\\uc6b4\\uac00\\uc871\\uacb0\\ud569\", \"TOTAL_CONTRACTS\": 9697}, {\"BUNDLE_COMBINATION\": \"\\ubaa8\\ubc14\\uc77c \\uc54c\\ub730\\uacb0\\ud569\", \"TOTAL_CONTRACTS\": 11}, {\"BUNDLE_COMBINATION\": \"\\uc694\\uc998\\uac00\\uc871\\uacb0\\ud569\", \"TOTAL_CONTRACTS\": 6721}] (showing 3 of 9 rows)"
+    },
+    {
+      "query": "What is the total number of contracts and the average net sales for each main category, joined with regional contract stats for 2023?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\uc778\\ud130\\ub137\", \"TOTAL_CONTRACTS\": 11930105, \"AVG_NET_SALES\": \"260790.643068\", \"TOTAL_REGIONAL_CONTRACTS\": 1784259}]"
+    },
+    {
+      "query": "What is the average overall conversion rate (OVERALL_CVR) for mobile contracts in 2023?",
+      "expected_response": "[{\"AVG(OVERALL_CVR)\": \"26.63176471\"}]"
+    },
+    {
+      "query": "How many contracts were completed (PAYEND_COUNT) for each main category in the last quarter of 2022?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\uc778\\ud130\\ub137\", \"SUM(PAYEND_COUNT)\": 109}, {\"MAIN_CATEGORY_NAME\": \"\\ub80c\\ud0c8\", \"SUM(PAYEND_COUNT)\": 26}]"
+    },
+    {
+      "query": "What is the average call-to-contract conversion rate (CALL_TO_CONTRACT_CVR) for mobile contracts in 2023?",
+      "expected_response": "[{\"AVG(CALL_TO_CONTRACT_CVR)\": \"48.24766667\"}]"
+    },
+    {
+      "query": "What is the total number of contracts and average net sales for each main category in 2023?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\ubaa8\\ubc14\\uc77c\", \"TOTAL_CONTRACTS\": 256, \"AVG_NET_SALES\": \"375547.833333\"}, {\"MAIN_CATEGORY_NAME\": \"\\uc778\\ud130\\ub137\", \"TOTAL_CONTRACTS\": 65527, \"AVG_NET_SALES\": \"354383.491525\"}, {\"MAIN_CATEGORY_NAME\": \"\\uc54c\\ub730 \\uc694\\uae08\\uc81c\", \"TOTAL_CONTRACTS\": 1751, \"AVG_NET_SALES\": \"116008.666667\"}] (showing 3 of 5 rows)"
+    },
+    {
+      "query": "What is the open conversion rate (OPEN_CVR) for each receive path in the last 6 months?",
+      "expected_response": "[{\"RECEIVE_PATH_NAME\": \"\\ud50c\\ub7ab\\ud3fc\", \"AVG_OPEN_CVR\": \"33.83202401\"}, {\"RECEIVE_PATH_NAME\": \"AFART\", \"AVG_OPEN_CVR\": \"76.48666667\"}, {\"RECEIVE_PATH_NAME\": \"\\ud53c\\ud130\\ud32c\", \"AVG_OPEN_CVR\": \"0E-8\"}] (showing 3 of 21 rows)"
+    },
+    {
+      "query": "What is the total net sales for each main category and inflow path in the last quarter?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\ub80c\\ud0c8\", \"INFLOW_PATH_NAME\": \"MJ \\ud611\\ub825\\uc5c5\\uccb4\", \"TOTAL_NET_SALES\": 3690000}, {\"MAIN_CATEGORY_NAME\": \"\\uae30\\uc5c5\\uc6a9\\uc778\\ud130\\ub137\", \"INFLOW_PATH_NAME\": \"\\ucd94\\ucc9c\\uc9c8\\ubb38\\uc9c0\", \"TOTAL_NET_SALES\": 0}, {\"MAIN_CATEGORY_NAME\": \"\\uc720\\uc2ec\\ub9cc\", \"INFLOW_PATH_NAME\": \"\\ub2f9\\uadfc\", \"TOTAL_NET_SALES\": 200000}] (showing 3 of 220 rows)"
+    },
+    {
+      "query": "What is the average net sales for contracts that were received via '인바운드' and inflow path 'TV광고' in 2023?",
+      "expected_response": "[{\"AVG_NET_SALES\": null}]"
+    },
+    {
+      "query": "What is the total contract count and average net sales for each main category, joined with the monthly regional contract stats for the last year?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\uc54c\\ub730 \\uc694\\uae08\\uc81c\", \"TOTAL_CONTRACTS\": 2192818, \"AVG_NET_SALES\": \"349202.076654\"}, {\"MAIN_CATEGORY_NAME\": \"\\ub80c\\ud0c8\", \"TOTAL_CONTRACTS\": 145189031, \"AVG_NET_SALES\": \"342087.658908\"}, {\"MAIN_CATEGORY_NAME\": \"\\uae30\\uc5c5\\uc6a9\\uc778\\ud130\\ub137\", \"TOTAL_CONTRACTS\": 119740, \"AVG_NET_SALES\": \"449002.476190\"}] (showing 3 of 7 rows)"
+    },
+    {
+      "query": "What is the total number of new installations for each state in the year 2023?",
+      "expected_response": "[{\"INSTALL_STATE\": \"\\uacbd\\uae30\", \"TOTAL_INSTALLS\": 19207}, {\"INSTALL_STATE\": \"\\uc804\\ub0a8\", \"TOTAL_INSTALLS\": 1180}, {\"INSTALL_STATE\": \"\\uc6b8\\uc0b0\", \"TOTAL_INSTALLS\": 1096}] (showing 3 of 17 rows)"
+    },
+    {
+      "query": "What is the average net sales for standalone contracts in the city of '부평구'?",
+      "expected_response": "[{\"AVG_STANDALONE_SALES\": \"453302.675676\"}]"
+    },
+    {
+      "query": "How many contracts were completed (payend) in each month of 2022?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total number of open contracts in the state of '충북' for the year 2023, and what is the corresponding average net sales?",
+      "expected_response": "[{\"TOTAL_OPEN_CONTRACTS\": 1218, \"AVG_NET_SALES\": \"256404.148936\"}]"
+    },
+    {
+      "query": "What is the total number of contracts for each rental main category in 2023?",
+      "expected_response": "[{\"RENTAL_MAIN_CATEGORY\": \"\\uc8fc\\ubc29\\uac00\\uc804\", \"TOTAL_CONTRACTS\": 13598}, {\"RENTAL_MAIN_CATEGORY\": \"TV/\\ub514\\uc9c0\\ud138\", \"TOTAL_CONTRACTS\": 224}, {\"RENTAL_MAIN_CATEGORY\": \"\\uac00\\uad6c\", \"TOTAL_CONTRACTS\": 36}] (showing 3 of 6 rows)"
+    },
+    {
+      "query": "What is the average net sales for each region in the last 6 months?",
+      "expected_response": "[{\"INSTALL_STATE\": \"\\uad11\\uc8fc\", \"AVG_NET_SALES\": \"364384.873239\"}, {\"INSTALL_STATE\": \"\\uc778\\ucc9c\", \"AVG_NET_SALES\": \"358871.839286\"}, {\"INSTALL_STATE\": \"\\uacbd\\ub0a8\", \"AVG_NET_SALES\": \"350568.778846\"}] (showing 3 of 18 rows)"
+    },
+    {
+      "query": "What is the total number of contracts for each rental main category that have been paid in full?",
+      "expected_response": "[{\"RENTAL_MAIN_CATEGORY\": \"\\uc0c1\\uc5c5\\uc6a9\\uac00\\uc804\", \"TOTAL_PAYEND_CONTRACTS\": 6}, {\"RENTAL_MAIN_CATEGORY\": \"\\uac00\\uad6c\", \"TOTAL_PAYEND_CONTRACTS\": 3488}, {\"RENTAL_MAIN_CATEGORY\": \"\\uacc4\\uc808\\uac00\\uc804\", \"TOTAL_PAYEND_CONTRACTS\": 21670}] (showing 3 of 8 rows)"
+    },
+    {
+      "query": "What is the open conversion rate for each rental main category in the last quarter?",
+      "expected_response": "[{\"RENTAL_MAIN_CATEGORY\": \"\\uac00\\uad6c\", \"AVG_OPEN_CVR\": \"58.02925926\"}, {\"RENTAL_MAIN_CATEGORY\": \"TV/\\ub514\\uc9c0\\ud138\", \"AVG_OPEN_CVR\": \"15.35709302\"}, {\"RENTAL_MAIN_CATEGORY\": \"\\ubbf8\\ubd84\\ub958\", \"AVG_OPEN_CVR\": \"53.16666667\"}] (showing 3 of 7 rows)"
+    },
+    {
+      "query": "What is the total number of contracts for each region and rental main category in the last year?",
+      "expected_response": "[{\"INSTALL_STATE\": \"\\ucda9\\ub0a8\", \"RENTAL_MAIN_CATEGORY\": \"\\ud5ec\\uc2a4 \\ubdf0\\ud2f0 \\ubc18\\ub824 \\uae30\\ud0c0\", \"TOTAL_CONTRACTS\": 10}, {\"INSTALL_STATE\": \"\\uacbd\\ubd81\", \"RENTAL_MAIN_CATEGORY\": \"\\uac00\\uad6c\", \"TOTAL_CONTRACTS\": 174}, {\"INSTALL_STATE\": \"\\uad11\\uc8fc\", \"RENTAL_MAIN_CATEGORY\": \"\\uc0dd\\ud65c\\uac00\\uc804\", \"TOTAL_CONTRACTS\": 821}] (showing 3 of 111 rows)"
+    },
+    {
+      "query": "What is the total revenue generated from each UTM source in the year 2023?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the average contract conversion rate (CONTRACT_CVR) for each UTM medium in the last 6 months?",
+      "expected_response": "[{\"UTM_MEDIUM\": \"\\uc6c5\\uc774\\uc544\\ubd80\\uc9c01124\", \"AVG_CONTRACT_CVR\": \"30.77000000\"}, {\"UTM_MEDIUM\": \"\\uc6b8\\ud2b8\\ub77ctv_250523_250705_sp_ppl_pjd\", \"AVG_CONTRACT_CVR\": \"0E-8\"}, {\"UTM_MEDIUM\": \"0110_\\uc9c0\\ud558\\ucca0_\\uae30\\ub465_2\\uba74\\ud615\", \"AVG_CONTRACT_CVR\": \"0E-8\"}] (showing 3 of 946 rows)"
+    },
+    {
+      "query": "How many total sessions were there for each UTM source and medium combination in the month of January 2023?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total number of consult requests and contracts for each UTM source in the last quarter?",
+      "expected_response": "[{\"UTM_SOURCE\": \"gmarket.co.kr\", \"TOTAL_CONSULT_REQUESTS\": 0, \"TOTAL_CONTRACTS\": 0}, {\"UTM_SOURCE\": \"shinhancard.com\", \"TOTAL_CONSULT_REQUESTS\": 1, \"TOTAL_CONTRACTS\": 0}, {\"UTM_SOURCE\": \"greenbacklink.co.kr\", \"TOTAL_CONSULT_REQUESTS\": 0, \"TOTAL_CONTRACTS\": 0}] (showing 3 of 417 rows)"
+    },
+    {
+      "query": "What is the total revenue generated from each UTM source and medium combination in the year 2023, joined with the total contract count from the V01_MONTHLY_REGIONAL_CONTRACT_STATS table?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total number of sessions for each device category in the year 2025?",
+      "expected_response": "[{\"DEVICE_CATEGORY\": \"desktop\", \"TOTAL_SESSIONS\": 12238943}, {\"DEVICE_CATEGORY\": \"smart tv\", \"TOTAL_SESSIONS\": 92}, {\"DEVICE_CATEGORY\": \"mobile\", \"TOTAL_SESSIONS\": 20144269}] (showing 3 of 4 rows)"
+    },
+    {
+      "query": "What is the average conversion rate for mobile devices in the last 6 months?",
+      "expected_response": "[{\"AVG_CONVERSION_RATE\": \"10.93500000\"}]"
+    },
+    {
+      "query": "How many unique users used desktop devices in January 2025?",
+      "expected_response": "[{\"TOTAL_USERS\": null}]"
+    },
+    {
+      "query": "What is the total number of conversion events for each device category in 2025?",
+      "expected_response": "[{\"DEVICE_CATEGORY\": \"smart tv\", \"TOTAL_CONVERSION_EVENTS\": 3}, {\"DEVICE_CATEGORY\": \"tablet\", \"TOTAL_CONVERSION_EVENTS\": 34480}, {\"DEVICE_CATEGORY\": \"mobile\", \"TOTAL_CONVERSION_EVENTS\": 2044224}] (showing 3 of 4 rows)"
+    },
+    {
+      "query": "What is the total number of sessions for each device category in regions with more than 1000 contracts in January 2025?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the total number of call attempts and the average billing time in seconds for each division in the year 2023?",
+      "expected_response": "[{\"DIVISION_NAME\": \"\\uc218\\uc2e0\", \"TOTAL_CALL_ATTEMPTS\": 2333, \"AVG_BILLING_TIME_SECONDS\": \"93.4684211\"}, {\"DIVISION_NAME\": \"\\ubc1c\\uc2e0\", \"TOTAL_CALL_ATTEMPTS\": 555, \"AVG_BILLING_TIME_SECONDS\": \"99.0647059\"}]"
+    },
+    {
+      "query": "What is the total call count and connection rate for each main category in the month of January 2023?",
+      "expected_response": "No results."
+    },
+    {
+      "query": "What is the average billing time in minutes for connected calls in the '인터넷' category for the year 2023?",
+      "expected_response": "[{\"AVG_BILLING_TIME_MINUTES\": \"1.3428571\"}]"
+    },
+    {
+      "query": "What is the total number of call attempts and the total billing time in seconds for each division, joined with the total contract count from the regional contract stats for the year 2023?",
+      "expected_response": "[{\"DIVISION_NAME\": \"\\ubc1c\\uc2e0\", \"TOTAL_CALL_ATTEMPTS\": 195602, \"TOTAL_BILLING_TIME_SECONDS\": 10068133, \"TOTAL_CONTRACT_COUNT\": 258101}, {\"DIVISION_NAME\": \"\\uc218\\uc2e0\", \"TOTAL_CALL_ATTEMPTS\": 823397, \"TOTAL_BILLING_TIME_SECONDS\": 16449162, \"TOTAL_CONTRACT_COUNT\": 267469}]"
+    },
+    {
+      "query": "What is the maximum billing time in seconds for each main category and division in the month of December 2022?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\uc778\\ud130\\ub137\", \"DIVISION_NAME\": \"\\uc218\\uc2e0\", \"MAX_BILLING_TIME_SECONDS\": 0}]"
+    },
+    {
+      "query": "What is the average connection rate for calls on weekdays (Monday to Friday) between 9 AM and 5 PM?",
+      "expected_response": "[{\"AVG(CONNECTION_RATE)\": \"95.02655556\"}]"
+    },
+    {
+      "query": "How many calls were made on weekends (Saturday and Sunday) and what is the average billing time in minutes?",
+      "expected_response": "[{\"COUNT(CALL_COUNT)\": 48, \"AVG(AVG_BILL_MINUTE)\": \"5.1354167\"}]"
+    },
+    {
+      "query": "What is the total number of connected and unconnected calls for each division (발신, 수신) on Mondays?",
+      "expected_response": "[{\"DIVISION_NAME\": \"\\ubc1c\\uc2e0\", \"TOTAL_CONNECTED\": 750906, \"TOTAL_UNCONNECTED\": 57691}, {\"DIVISION_NAME\": \"\\uc218\\uc2e0\", \"TOTAL_CONNECTED\": 374068, \"TOTAL_UNCONNECTED\": 7953}]"
+    },
+    {
+      "query": "What is the average billing time in seconds for calls made between 6 PM and 10 PM across all days of the week?",
+      "expected_response": "[{\"AVG(AVG_BILL_SECOND)\": \"317.8542857\"}]"
+    },
+    {
+      "query": "Join with the monthly call stats table and find the total billing seconds for each division in the last month.",
+      "expected_response": "[{\"DIVISION_NAME\": \"\\ubc1c\\uc2e0\", \"TOTAL_BILL_SECOND\": 1114253280}, {\"DIVISION_NAME\": \"\\uc218\\uc2e0\", \"TOTAL_BILL_SECOND\": 552624744}]"
+    },
+    {
+      "query": "What is the average call-to-contract conversion rate for each main category in 2023?",
+      "expected_response": "[{\"MAIN_CATEGORY_NAME\": \"\\ub80c\\ud0c8\", \"AVG_CONVERSION_RATE\": \"69.19888889\"}, {\"MAIN_CATEGORY_NAME\": \"\\uc778\\ud130\\ub137\", \"AVG_CONVERSION_RATE\": \"66.99071429\"}, {\"MAIN_CATEGORY_NAME\": \"\\uc54c\\ub730 \\uc694\\uae08\\uc81c\", \"AVG_CONVERSION_RATE\": \"49.25800000\"}] (showing 3 of 5 rows)"
+    },
+    {
+      "query": "How many total calls were made in the '모바일' category in the last 6 months?",
+      "expected_response": "[{\"TOTAL_CALLS\": 52709}]"
+    },
+    {
+      "query": "What is the median lead time in days for contracts in the '인터넷' category for the year 2022?",
+      "expected_response": "[{\"MEDIAN_LEAD_TIME\": \"-3.0000\"}]"
+    },
+    {
+      "query": "What is the total number of linked contracts for each division in the last quarter?",
+      "expected_response": "[{\"DIVISION_NAME\": \"\\ubc1c\\uc2e0\", \"TOTAL_LINKED_CONTRACTS\": 386269}, {\"DIVISION_NAME\": \"\\uc218\\uc2e0\", \"TOTAL_LINKED_CONTRACTS\": 283812}, {\"DIVISION_NAME\": \"\\ubbf8\\ubd84\\ub958\", \"TOTAL_LINKED_CONTRACTS\": 3781}]"
+    },
+    {
+      "query": "What is the average call-to-contract conversion rate for the '모바일' category in regions with more than 1000 contracts in 2023?",
+      "expected_response": "No results."
+    }
+  ],
+  "questions": [
+    "What is the total number of contracts created in the year 2023?",
+    "What is the average conversion rate for open contracts in the '인터넷' category in the '서울특별시' state?",
+    "How many contracts were completed in the '경기도' state in the last 6 months?",
+    "What is the total net sales for contracts that include TV services in the '전남' state?",
+    "What is the average lead time in days for contracts in the '모바일' category in 2023?",
+    "What is the total number of contracts for each main category in 2023?",
+    "What is the average net sales for contracts with TV and Phone in the last 6 months?",
+    "How many contracts include WiFi and what is the total payend count for these contracts?",
+    "What is the total number of contracts by bundle combination for the '인터넷' category in 2023?",
+    "What is the total number of contracts and the average net sales for each main category, joined with regional contract stats for 2023?",
+    "What is the average overall conversion rate (OVERALL_CVR) for mobile contracts in 2023?",
+    "How many contracts were completed (PAYEND_COUNT) for each main category in the last quarter of 2022?",
+    "What is the average call-to-contract conversion rate (CALL_TO_CONTRACT_CVR) for mobile contracts in 2023?",
+    "What is the total number of contracts and average net sales for each main category in 2023?",
+    "What is the open conversion rate (OPEN_CVR) for each receive path in the last 6 months?",
+    "What is the total net sales for each main category and inflow path in the last quarter?",
+    "What is the average net sales for contracts that were received via '인바운드' and inflow path 'TV광고' in 2023?",
+    "What is the total contract count and average net sales for each main category, joined with the monthly regional contract stats for the last year?",
+    "What is the total number of new installations for each state in the year 2023?",
+    "What is the average net sales for standalone contracts in the city of '부평구'?",
+    "How many contracts were completed (payend) in each month of 2022?",
+    "What is the total number of open contracts in the state of '충북' for the year 2023, and what is the corresponding average net sales?",
+    "What is the total number of contracts for each rental main category in 2023?",
+    "What is the average net sales for each region in the last 6 months?",
+    "What is the total number of contracts for each rental main category that have been paid in full?",
+    "What is the open conversion rate for each rental main category in the last quarter?",
+    "What is the total number of contracts for each region and rental main category in the last year?",
+    "What is the total revenue generated from each UTM source in the year 2023?",
+    "What is the average contract conversion rate (CONTRACT_CVR) for each UTM medium in the last 6 months?",
+    "How many total sessions were there for each UTM source and medium combination in the month of January 2023?",
+    "What is the total number of consult requests and contracts for each UTM source in the last quarter?",
+    "What is the total revenue generated from each UTM source and medium combination in the year 2023, joined with the total contract count from the V01_MONTHLY_REGIONAL_CONTRACT_STATS table?",
+    "What is the total number of sessions for each device category in the year 2025?",
+    "What is the average conversion rate for mobile devices in the last 6 months?",
+    "How many unique users used desktop devices in January 2025?",
+    "What is the total number of conversion events for each device category in 2025?",
+    "What is the total number of sessions for each device category in regions with more than 1000 contracts in January 2025?",
+    "What is the total number of call attempts and the average billing time in seconds for each division in the year 2023?",
+    "What is the total call count and connection rate for each main category in the month of January 2023?",
+    "What is the average billing time in minutes for connected calls in the '인터넷' category for the year 2023?",
+    "What is the total number of call attempts and the total billing time in seconds for each division, joined with the total contract count from the regional contract stats for the year 2023?",
+    "What is the maximum billing time in seconds for each main category and division in the month of December 2022?",
+    "What is the average connection rate for calls on weekdays (Monday to Friday) between 9 AM and 5 PM?",
+    "How many calls were made on weekends (Saturday and Sunday) and what is the average billing time in minutes?",
+    "What is the total number of connected and unconnected calls for each division (발신, 수신) on Mondays?",
+    "What is the average billing time in seconds for calls made between 6 PM and 10 PM across all days of the week?",
+    "Join with the monthly call stats table and find the total billing seconds for each division in the last month.",
+    "What is the average call-to-contract conversion rate for each main category in 2023?",
+    "How many total calls were made in the '모바일' category in the last 6 months?",
+    "What is the median lead time in days for contracts in the '인터넷' category for the year 2022?",
+    "What is the total number of linked contracts for each division in the last quarter?",
+    "What is the average call-to-contract conversion rate for the '모바일' category in regions with more than 1000 contracts in 2023?"
+  ]
+}

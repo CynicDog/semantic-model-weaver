@@ -1,0 +1,1755 @@
+name: nextrade_equity_market_data_fin
+description: Semantic model for NEXTRADE_EQUITY_MARKET_DATA.FIN
+tables:
+- name: NX_HT_BAT_REFER_A0
+  description: 배치참조A0종목정보
+  base_table:
+    database: NEXTRADE_EQUITY_MARKET_DATA
+    schema: FIN
+    table: NX_HT_BAT_REFER_A0
+  primary_key:
+    columns:
+    - DWDD
+    - ISU_CD
+  dimensions:
+  - name: ISU_CD
+    expr: ISU_CD
+    data_type: VARCHAR
+    description: 종목코드
+    sample_values:
+    - KR7028260008
+    - KR7475460002
+    - KR7439090002
+    - KR7397810003
+    - KR7451760003
+  - name: ISU_SRT_CD
+    expr: ISU_SRT_CD
+    data_type: VARCHAR
+    description: 종목단축코드
+    sample_values:
+    - A028260
+    - A475460
+    - A439090
+    - A397810
+    - A451760
+  - name: ISU_ABWD_NM
+    expr: ISU_ABWD_NM
+    data_type: VARCHAR
+    description: 종목약어명
+    sample_values:
+    - 삼성물산
+    - 미트박스
+    - 마녀공장
+    - 애드포러스
+    - 컨텍
+  - name: ISU_ENAW_NM
+    expr: ISU_ENAW_NM
+    data_type: VARCHAR
+    description: 종목영문약어명
+    sample_values:
+    - SAMSUNG C&T
+    - MeatBox
+    - Manyo
+    - ADforus
+    - CONTEC
+  - name: INFO_DSTB_GRP_NO
+    expr: INFO_DSTB_GRP_NO
+    data_type: VARCHAR
+    description: 정보분배그룹번호
+    sample_values:
+    - '00001'
+    - '00006'
+  - name: MKOP_PROD_GRP_ID
+    expr: MKOP_PROD_GRP_ID
+    data_type: VARCHAR
+    description: 장운영상품그룹ID
+    sample_values:
+    - STK
+    - KSQ
+  - name: SECU_GRP_ID
+    expr: SECU_GRP_ID
+    data_type: VARCHAR
+    description: 증권그룹ID
+    sample_values:
+    - ST
+    - RT
+  - name: OFF_TP_CD
+    expr: OFF_TP_CD
+    data_type: VARCHAR
+    description: 락구분코드
+    sample_values:
+    - '00'
+    - '02'
+  - name: PAPR_CHG_TP_CD
+    expr: PAPR_CHG_TP_CD
+    data_type: VARCHAR
+    description: 액면가변경구분코드
+    sample_values:
+    - '00'
+  - name: OPBA_PRC_ISU_YN
+    expr: OPBA_PRC_ISU_YN
+    data_type: VARCHAR
+    description: 시가기준가격종목여부
+    sample_values:
+    - N
+  - name: RVAL_ISU_RSN_CD
+    expr: RVAL_ISU_RSN_CD
+    data_type: VARCHAR
+    description: 재평가종목사유코드
+    sample_values:
+    - '00'
+  - name: BASE_PRC_CHG_ISU_YN
+    expr: BASE_PRC_CHG_ISU_YN
+    data_type: VARCHAR
+    description: 기준가격변경종목여부
+    sample_values:
+    - N
+  - name: RDEN_TG_COND_CD
+    expr: RDEN_TG_COND_CD
+    data_type: VARCHAR
+    description: 임의종료발동조건코드
+    sample_values:
+    - '1'
+  - name: MKT_ALRT_RISK_ADNT_YN
+    expr: MKT_ALRT_RISK_ADNT_YN
+    data_type: VARCHAR
+    description: 시장경보위험예고여부
+    sample_values:
+    - N
+  - name: MKT_ALRT_TP_CD
+    expr: MKT_ALRT_TP_CD
+    data_type: VARCHAR
+    description: 시장경보구분코드
+    sample_values:
+    - '00'
+    - '02'
+  - name: GVNC_EXLC_YN
+    expr: GVNC_EXLC_YN
+    data_type: VARCHAR
+    description: 지배구조우량여부
+    sample_values:
+    - N
+  - name: AMIS_YN
+    expr: AMIS_YN
+    data_type: VARCHAR
+    description: 관리종목여부
+    sample_values:
+    - N
+    - Y
+  - name: UFDC_YN
+    expr: UFDC_YN
+    data_type: VARCHAR
+    description: 불성실공시여부
+    sample_values:
+    - N
+  - name: BKLS_YN
+    expr: BKLS_YN
+    data_type: VARCHAR
+    description: 우회상장여부
+    sample_values:
+    - N
+  - name: TDHL_YN
+    expr: TDHL_YN
+    data_type: VARCHAR
+    description: 거래정지여부
+    sample_values:
+    - N
+    - Y
+  - name: IND_ID
+    expr: IND_ID
+    data_type: VARCHAR
+    description: 업종ID
+    sample_values:
+    - '074607'
+    - '106309'
+    - '032004'
+    - '137103'
+    - '106201'
+  - name: SMSC_YN
+    expr: SMSC_YN
+    data_type: VARCHAR
+    description: 중소기업여부
+    sample_values:
+    - N
+    - Y
+  - name: BSEC_TP_CD
+    expr: BSEC_TP_CD
+    data_type: VARCHAR
+    description: 소속부구분코드
+    sample_values:
+    - ''
+    - '3'
+    - '2'
+    - '4'
+    - '1'
+  - name: IVOG_TP_CD
+    expr: IVOG_TP_CD
+    data_type: VARCHAR
+    description: 투자기구구분코드
+    sample_values:
+    - '0'
+  - name: KRX_PRDY_CSPR_TP_CD
+    expr: KRX_PRDY_CSPR_TP_CD
+    data_type: VARCHAR
+    description: KRX전일종가구분코드
+    sample_values:
+    - '1'
+    - '3'
+  - name: LIST_DD
+    expr: LIST_DD
+    data_type: VARCHAR
+    description: 상장일자
+    sample_values:
+    - '20141218'
+    - '20250123'
+    - '20230608'
+    - '20250822'
+    - '20231109'
+  - name: ARTR_YN
+    expr: ARTR_YN
+    data_type: VARCHAR
+    description: 정리매매여부
+    sample_values:
+    - N
+  - name: EXIE_STRT_DD
+    expr: EXIE_STRT_DD
+    data_type: VARCHAR
+    description: 존립개시일자
+    sample_values:
+    - ''
+    - '20101104'
+  - name: EXIE_END_DD
+    expr: EXIE_END_DD
+    data_type: VARCHAR
+    description: 존립종료일자
+    sample_values:
+    - ''
+    - '99991231'
+  - name: CRDT_ODPS_YN
+    expr: CRDT_ODPS_YN
+    data_type: VARCHAR
+    description: 신용주문가능여부
+    sample_values:
+    - Y
+    - N
+  - name: CPIC_TP_CD
+    expr: CPIC_TP_CD
+    data_type: VARCHAR
+    description: 증자구분코드
+    sample_values:
+    - '00'
+  - name: NTST_YN
+    expr: NTST_YN
+    data_type: VARCHAR
+    description: 국민주여부
+    sample_values:
+    - N
+  - name: REITS_KIND_CD
+    expr: REITS_KIND_CD
+    data_type: VARCHAR
+    description: 리츠종류코드
+    sample_values:
+    - ''
+    - '1'
+  - name: TGST_ISU_CD
+    expr: TGST_ISU_CD
+    data_type: VARCHAR
+    description: 목적주권종목코드
+    sample_values:
+    - ''
+  - name: CURR_ISO_CD
+    expr: CURR_ISO_CD
+    data_type: VARCHAR
+    description: 통화ISO코드
+    sample_values:
+    - KRW
+  - name: NT_CD
+    expr: NT_CD
+    data_type: VARCHAR
+    description: 국가코드
+    sample_values:
+    - '410'
+  - name: MKMK_PSBT_YN
+    expr: MKMK_PSBT_YN
+    data_type: VARCHAR
+    description: 시장조성가능여부
+    sample_values:
+    - N
+    - Y
+  - name: SHSL_PSBT_YN
+    expr: SHSL_PSBT_YN
+    data_type: VARCHAR
+    description: 공매도가능여부
+    sample_values:
+    - Y
+  - name: REGS_YN
+    expr: REGS_YN
+    data_type: VARCHAR
+    description: REGS여부
+    sample_values:
+    - N
+  - name: SPAC_YN
+    expr: SPAC_YN
+    data_type: VARCHAR
+    description: SPAC여부
+    sample_values:
+    - N
+    - Y
+  - name: IVCT_RMID_ISU_YN
+    expr: IVCT_RMID_ISU_YN
+    data_type: VARCHAR
+    description: 투자주의환기종목여부
+    sample_values:
+    - N
+    - Y
+  - name: STRM_OVHT_ISU_TP_CD
+    expr: STRM_OVHT_ISU_TP_CD
+    data_type: VARCHAR
+    description: 단기과열종목구분코드
+    sample_values:
+    - '0'
+  - name: LSBR_MBR_NO
+    expr: LSBR_MBR_NO
+    data_type: VARCHAR
+    description: 상장주선인회원번호
+    sample_values:
+    - '00005'
+    - '00003'
+    - '00006'
+    - '00004'
+    - ''
+  - name: LP_ODPS_YN
+    expr: LP_ODPS_YN
+    data_type: VARCHAR
+    description: LP주문가능여부
+    sample_values:
+    - N
+  - name: LWLQ_YN
+    expr: LWLQ_YN
+    data_type: VARCHAR
+    description: 저유동성여부
+    sample_values:
+    - N
+  - name: ANSG_YN
+    expr: ANSG_YN
+    data_type: VARCHAR
+    description: 이상급등여부
+    sample_values:
+    - N
+  - name: IVWR_ISU_YN
+    expr: IVWR_ISU_YN
+    data_type: VARCHAR
+    description: 투자유의종목여부
+    sample_values:
+    - N
+  - name: LSST_CT_LCK_ISU_YN
+    expr: LSST_CT_LCK_ISU_YN
+    data_type: VARCHAR
+    description: 상장주식수부족종목여부
+    sample_values:
+    - N
+  - name: SPAC_DAPP_MRGE_YN
+    expr: SPAC_DAPP_MRGE_YN
+    data_type: VARCHAR
+    description: SPAC소멸합병여부
+    sample_values:
+    - N
+    - Y
+  - name: SGMT_TP_CD
+    expr: SGMT_TP_CD
+    data_type: VARCHAR
+    description: 세그먼트구분코드
+    sample_values:
+    - ''
+    - '2'
+    - '1'
+  - name: CPTR_TRD_CHIC_YN
+    expr: CPTR_TRD_CHIC_YN
+    data_type: VARCHAR
+    description: 경쟁매매거래선정여부
+    sample_values:
+    - Y
+    - N
+  - name: CPTR_TRDVL_LMT_YN
+    expr: CPTR_TRDVL_LMT_YN
+    data_type: VARCHAR
+    description: 경쟁매매거래량제한여부
+    sample_values:
+    - N
+    - ' '
+  - name: CPTR_TRD_IPSB_RSN_OCCR_YN
+    expr: CPTR_TRD_IPSB_RSN_OCCR_YN
+    data_type: VARCHAR
+    description: 경쟁매매거래불가사유발생여부
+    sample_values:
+    - N
+    - ' '
+  - name: CPTR_TRD_PSBT_YN
+    expr: CPTR_TRD_PSBT_YN
+    data_type: VARCHAR
+    description: 경쟁매매거래가능여부
+    sample_values:
+    - Y
+    - N
+  - name: NGTR_TRD_PSBT_YN
+    expr: NGTR_TRD_PSBT_YN
+    data_type: VARCHAR
+    description: 협상매매거래가능여부
+    sample_values:
+    - Y
+    - N
+  - name: NXT_PRDY_CSPR_TP_CD
+    expr: NXT_PRDY_CSPR_TP_CD
+    data_type: VARCHAR
+    description: NXT전일종가구분코드
+    sample_values:
+    - '1'
+    - '3'
+  - name: CPTR_TRD_PMSN_CD
+    expr: CPTR_TRD_PMSN_CD
+    data_type: NUMBER
+    description: 경쟁매매거래허용코드
+  - name: MAMKT_BF_NGTR_PSBT_YN
+    expr: MAMKT_BF_NGTR_PSBT_YN
+    data_type: VARCHAR
+    description: 메인마켓이전협상매매가능여부
+    sample_values:
+    - Y
+    - N
+  time_dimensions:
+  - name: DWDD
+    expr: DWDD
+    data_type: DATE
+    description: DW일자
+  measures:
+  - name: BASE_PRC
+    expr: AVG(BASE_PRC)
+    data_type: NUMBER
+    description: 기준가격
+  - name: KRX_PRDY_CSPR
+    expr: SUM(KRX_PRDY_CSPR)
+    data_type: NUMBER
+    description: KRX전일종가
+  - name: PRDY_ACC_TRD_QTY
+    expr: SUM(PRDY_ACC_TRD_QTY)
+    data_type: NUMBER
+    description: 전일누적거래수량
+  - name: PRDY_ACC_TRVAL
+    expr: SUM(PRDY_ACC_TRVAL)
+    data_type: NUMBER
+    description: 전일누적거래대금
+  - name: ULPR
+    expr: SUM(ULPR)
+    data_type: NUMBER
+    description: 상한가
+  - name: LWLP
+    expr: SUM(LWLP)
+    data_type: NUMBER
+    description: 하한가
+  - name: PAPR
+    expr: SUM(PAPR)
+    data_type: NUMBER
+    description: 액면가
+  - name: ISSU_PRC
+    expr: AVG(ISSU_PRC)
+    data_type: NUMBER
+    description: 발행가격
+  - name: LSST_CT
+    expr: SUM(LSST_CT)
+    data_type: NUMBER
+    description: 상장주식수
+  - name: CAPT_AMT
+    expr: SUM(CAPT_AMT)
+    data_type: NUMBER
+    description: 자본금액
+  - name: VALU_PRC
+    expr: AVG(VALU_PRC)
+    data_type: NUMBER
+    description: 평가가격
+  - name: LWST_OD_PRC
+    expr: AVG(LWST_OD_PRC)
+    data_type: NUMBER
+    description: 최저호가가격
+  - name: HGST_OD_PRC
+    expr: AVG(HGST_OD_PRC)
+    data_type: NUMBER
+    description: 최고호가가격
+  - name: NXT_PRDY_CSPR
+    expr: SUM(NXT_PRDY_CSPR)
+    data_type: NUMBER
+    description: NXT전일종가
+- name: NX_HT_ONL_MKTPR_A3
+  description: Online market price table for analytics
+  base_table:
+    database: NEXTRADE_EQUITY_MARKET_DATA
+    schema: FIN
+    table: NX_HT_ONL_MKTPR_A3
+  primary_key:
+    columns:
+    - BRD_ID
+    - DWDD
+    - INFO_DSTB_SEQ
+    - ISU_CD
+    - MKT_ID
+    - SESS_ID
+    - TDG_PROCS_DTLS_TIME
+  dimensions:
+  - name: MKT_ID
+    expr: MKT_ID
+    data_type: VARCHAR
+    description: Market ID
+    synonyms:
+    - 'market ID'
+    - 'market identifier'
+    - '시장ID'
+    - '시장 식별자'
+    sample_values:
+    - KSQ
+    - STK
+  - name: BRD_ID
+    expr: BRD_ID
+    data_type: VARCHAR
+    description: Board ID
+    synonyms:
+    - 'board ID'
+    - 'board identifier'
+    - '보드ID'
+    - '보드 식별자'
+    sample_values:
+    - G1
+  - name: ISU_CD
+    expr: ISU_CD
+    data_type: VARCHAR
+    description: Issue code
+    synonyms:
+    - 'issue code'
+    - 'stock code'
+    - '종목코드'
+    - '주식 코드'
+    sample_values:
+    - KR7484590005
+    - KR7110990009
+    - KR7476060009
+    - KR7035420009
+    - KR7005490008
+  - name: INFO_DSTB_SEQ
+    expr: INFO_DSTB_SEQ
+    data_type: NUMBER
+    description: Information distribution sequence number
+    synonyms:
+    - 'information distribution sequence'
+    - 'info dist seq'
+    - '정보분배일련번호'
+    - '정보 분배 일련번호'
+  - name: SESS_ID
+    expr: SESS_ID
+    data_type: VARCHAR
+    description: Session ID
+    synonyms:
+    - 'session ID'
+    - 'session identifier'
+    - '세션ID'
+    - '세션 식별자'
+    sample_values:
+    - '41'
+    - '40'
+    - '42'
+  - name: TDG_PROCS_DTLS_TIME
+    expr: TDG_PROCS_DTLS_TIME
+    data_type: VARCHAR
+    description: Trade processing detailed time
+    synonyms:
+    - 'trade processing time'
+    - 'trade time'
+    - '매매처리상세시각'
+    - '거래 처리 시각'
+    sample_values:
+    - 080835349146
+    - '101819777098'
+    - '154147239404'
+    - 093013158820
+    - '105500988825'
+  - name: PRDY_CMP_TP_CD
+    expr: PRDY_CMP_TP_CD
+    data_type: VARCHAR
+    description: Previous day comparison type code
+    synonyms:
+    - 'previous day comparison code'
+    - 'day comparison code'
+    - '전일대비구분코드'
+    - '전일 대비 구분 코드'
+    sample_values:
+    - '2'
+    - '5'
+    - '3'
+  - name: LST_AKNB_TP_CD
+    expr: LST_AKNB_TP_CD
+    data_type: VARCHAR
+    description: Last acknowledgment type code
+    synonyms:
+    - 'last acknowledgment code'
+    - 'acknowledgment code'
+    - '최종매도매수구분코드'
+    - '최종 매도매수 구분 코드'
+    sample_values:
+    - '2'
+    - '1'
+  time_dimensions:
+  - name: DWDD
+    expr: DWDD
+    data_type: DATE
+    description: DW date
+    synonyms:
+    - 'DW date'
+    - 'data warehouse date'
+    - 'DW일자'
+    - '데이터 웨어하우스 일자'
+  measures:
+  - name: PRDY_CMP_PRC
+    expr: AVG(PRDY_CMP_PRC)
+    data_type: NUMBER
+    description: Previous day comparison price
+    synonyms:
+    - 'previous day price'
+    - 'day comparison price'
+    - '전일대비가격'
+    - '전일 대비 가격'
+  - name: TD_PRC
+    expr: AVG(TD_PRC)
+    data_type: NUMBER
+    description: Trade price
+    synonyms:
+    - 'trade price'
+    - 'transaction price'
+    - '체결가격'
+    - '거래 가격'
+  - name: TRD_QTY
+    expr: SUM(TRD_QTY)
+    data_type: NUMBER
+    description: Trade quantity
+    synonyms:
+    - 'trade quantity'
+    - 'trading volume'
+    - '거래수량'
+    - '거래량'
+  - name: OPPR
+    expr: SUM(OPPR)
+    data_type: NUMBER
+    description: Opening price
+    synonyms:
+    - 'opening price'
+    - 'starting price'
+    - '시가'
+    - '시작 가격'
+  - name: HGPR
+    expr: SUM(HGPR)
+    data_type: NUMBER
+    description: High price
+    synonyms:
+    - 'high price'
+    - 'highest price'
+    - '고가'
+    - '최고 가격'
+  - name: LWPR
+    expr: SUM(LWPR)
+    data_type: NUMBER
+    description: Low price
+    synonyms:
+    - 'low price'
+    - 'lowest price'
+    - '저가'
+    - '최저 가격'
+  - name: ACC_TRD_QTY
+    expr: SUM(ACC_TRD_QTY)
+    data_type: NUMBER
+    description: Accumulated trade quantity
+    synonyms:
+    - 'accumulated trade quantity'
+    - 'total trade quantity'
+    - '누적거래수량'
+    - '누적 거래량'
+  - name: ACC_TRVAL
+    expr: SUM(ACC_TRVAL)
+    data_type: NUMBER
+    description: Accumulated trade value
+    synonyms:
+    - 'accumulated trade value'
+    - 'total trade value'
+    - '누적거래대금'
+    - '누적 거래 대금'
+  - name: LP_HOLD_QTY
+    expr: SUM(LP_HOLD_QTY)
+    data_type: NUMBER
+    description: LP holding quantity
+    synonyms:
+    - 'LP holding quantity'
+    - 'LP holdings'
+    - 'LP보유수량'
+    - 'LP 보유량'
+  - name: AKFB_OD_PRC
+    expr: AVG(AKFB_OD_PRC)
+    data_type: NUMBER
+    description: Best ask price
+    synonyms:
+    - 'best ask price'
+    - 'highest ask price'
+    - '매도최우선호가가격'
+    - '매도 최우선 호가 가격'
+  - name: BDFB_OD_PRC
+    expr: AVG(BDFB_OD_PRC)
+    data_type: NUMBER
+    description: Best bid price
+    synonyms:
+    - 'best bid price'
+    - 'highest bid price'
+    - '매수최우선호가가격'
+    - '매수 최우선 호가 가격'
+- name: NX_HT_ONL_MKTPR_B6
+  description: 온라인시세B6우선호가
+  base_table:
+    database: NEXTRADE_EQUITY_MARKET_DATA
+    schema: FIN
+    table: NX_HT_ONL_MKTPR_B6
+  primary_key:
+    columns:
+    - BRD_ID
+    - DWDD
+    - INFO_DSTB_SEQ
+    - ISU_CD
+    - MKT_ID
+    - SESS_ID
+    - TDG_PROCS_DTLS_TIME
+  dimensions:
+  - name: MKT_ID
+    expr: MKT_ID
+    data_type: VARCHAR
+    description: 시장ID
+    sample_values:
+    - KSQ
+    - STK
+  - name: BRD_ID
+    expr: BRD_ID
+    data_type: VARCHAR
+    description: 보드ID
+    sample_values:
+    - G1
+  - name: ISU_CD
+    expr: ISU_CD
+    data_type: VARCHAR
+    description: 종목코드
+    sample_values:
+    - KR7424870004
+    - KR7006400006
+    - KR7010140002
+    - KR7034020008
+    - KR7458870003
+  - name: INFO_DSTB_SEQ
+    expr: INFO_DSTB_SEQ
+    data_type: NUMBER
+    description: 정보분배일련번호
+  - name: SESS_ID
+    expr: SESS_ID
+    data_type: VARCHAR
+    description: 세션ID
+    sample_values:
+    - '42'
+    - '40'
+    - '41'
+  - name: TDG_PROCS_DTLS_TIME
+    expr: TDG_PROCS_DTLS_TIME
+    data_type: VARCHAR
+    description: 매매처리상세시각
+    sample_values:
+    - '190553907312'
+    - '120722357222'
+    - '115238348284'
+    - 082911332279
+    - 080249558766
+  time_dimensions:
+  - name: DWDD
+    expr: DWDD
+    data_type: DATE
+    description: DW일자
+  measures:
+  - name: ASK_STEP1_BSOD_PRC
+    expr: AVG(ASK_STEP1_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도1단계우선호가가격
+  - name: BID_STEP1_BSOD_PRC
+    expr: AVG(BID_STEP1_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수1단계우선호가가격
+  - name: ASK_STEP1_BSOD_RQTY
+    expr: SUM(ASK_STEP1_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도1단계우선호가잔량
+  - name: BID_STEP1_BSOD_RQTY
+    expr: SUM(BID_STEP1_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수1단계우선호가잔량
+  - name: ASK_STEP2_BSOD_PRC
+    expr: AVG(ASK_STEP2_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도2단계우선호가가격
+  - name: BID_STEP2_BSOD_PRC
+    expr: AVG(BID_STEP2_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수2단계우선호가가격
+  - name: ASK_STEP2_BSOD_RQTY
+    expr: SUM(ASK_STEP2_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도2단계우선호가잔량
+  - name: BID_STEP2_BSOD_RQTY
+    expr: SUM(BID_STEP2_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수2단계우선호가잔량
+  - name: ASK_STEP3_BSOD_PRC
+    expr: AVG(ASK_STEP3_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도3단계우선호가가격
+  - name: BID_STEP3_BSOD_PRC
+    expr: AVG(BID_STEP3_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수3단계우선호가가격
+  - name: ASK_STEP3_BSOD_RQTY
+    expr: SUM(ASK_STEP3_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도3단계우선호가잔량
+  - name: BID_STEP3_BSOD_RQTY
+    expr: SUM(BID_STEP3_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수3단계우선호가잔량
+  - name: ASK_STEP4_BSOD_PRC
+    expr: AVG(ASK_STEP4_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도4단계우선호가가격
+  - name: BID_STEP4_BSOD_PRC
+    expr: AVG(BID_STEP4_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수4단계우선호가가격
+  - name: ASK_STEP4_BSOD_RQTY
+    expr: SUM(ASK_STEP4_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도4단계우선호가잔량
+  - name: BID_STEP4_BSOD_RQTY
+    expr: SUM(BID_STEP4_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수4단계우선호가잔량
+  - name: ASK_STEP5_BSOD_PRC
+    expr: AVG(ASK_STEP5_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도5단계우선호가가격
+  - name: BID_STEP5_BSOD_PRC
+    expr: AVG(BID_STEP5_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수5단계우선호가가격
+  - name: ASK_STEP5_BSOD_RQTY
+    expr: SUM(ASK_STEP5_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도5단계우선호가잔량
+  - name: BID_STEP5_BSOD_RQTY
+    expr: SUM(BID_STEP5_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수5단계우선호가잔량
+  - name: ASK_STEP6_BSOD_PRC
+    expr: AVG(ASK_STEP6_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도6단계우선호가가격
+  - name: BID_STEP6_BSOD_PRC
+    expr: AVG(BID_STEP6_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수6단계우선호가가격
+  - name: ASK_STEP6_BSOD_RQTY
+    expr: SUM(ASK_STEP6_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도6단계우선호가잔량
+  - name: BID_STEP6_BSOD_RQTY
+    expr: SUM(BID_STEP6_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수6단계우선호가잔량
+  - name: ASK_STEP7_BSOD_PRC
+    expr: AVG(ASK_STEP7_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도7단계우선호가가격
+  - name: BID_STEP7_BSOD_PRC
+    expr: AVG(BID_STEP7_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수7단계우선호가가격
+  - name: ASK_STEP7_BSOD_RQTY
+    expr: SUM(ASK_STEP7_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도7단계우선호가잔량
+  - name: BID_STEP7_BSOD_RQTY
+    expr: SUM(BID_STEP7_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수7단계우선호가잔량
+  - name: ASK_STEP8_BSOD_PRC
+    expr: AVG(ASK_STEP8_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도8단계우선호가가격
+  - name: BID_STEP8_BSOD_PRC
+    expr: AVG(BID_STEP8_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수8단계우선호가가격
+  - name: ASK_STEP8_BSOD_RQTY
+    expr: SUM(ASK_STEP8_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도8단계우선호가잔량
+  - name: BID_STEP8_BSOD_RQTY
+    expr: SUM(BID_STEP8_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수8단계우선호가잔량
+  - name: ASK_STEP9_BSOD_PRC
+    expr: AVG(ASK_STEP9_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도9단계우선호가가격
+  - name: BID_STEP9_BSOD_PRC
+    expr: AVG(BID_STEP9_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수9단계우선호가가격
+  - name: ASK_STEP9_BSOD_RQTY
+    expr: SUM(ASK_STEP9_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도9단계우선호가잔량
+  - name: BID_STEP9_BSOD_RQTY
+    expr: SUM(BID_STEP9_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수9단계우선호가잔량
+  - name: ASK_STEP10_BSOD_PRC
+    expr: AVG(ASK_STEP10_BSOD_PRC)
+    data_type: NUMBER
+    description: 매도10단계우선호가가격
+  - name: BID_STEP10_BSOD_PRC
+    expr: AVG(BID_STEP10_BSOD_PRC)
+    data_type: NUMBER
+    description: 매수10단계우선호가가격
+  - name: ASK_STEP10_BSOD_RQTY
+    expr: SUM(ASK_STEP10_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매도10단계우선호가잔량
+  - name: BID_STEP10_BSOD_RQTY
+    expr: SUM(BID_STEP10_BSOD_RQTY)
+    data_type: NUMBER
+    description: 매수10단계우선호가잔량
+  - name: AKOD_OPN_STEP_RQTY_SUM_QTY
+    expr: SUM(AKOD_OPN_STEP_RQTY_SUM_QTY)
+    data_type: NUMBER
+    description: 매도호가공개단계잔량합계수량
+  - name: BIOD_OPN_STEP_RQTY_SUM_QTY
+    expr: SUM(BIOD_OPN_STEP_RQTY_SUM_QTY)
+    data_type: NUMBER
+    description: 매수호가공개단계잔량합계수량
+  - name: DEEM_TD_PRC
+    expr: AVG(DEEM_TD_PRC)
+    data_type: NUMBER
+    description: 예상체결가격
+  - name: DEEM_TD_QTY
+    expr: SUM(DEEM_TD_QTY)
+    data_type: NUMBER
+    description: 예상체결수량
+  - name: MID_PRC
+    expr: AVG(MID_PRC)
+    data_type: NUMBER
+    description: 중간가격
+  - name: ASK_MDPR_RQTY_SUM_QTY
+    expr: SUM(ASK_MDPR_RQTY_SUM_QTY)
+    data_type: NUMBER
+    description: 매도중간가잔량합계수량
+  - name: BID_MDPR_RQTY_SUM_QTY
+    expr: SUM(BID_MDPR_RQTY_SUM_QTY)
+    data_type: NUMBER
+    description: 매수중간가잔량합계수량
+- name: NX_HT_ONL_MKTPR_E1
+  description: Online market price table for NX_HT_ONL_MKTPR_E1
+  base_table:
+    database: NEXTRADE_EQUITY_MARKET_DATA
+    schema: FIN
+    table: NX_HT_ONL_MKTPR_E1
+  primary_key:
+    columns:
+    - BRD_ID
+    - DWDD
+    - INFO_DSTB_SEQ
+    - ISU_CD
+    - MKT_ID
+  dimensions:
+  - name: MKT_ID
+    expr: MKT_ID
+    data_type: VARCHAR
+    description: Market ID
+    synonyms:
+    - 'market ID'
+    - 'market identifier'
+    - '시장ID'
+    - '시장 식별자'
+    sample_values:
+    - KSQ
+    - STK
+  - name: BRD_ID
+    expr: BRD_ID
+    data_type: VARCHAR
+    description: Board ID
+    synonyms:
+    - 'board ID'
+    - 'board identifier'
+    - '보드ID'
+    - '보드 식별자'
+    sample_values:
+    - G3
+  - name: ISU_CD
+    expr: ISU_CD
+    data_type: VARCHAR
+    description: Issue code
+    synonyms:
+    - 'issue code'
+    - 'stock code'
+    - '종목코드'
+    - '주식 코드'
+    sample_values:
+    - KR7126340009
+    - KR7008730004
+    - KR7457190007
+    - KR7484810007
+    - KR7022100002
+  - name: INFO_DSTB_SEQ
+    expr: INFO_DSTB_SEQ
+    data_type: NUMBER
+    description: Information distribution sequence number
+    synonyms:
+    - 'information distribution sequence'
+    - 'distribution sequence number'
+    - '정보분배일련번호'
+    - '정보 분배 일련번호'
+  time_dimensions:
+  - name: DWDD
+    expr: DWDD
+    data_type: DATE
+    description: DW date
+    synonyms:
+    - 'DW date'
+    - 'data warehouse date'
+    - 'DW일자'
+    - '데이터 웨어하우스 일자'
+  measures:
+  - name: AKOD_TOT_RQTY
+    expr: SUM(AKOD_TOT_RQTY)
+    data_type: NUMBER
+    description: Total ask order quantity
+    synonyms:
+    - 'total ask quantity'
+    - 'total sell order quantity'
+    - '매도호가총잔량'
+    - '매도 호가 총 잔량'
+  - name: BIOD_TOT_RQTY
+    expr: SUM(BIOD_TOT_RQTY)
+    data_type: NUMBER
+    description: Total bid order quantity
+    synonyms:
+    - 'total bid quantity'
+    - 'total buy order quantity'
+    - '매수호가총잔량'
+    - '매수 호가 총 잔량'
+- name: NX_HT_ONL_STATS_B5
+  description: Online statistics for market fluctuations
+  base_table:
+    database: NEXTRADE_EQUITY_MARKET_DATA
+    schema: FIN
+    table: NX_HT_ONL_STATS_B5
+  primary_key:
+    columns:
+    - DATA_CALC_TIME
+    - DWDD
+    - MKT_ID
+  dimensions:
+  - name: DATA_CALC_TIME
+    expr: DATA_CALC_TIME
+    data_type: VARCHAR
+    description: Time when data was calculated
+    synonyms:
+    - 'data calculation time'
+    - 'data generation time'
+    - '데이터산출시각'
+    - '데이터생성시각'
+    sample_values:
+    - '163130'
+    - '124530'
+    - '183340'
+    - '102100'
+    - '115900'
+  - name: MKT_ID
+    expr: MKT_ID
+    data_type: VARCHAR
+    description: Market identifier
+    synonyms:
+    - 'market ID'
+    - 'market identifier'
+    - '시장ID'
+    - '시장식별자'
+    sample_values:
+    - KSQ
+    - STK
+  time_dimensions:
+  - name: DWDD
+    expr: DWDD
+    data_type: DATE
+    description: Date in data warehouse
+    synonyms:
+    - 'DW date'
+    - 'data warehouse date'
+    - 'DW일자'
+    - '데이터웨어하우스일자'
+  measures:
+  - name: FLUC_OBJ_ISU_CT
+    expr: SUM(FLUC_OBJ_ISU_CT)
+    data_type: NUMBER
+    description: Number of fluctuating issues
+    synonyms:
+    - 'fluctuating issues count'
+    - 'number of fluctuating issues'
+    - '등락대상종목수'
+    - '등락종목수'
+  - name: FLUC_TRD_FORM_CT
+    expr: SUM(FLUC_TRD_FORM_CT)
+    data_type: NUMBER
+    description: Number of fluctuating trades formed
+    synonyms:
+    - 'fluctuating trades count'
+    - 'number of fluctuating trades'
+    - '등락거래형성수'
+    - '등락거래수'
+  - name: FLUC_UPLM_CT
+    expr: SUM(FLUC_UPLM_CT)
+    data_type: NUMBER
+    description: Number of upper limit fluctuations
+    synonyms:
+    - 'upper limit count'
+    - 'number of upper limit fluctuations'
+    - '등락상한수'
+    - '상한가수'
+  - name: FLUC_UP_CT
+    expr: SUM(FLUC_UP_CT)
+    data_type: NUMBER
+    description: Number of upward fluctuations
+    synonyms:
+    - 'upward fluctuations count'
+    - 'number of upward fluctuations'
+    - '등락상승수'
+    - '상승수'
+  - name: FLUC_STDN_CT
+    expr: SUM(FLUC_STDN_CT)
+    data_type: NUMBER
+    description: Number of steady fluctuations
+    synonyms:
+    - 'steady fluctuations count'
+    - 'number of steady fluctuations'
+    - '등락보합수'
+    - '보합수'
+  - name: FLUC_LWLM_CT
+    expr: SUM(FLUC_LWLM_CT)
+    data_type: NUMBER
+    description: Number of lower limit fluctuations
+    synonyms:
+    - 'lower limit count'
+    - 'number of lower limit fluctuations'
+    - '등락하한수'
+    - '하한가수'
+  - name: FLUC_DN_CT
+    expr: SUM(FLUC_DN_CT)
+    data_type: NUMBER
+    description: Number of downward fluctuations
+    synonyms:
+    - 'downward fluctuations count'
+    - 'number of downward fluctuations'
+    - '등락하락수'
+    - '하락수'
+  - name: FLUC_BQUT_CT
+    expr: SUM(FLUC_BQUT_CT)
+    data_type: NUMBER
+    description: Number of trend fluctuations
+    synonyms:
+    - 'trend fluctuations count'
+    - 'number of trend fluctuations'
+    - '등락기세수'
+    - '기세수'
+  - name: FLUC_BQUT_UP_CT
+    expr: SUM(FLUC_BQUT_UP_CT)
+    data_type: NUMBER
+    description: Number of upward trend fluctuations
+    synonyms:
+    - 'upward trend count'
+    - 'number of upward trend fluctuations'
+    - '등락기세상승수'
+    - '기세상승수'
+  - name: FLUC_BQUT_DN_CT
+    expr: SUM(FLUC_BQUT_DN_CT)
+    data_type: NUMBER
+    description: Number of downward trend fluctuations
+    synonyms:
+    - 'downward trend count'
+    - 'number of downward trend fluctuations'
+    - '등락기세하락수'
+    - '기세하락수'
+- name: NX_HT_ONL_STATS_C3
+  description: Online statistics for market transactions
+  base_table:
+    database: NEXTRADE_EQUITY_MARKET_DATA
+    schema: FIN
+    table: NX_HT_ONL_STATS_C3
+  primary_key:
+    columns:
+    - DATA_CALC_TIME
+    - DWDD
+    - ISU_CD
+    - MKT_ID
+  dimensions:
+  - name: DATA_CALC_TIME
+    expr: DATA_CALC_TIME
+    data_type: VARCHAR
+    description: Data calculation time
+    synonyms:
+    - 'data calculation time'
+    - 'calculation time'
+    - '데이터산출시각'
+    - '산출시각'
+    sample_values:
+    - '160000'
+    - '140730'
+    - '132530'
+    - '163300'
+    - '131500'
+  - name: MKT_ID
+    expr: MKT_ID
+    data_type: VARCHAR
+    description: Market identifier
+    synonyms:
+    - 'market ID'
+    - 'market identifier'
+    - '시장ID'
+    - '시장 식별자'
+    sample_values:
+    - STK
+    - KSQ
+  - name: ISU_CD
+    expr: ISU_CD
+    data_type: VARCHAR
+    description: Stock code
+    synonyms:
+    - 'stock code'
+    - 'issue code'
+    - '종목코드'
+    - '주식 코드'
+    sample_values:
+    - KR7011790003
+    - KR7365340009
+    - KR7063080006
+    - KR7314930009
+    - KR7139480008
+  time_dimensions:
+  - name: DWDD
+    expr: DWDD
+    data_type: DATE
+    description: DW date
+    synonyms:
+    - 'DW date'
+    - 'data warehouse date'
+    - 'DW일자'
+    - '데이터웨어하우스 일자'
+  measures:
+  - name: ASK_ARB_RQTY
+    expr: SUM(ASK_ARB_RQTY)
+    data_type: NUMBER
+    description: Sell arbitrage remaining quantity
+    synonyms:
+    - 'sell arbitrage remaining quantity'
+    - '매도차익잔량'
+    - '매도 차익 잔량'
+  - name: BID_ARB_RQTY
+    expr: SUM(BID_ARB_RQTY)
+    data_type: NUMBER
+    description: Buy arbitrage remaining quantity
+    synonyms:
+    - 'buy arbitrage remaining quantity'
+    - '매수차익잔량'
+    - '매수 차익 잔량'
+  - name: ASK_NARB_RQTY
+    expr: SUM(ASK_NARB_RQTY)
+    data_type: NUMBER
+    description: Sell non-arbitrage remaining quantity
+    synonyms:
+    - 'sell non-arbitrage remaining quantity'
+    - '매도비차익잔량'
+    - '매도 비차익 잔량'
+  - name: BID_NARB_RQTY
+    expr: SUM(BID_NARB_RQTY)
+    data_type: NUMBER
+    description: Buy non-arbitrage remaining quantity
+    synonyms:
+    - 'buy non-arbitrage remaining quantity'
+    - '매수비차익잔량'
+    - '매수 비차익 잔량'
+  - name: ASK_ARB_QTY
+    expr: SUM(ASK_ARB_QTY)
+    data_type: NUMBER
+    description: Sell arbitrage quantity
+    synonyms:
+    - 'sell arbitrage quantity'
+    - '매도차익수량'
+    - '매도 차익 수량'
+  - name: BID_ARB_QTY
+    expr: SUM(BID_ARB_QTY)
+    data_type: NUMBER
+    description: Buy arbitrage quantity
+    synonyms:
+    - 'buy arbitrage quantity'
+    - '매수차익수량'
+    - '매수 차익 수량'
+  - name: ASK_NARB_QTY
+    expr: SUM(ASK_NARB_QTY)
+    data_type: NUMBER
+    description: Sell non-arbitrage quantity
+    synonyms:
+    - 'sell non-arbitrage quantity'
+    - '매도비차익수량'
+    - '매도 비차익 수량'
+  - name: BID_NARB_QTY
+    expr: SUM(BID_NARB_QTY)
+    data_type: NUMBER
+    description: Buy non-arbitrage quantity
+    synonyms:
+    - 'buy non-arbitrage quantity'
+    - '매수비차익수량'
+    - '매수 비차익 수량'
+  - name: TRAK_ARB_TD_QTY
+    expr: SUM(TRAK_ARB_TD_QTY)
+    data_type: NUMBER
+    description: Entrusted sell arbitrage transaction quantity
+    synonyms:
+    - 'entrusted sell arbitrage transaction quantity'
+    - '위탁매도차익체결수량'
+    - '위탁 매도 차익 체결 수량'
+  - name: PCAK_ARB_TD_QTY
+    expr: SUM(PCAK_ARB_TD_QTY)
+    data_type: NUMBER
+    description: Self sell arbitrage transaction quantity
+    synonyms:
+    - 'self sell arbitrage transaction quantity'
+    - '자기매도차익체결수량'
+    - '자기 매도 차익 체결 수량'
+  - name: TRBD_ARB_TD_QTY
+    expr: SUM(TRBD_ARB_TD_QTY)
+    data_type: NUMBER
+    description: Entrusted buy arbitrage transaction quantity
+    synonyms:
+    - 'entrusted buy arbitrage transaction quantity'
+    - '위탁매수차익체결수량'
+    - '위탁 매수 차익 체결 수량'
+  - name: PCBD_ARB_TD_QTY
+    expr: SUM(PCBD_ARB_TD_QTY)
+    data_type: NUMBER
+    description: Self buy arbitrage transaction quantity
+    synonyms:
+    - 'self buy arbitrage transaction quantity'
+    - '자기매수차익체결수량'
+    - '자기 매수 차익 체결 수량'
+  - name: TRAK_NARB_TD_QTY
+    expr: SUM(TRAK_NARB_TD_QTY)
+    data_type: NUMBER
+    description: Entrusted sell non-arbitrage transaction quantity
+    synonyms:
+    - 'entrusted sell non-arbitrage transaction quantity'
+    - '위탁매도비차익체결수량'
+    - '위탁 매도 비차익 체결 수량'
+  - name: PCAK_NARB_TD_QTY
+    expr: SUM(PCAK_NARB_TD_QTY)
+    data_type: NUMBER
+    description: Self sell non-arbitrage transaction quantity
+    synonyms:
+    - 'self sell non-arbitrage transaction quantity'
+    - '자기매도비차익체결수량'
+    - '자기 매도 비차익 체결 수량'
+  - name: TRBD_NARB_TD_QTY
+    expr: SUM(TRBD_NARB_TD_QTY)
+    data_type: NUMBER
+    description: Entrusted buy non-arbitrage transaction quantity
+    synonyms:
+    - 'entrusted buy non-arbitrage transaction quantity'
+    - '위탁매수비차익체결수량'
+    - '위탁 매수 비차익 체결 수량'
+  - name: PCBD_NARB_TD_QTY
+    expr: SUM(PCBD_NARB_TD_QTY)
+    data_type: NUMBER
+    description: Self buy non-arbitrage transaction quantity
+    synonyms:
+    - 'self buy non-arbitrage transaction quantity'
+    - '자기매수비차익체결수량'
+    - '자기 매수 비차익 체결 수량'
+  - name: TRAK_ARB_TRVAL
+    expr: SUM(TRAK_ARB_TRVAL)
+    data_type: NUMBER
+    description: Entrusted sell arbitrage transaction value
+    synonyms:
+    - 'entrusted sell arbitrage transaction value'
+    - '위탁매도차익거래대금'
+    - '위탁 매도 차익 거래 대금'
+  - name: PCAK_ARB_TRVAL
+    expr: SUM(PCAK_ARB_TRVAL)
+    data_type: NUMBER
+    description: Self sell arbitrage transaction value
+    synonyms:
+    - 'self sell arbitrage transaction value'
+    - '자기매도차익거래대금'
+    - '자기 매도 차익 거래 대금'
+  - name: TRBD_ARB_TRVAL
+    expr: SUM(TRBD_ARB_TRVAL)
+    data_type: NUMBER
+    description: Entrusted buy arbitrage transaction value
+    synonyms:
+    - 'entrusted buy arbitrage transaction value'
+    - '위탁매수차익거래대금'
+    - '위탁 매수 차익 거래 대금'
+  - name: PCBD_ARB_TRVAL
+    expr: SUM(PCBD_ARB_TRVAL)
+    data_type: NUMBER
+    description: Self buy arbitrage transaction value
+    synonyms:
+    - 'self buy arbitrage transaction value'
+    - '자기매수차익거래대금'
+    - '자기 매수 차익 거래 대금'
+  - name: TRAK_NARB_TRVAL
+    expr: SUM(TRAK_NARB_TRVAL)
+    data_type: NUMBER
+    description: Entrusted sell non-arbitrage transaction value
+    synonyms:
+    - 'entrusted sell non-arbitrage transaction value'
+    - '위탁매도비차익거래대금'
+    - '위탁 매도 비차익 거래 대금'
+  - name: PCAK_NARB_TRVAL
+    expr: SUM(PCAK_NARB_TRVAL)
+    data_type: NUMBER
+    description: Self sell non-arbitrage transaction value
+    synonyms:
+    - 'self sell non-arbitrage transaction value'
+    - '자기매도비차익거래대금'
+    - '자기 매도 비차익 거래 대금'
+  - name: TRBD_NARB_TRVAL
+    expr: SUM(TRBD_NARB_TRVAL)
+    data_type: NUMBER
+    description: Entrusted buy non-arbitrage transaction value
+    synonyms:
+    - 'entrusted buy non-arbitrage transaction value'
+    - '위탁매수비차익거래대금'
+    - '위탁 매수 비차익 거래 대금'
+  - name: PCBD_NARB_TRVAL
+    expr: SUM(PCBD_NARB_TRVAL)
+    data_type: NUMBER
+    description: Self buy non-arbitrage transaction value
+    synonyms:
+    - 'self buy non-arbitrage transaction value'
+    - '자기매수비차익거래대금'
+    - '자기 매수 비차익 거래 대금'
+- name: NX_HT_ONL_STATS_P0
+  description: Online trading statistics for various investor types
+  base_table:
+    database: NEXTRADE_EQUITY_MARKET_DATA
+    schema: FIN
+    table: NX_HT_ONL_STATS_P0
+  primary_key:
+    columns:
+    - DATA_CALC_TIME
+    - DWDD
+    - MKT_ID
+  dimensions:
+  - name: DATA_CALC_TIME
+    expr: DATA_CALC_TIME
+    data_type: VARCHAR
+    description: The time when the data was calculated
+    synonyms:
+    - 'data calculation time'
+    - 'data generation time'
+    - '데이터 산출 시각'
+    - '데이터 생성 시각'
+    sample_values:
+    - '175830'
+    - '142100'
+    - '163130'
+    - '144330'
+    - '200000'
+  - name: MKT_ID
+    expr: MKT_ID
+    data_type: VARCHAR
+    description: The market identifier
+    synonyms:
+    - 'market ID'
+    - 'market identifier'
+    - '시장 ID'
+    - '시장 식별자'
+    sample_values:
+    - STK
+    - KSQ
+  - name: IVTR_TP_CD
+    expr: IVTR_TP_CD
+    data_type: VARCHAR
+    description: The investor type code
+    synonyms:
+    - 'investor type code'
+    - 'investor classification code'
+    - '투자자 구분 코드'
+    - '투자자 분류 코드'
+    sample_values:
+    - '3100'
+    - '1000'
+    - '8000'
+    - '6000'
+    - '7100'
+  time_dimensions:
+  - name: DWDD
+    expr: DWDD
+    data_type: DATE
+    description: The date of the data warehouse
+    synonyms:
+    - 'data warehouse date'
+    - 'DW date'
+    - 'DW 일자'
+    - '데이터 웨어하우스 일자'
+  measures:
+  - name: ASK_ARB_TD_QTY
+    expr: SUM(ASK_ARB_TD_QTY)
+    data_type: NUMBER
+    description: The quantity of arbitrage sell trades
+    synonyms:
+    - 'arbitrage sell quantity'
+    - 'arbitrage sell trade quantity'
+    - '매도 차익 체결 수량'
+    - '매도 차익 거래 수량'
+  - name: ASK_ARB_TRVAL
+    expr: SUM(ASK_ARB_TRVAL)
+    data_type: NUMBER
+    description: The value of arbitrage sell trades
+    synonyms:
+    - 'arbitrage sell value'
+    - 'arbitrage sell trade value'
+    - '매도 차익 거래 대금'
+    - '매도 차익 거래 금액'
+  - name: ASK_NARB_TD_QTY
+    expr: SUM(ASK_NARB_TD_QTY)
+    data_type: NUMBER
+    description: The quantity of non-arbitrage sell trades
+    synonyms:
+    - 'non-arbitrage sell quantity'
+    - 'non-arbitrage sell trade quantity'
+    - '매도 비차익 체결 수량'
+    - '매도 비차익 거래 수량'
+  - name: ASK_NARB_TRVAL
+    expr: SUM(ASK_NARB_TRVAL)
+    data_type: NUMBER
+    description: The value of non-arbitrage sell trades
+    synonyms:
+    - 'non-arbitrage sell value'
+    - 'non-arbitrage sell trade value'
+    - '매도 비차익 거래 대금'
+    - '매도 비차익 거래 금액'
+  - name: BID_ARB_TD_QTY
+    expr: SUM(BID_ARB_TD_QTY)
+    data_type: NUMBER
+    description: The quantity of arbitrage buy trades
+    synonyms:
+    - 'arbitrage buy quantity'
+    - 'arbitrage buy trade quantity'
+    - '매수 차익 체결 수량'
+    - '매수 차익 거래 수량'
+  - name: BID_ARB_TRVAL
+    expr: SUM(BID_ARB_TRVAL)
+    data_type: NUMBER
+    description: The value of arbitrage buy trades
+    synonyms:
+    - 'arbitrage buy value'
+    - 'arbitrage buy trade value'
+    - '매수 차익 거래 대금'
+    - '매수 차익 거래 금액'
+  - name: BID_NARB_TD_QTY
+    expr: SUM(BID_NARB_TD_QTY)
+    data_type: NUMBER
+    description: The quantity of non-arbitrage buy trades
+    synonyms:
+    - 'non-arbitrage buy quantity'
+    - 'non-arbitrage buy trade quantity'
+    - '매수 비차익 체결 수량'
+    - '매수 비차익 거래 수량'
+  - name: BID_NARB_TRVAL
+    expr: SUM(BID_NARB_TRVAL)
+    data_type: NUMBER
+    description: The value of non-arbitrage buy trades
+    synonyms:
+    - 'non-arbitrage buy value'
+    - 'non-arbitrage buy trade value'
+    - '매수 비차익 거래 대금'
+    - '매수 비차익 거래 금액'
+relationships:
+- name: NX_HT_BAT_REFER_A0_to_NX_HT_ONL_MKTPR_A3
+  left_table: NX_HT_BAT_REFER_A0
+  right_table: NX_HT_ONL_MKTPR_A3
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_BAT_REFER_A0_to_NX_HT_ONL_MKTPR_B6
+  left_table: NX_HT_BAT_REFER_A0
+  right_table: NX_HT_ONL_MKTPR_B6
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_BAT_REFER_A0_to_NX_HT_ONL_MKTPR_E1
+  left_table: NX_HT_BAT_REFER_A0
+  right_table: NX_HT_ONL_MKTPR_E1
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_BAT_REFER_A0_to_NX_HT_ONL_STATS_B5
+  left_table: NX_HT_BAT_REFER_A0
+  right_table: NX_HT_ONL_STATS_B5
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_BAT_REFER_A0_to_NX_HT_ONL_STATS_C3
+  left_table: NX_HT_BAT_REFER_A0
+  right_table: NX_HT_ONL_STATS_C3
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_BAT_REFER_A0_to_NX_HT_ONL_STATS_P0
+  left_table: NX_HT_BAT_REFER_A0
+  right_table: NX_HT_ONL_STATS_P0
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_A3_to_NX_HT_ONL_MKTPR_B6
+  left_table: NX_HT_ONL_MKTPR_A3
+  right_table: NX_HT_ONL_MKTPR_B6
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_A3_to_NX_HT_ONL_MKTPR_E1
+  left_table: NX_HT_ONL_MKTPR_A3
+  right_table: NX_HT_ONL_MKTPR_E1
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_A3_to_NX_HT_ONL_STATS_B5
+  left_table: NX_HT_ONL_MKTPR_A3
+  right_table: NX_HT_ONL_STATS_B5
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_A3_to_NX_HT_ONL_STATS_C3
+  left_table: NX_HT_ONL_MKTPR_A3
+  right_table: NX_HT_ONL_STATS_C3
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_A3_to_NX_HT_ONL_STATS_P0
+  left_table: NX_HT_ONL_MKTPR_A3
+  right_table: NX_HT_ONL_STATS_P0
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_B6_to_NX_HT_ONL_MKTPR_E1
+  left_table: NX_HT_ONL_MKTPR_B6
+  right_table: NX_HT_ONL_MKTPR_E1
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_B6_to_NX_HT_ONL_STATS_B5
+  left_table: NX_HT_ONL_MKTPR_B6
+  right_table: NX_HT_ONL_STATS_B5
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_B6_to_NX_HT_ONL_STATS_C3
+  left_table: NX_HT_ONL_MKTPR_B6
+  right_table: NX_HT_ONL_STATS_C3
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_B6_to_NX_HT_ONL_STATS_P0
+  left_table: NX_HT_ONL_MKTPR_B6
+  right_table: NX_HT_ONL_STATS_P0
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_E1_to_NX_HT_ONL_STATS_B5
+  left_table: NX_HT_ONL_MKTPR_E1
+  right_table: NX_HT_ONL_STATS_B5
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_E1_to_NX_HT_ONL_STATS_C3
+  left_table: NX_HT_ONL_MKTPR_E1
+  right_table: NX_HT_ONL_STATS_C3
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_MKTPR_E1_to_NX_HT_ONL_STATS_P0
+  left_table: NX_HT_ONL_MKTPR_E1
+  right_table: NX_HT_ONL_STATS_P0
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_STATS_B5_to_NX_HT_ONL_STATS_C3
+  left_table: NX_HT_ONL_STATS_B5
+  right_table: NX_HT_ONL_STATS_C3
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_STATS_B5_to_NX_HT_ONL_STATS_P0
+  left_table: NX_HT_ONL_STATS_B5
+  right_table: NX_HT_ONL_STATS_P0
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
+- name: NX_HT_ONL_STATS_C3_to_NX_HT_ONL_STATS_P0
+  left_table: NX_HT_ONL_STATS_C3
+  right_table: NX_HT_ONL_STATS_P0
+  relationship_type: many_to_one
+  join_type: left_outer
+  relationship_columns:
+  - left_column: DWDD
+    right_column: DWDD
