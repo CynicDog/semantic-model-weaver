@@ -630,7 +630,7 @@ flowchart TD
     DB[("Snowflake\ndatabase.schema")]
 
     DB -->|INFORMATION_SCHEMA| disc["SchemaDiscovery"]
-    DB -->|ACCOUNT_USAGE\n.QUERY_HISTORY| qh["QueryHistoryMiner"]
+    DB -->|"ACCOUNT_USAGE<br/>.QUERY_HISTORY"| qh["QueryHistoryMiner"]
 
     disc -->|SchemaProfile| writer["YAMLWriter"]
     disc -->|SchemaProfile| scen["ScenarioGenerator"]
@@ -646,7 +646,7 @@ flowchart TD
 
     probe -->|ProbeResult per question| eval
 
-    eval -->|feedback_df\n(scores + explanations)| refiner["RefinementAgent"]
+    eval -->|"feedback_df<br/>(scores + explanations)"| refiner["RefinementAgent"]
     refiner -->|patched SemanticModel| probe
 ```
 
