@@ -97,7 +97,7 @@ def _print_banner():
     console.print()
     console.print(_BANNER, style="bold cyan", highlight=False)
     console.print()
-    console.print("  [bold white]Semantic Model Weaver[/bold white]  [dim]·  Snowflake Hackathon 2026 Seoul  ·  @CynicDog[/dim]")
+    console.print("  [bold white]Semantic Model Weaver[/bold white]  [dim]·  Snowflake Hackathon 2026 Seoul  ·  @CynicDog - Hypaspist[/dim]")
     console.rule(style="cyan")
     console.print()
 
@@ -446,11 +446,8 @@ def _show_plan(iterations: int = 3):
     def _arrow_h(color: str = "cyan") -> Text:
         return Text(" ──► ", style=f"bold {color}")
 
-    def _box(title: str, file_: str, body: str, color: str = "cyan", w: int = 30) -> Panel:
-        hdr = Text()
-        hdr.append(title + "\n", style=f"bold {color}")
-        hdr.append(file_, style="dim")
-        return Panel(body, title=hdr, title_align="left", width=w, border_style=color, padding=(0, 1))
+    def _box(title: str, body: str, color: str = "cyan", w: int = 30) -> Panel:
+        return Panel(body, title=Text(title, style=f"bold {color}"), title_align="left", width=w, border_style=color, padding=(0, 1))
 
     def _hrow(*cells) -> Table:
         tbl = Table.grid()
@@ -460,7 +457,7 @@ def _show_plan(iterations: int = 3):
         return tbl
 
     console.print()
-    console.print("  [bold white]Pipeline Plan[/bold white]  [dim]·  --show-plan[/dim]")
+    console.print("  [bold white]파이프라인 실행 계획[/bold white]  [dim]·  시맨틱 모델 작성을 자동화하고 확장합니다  ·  --show-plan[/dim]")
     console.print()
 
     W3 = 32
@@ -469,90 +466,85 @@ def _show_plan(iterations: int = 3):
     WM = 78
 
     console.print(Align(_hrow(
-        _box("SchemaDiscovery", "discovery.py",
-             "Reads INFORMATION_SCHEMA via Snowpark.\n"
-             "Profiles columns; samples text/boolean.\n"
-             "Infers FK candidates by name + type.\n"
+        _box("SchemaDiscovery",
+             "Snowpark로 INFORMATION_SCHEMA 읽기.\n"
+             "컬럼 프로파일링; 텍스트/불리언 샘플링.\n"
+             "이름 + 타입으로 FK 후보 추론.\n"
              "[dim]→ SchemaProfile[/dim]", "cyan", W3),
         _arrow_h(),
-        _box("YAMLWriter", "writer.py",
-             "Rule-based (no LLM). Classifies cols\n"
-             "into dimensions / measures /\n"
-             "time_dimensions. Builds Relationships.\n"
+        _box("YAMLWriter",
+             "SchemaProfile 기반으로\n"
+             "Cortex Analyst 규격의\n"
+             "시맨틱 YAML 생성.\n"
              "[dim]→ SemanticModel[/dim]", "cyan", W3),
         _arrow_h(),
-        _box("QueryHistoryMiner", "query_history.py",
-             "Mines QUERY_HISTORY (90-day, ≤1000).\n"
-             "Extracts column aliases from SQL\n"
-             "as business vocabulary terms.\n"
+        _box("QueryHistoryMiner",
+             "QUERY_HISTORY 마이닝 (90일, ≤1000건).\n"
+             "SQL에서 컬럼 별칭 추출하여\n"
+             "비즈니스 어휘 용어 구축.\n"
              "[dim]→ QueryTerms[/dim]", "cyan", W3),
     ), "center"))
 
     _arrow_v()
 
     console.print(Align(_hrow(
-        _box("SynonymEnricher", "enricher.py",
-             "Cortex COMPLETE() (mistral-large2) per table.\n"
-             "Descriptions + synonyms grounded by QueryTerms.\n"
-             "No structural changes to the model.\n"
+        _box("SynonymEnricher",
+             "테이블별 Cortex COMPLETE() (mistral-large2).\n"
+             "QueryTerms 기반으로 설명 + 동의어 보강.\n"
              "[dim]→ SemanticModel.enriched[/dim]", "cyan", W2),
         _arrow_h(),
-        _box("ScenarioGenerator", "scenarios.py",
-             "Cortex COMPLETE() · 5 NL questions per table\n"
-             "(including joins). Ground-truth SQL executed\n"
-             "directly via Snowpark. Failed SQL dropped.\n"
+        _box("ScenarioGenerator",
+             "Cortex COMPLETE() · 테이블당 NL 질문 5개\n"
+             "(조인 포함). 정답 SQL은 Snowpark로\n"
+             "직접 실행. 실패한 SQL은 제외.\n"
              "[dim]→ golden_set + questions[/dim]", "cyan", W2),
     ), "center"))
 
     _arrow_v()
 
-    pad = 46
-    console.print(
-        Align(
-            f"┌{'─' * pad}┐\n"
-            f"│  [yellow]loop[/yellow] [dim]· 1 of {iterations} iter(s) shown · stops when correctness ≥ 0.65[/dim]  │\n"
-            f"└{'─' * pad}┘",
-            "center",
-        ),
-        highlight=False,
-    )
-
-    _arrow_v()
-
-    console.print(Align(_hrow(
-        _box("CortexAnalystProbe", "probe.py",
-             "Fires NL questions at Cortex\n"
-             "Analyst REST API with current\n"
-             "YAML; executes returned SQL.\n"
-             "[dim]→ ProbeResult[/dim]", "yellow", W4),
-        _arrow_h("yellow"),
-        _box("Evaluator + TruLens", "evaluator.py",
-             "OTEL spans → Snowflake event\n"
-             "table. Computes answer_relevance\n"
-             "+ correctness server-side.\n"
-             "[dim]→ feedback_df[/dim]", "yellow", W4),
-        _arrow_h("yellow"),
-        _box("VerifiedQuery", "__main__.py",
-             "Correctness ≥ 0.80 questions\n"
-             "promoted to verified_queries\n"
-             "to anchor SQL generation.\n"
-             "[dim]→ SemanticModel[/dim]", "yellow", W4),
-        _arrow_h("yellow"),
-        _box("RefinementAgent", "refiner.py",
-             "Cortex COMPLETE() patches\n"
-             "synonyms + descriptions only.\n"
-             "None on convergence (≥ 0.65).\n"
-             "[dim]→ patched SemanticModel[/dim]", "yellow", W4),
-        Text(" ↺", style="bold yellow"),
+    loop_title = Text()
+    loop_title.append("반복 루프", style="bold yellow")
+    loop_title.append(f"  · {iterations}회 · correctness ≥ 0.65 시 종료", style="dim")
+    console.print(Align(Panel(
+        Align(_hrow(
+            _box("CortexAnalystProbe",
+                 "현재 YAML로 Cortex Analyst\n"
+                 "REST API에 NL 질문 전송;\n"
+                 "반환된 SQL 실행.\n"
+                 "[dim]→ ProbeResult[/dim]", "yellow", W4),
+            _arrow_h("yellow"),
+            _box("Evaluator + TruLens",
+                 "Snowflake Evaluator Event 실행\n"
+                 "(TruLens). answer_relevance +\n"
+                 "correctness 계산.\n"
+                 "[dim]→ feedback_df[/dim]", "yellow", W4),
+            _arrow_h("yellow"),
+            _box("VerifiedQuery",
+                 "correctness ≥ 0.80 질문을\n"
+                 "예시 쿼리로 저장.\n"
+                 "\n"
+                 "[dim]→ SemanticModel[/dim]", "yellow", W4),
+            _arrow_h("yellow"),
+            _box("RefinementAgent",
+                 "Cortex COMPLETE()로 동의어\n"
+                 "+ 설명만 패치.\n"
+                 "수렴 시 (≥ 0.65) None 반환.\n"
+                 "[dim]→ 패치된 SemanticModel[/dim]", "yellow", W4),
+            Text(" ↺", style="bold yellow"),
+        ), "center"),
+        title=loop_title,
+        title_align="left",
+        border_style="yellow",
+        padding=(0, 1),
     ), "center"))
 
     _arrow_v()
 
     console.print(Align(
         _box(
-            "manifest/{DATABASE}.{SCHEMA}/{timestamp}/", "__main__.py",
+            "manifest/{DATABASE}.{SCHEMA}/{timestamp}/",
             "model.yaml  ·  model.enriched.yaml  ·  model.iter{N}.yaml  ·  model.final.yaml\n"
-            "synonyms.json  ·  scenarios.json     [dim]resumable via  --resume <run_dir>[/dim]",
+            "synonyms.json  ·  scenarios.json     [dim]--resume <run_dir> 로 재개 가능[/dim]",
             "green", WM,
         ),
     "center"))
@@ -753,25 +745,25 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog="weaver",
-        description="Semantic Model Weaver — Cortex Analyst semantic model generator and evaluator.",
+        description="Semantic Model Weaver — Cortex Analyst 시맨틱 모델 자동 생성 및 평가 도구.",
     )
-    parser.add_argument("--show-plan", action="store_true", help="Print the pipeline execution plan and exit.")
-    parser.add_argument("--setup", action="store_true", help="Create workspace DB, schema, and network policy. Safe to re-run.")
-    parser.add_argument("--reset-workspace", action="store_true", help="Drop and recreate the TruLens schema. Clears all evaluation records.")
-    parser.add_argument("--yes", action="store_true", help="Skip confirmation prompt for --reset-workspace.")
-    parser.add_argument("--database", help="Snowflake database to weave a model for.")
-    parser.add_argument("--schema", help="Snowflake schema to weave a model for.")
-    parser.add_argument("--iterations", type=int, default=3, help="Max refinement iterations (default: 3).")
-    parser.add_argument("--version", default="v1", help="TruLens app version tag (default: v1).")
+    parser.add_argument("--show-plan", action="store_true", help="파이프라인 실행 계획을 출력하고 종료합니다.")
+    parser.add_argument("--setup", action="store_true", help="워크스페이스 DB, 스키마, 네트워크 정책을 생성합니다. 재실행해도 안전합니다.")
+    parser.add_argument("--reset-workspace", action="store_true", help="TruLens 스키마를 삭제 후 재생성합니다. 모든 평가 기록이 삭제됩니다.")
+    parser.add_argument("--yes", action="store_true", help="--reset-workspace 확인 프롬프트를 건너뜁니다.")
+    parser.add_argument("--database", help="모델을 생성할 Snowflake 데이터베이스.")
+    parser.add_argument("--schema", help="모델을 생성할 Snowflake 스키마.")
+    parser.add_argument("--iterations", type=int, default=3, help="최대 정제 반복 횟수 (기본값: 3).")
+    parser.add_argument("--version", default="v1", help="TruLens 앱 버전 태그 (기본값: v1).")
     parser.add_argument(
         "--resume",
         metavar="RUN_DIR",
         help=(
-            "Resume from a previous run directory, e.g. "
+            "이전 실행 디렉토리에서 재개합니다. 예: "
             "manifest/NEXTRADE_EQUITY_MARKET_DATA.FIN/20260405_232125/. "
-            "The stage is detected automatically from the artifacts present: "
-            "scenarios.json → evaluation; synonyms.json → scenarios; model.yaml → enrichment. "
-            "--database and --schema are inferred from the path if not given."
+            "실행 단계는 존재하는 아티팩트로 자동 감지됩니다: "
+            "scenarios.json → 평가; synonyms.json → 시나리오; model.yaml → 보강. "
+            "--database 와 --schema 는 경로에서 자동 추론됩니다."
         ),
     )
     args = parser.parse_args()
