@@ -434,6 +434,131 @@ def _silence_third_party_loggers() -> None:
             logging.getLogger(name).setLevel(logging.ERROR)
 
 
+def _show_plan(iterations: int = 3):
+    from rich.align import Align
+    from rich.panel import Panel
+    from rich.table import Table
+    from rich.text import Text
+
+    def _arrow_v():
+        console.print(Align("↓", "center"), style="dim cyan")
+
+    def _arrow_h(color: str = "cyan") -> Text:
+        return Text(" ──► ", style=f"bold {color}")
+
+    def _box(title: str, file_: str, body: str, color: str = "cyan", w: int = 30) -> Panel:
+        hdr = Text()
+        hdr.append(title + "\n", style=f"bold {color}")
+        hdr.append(file_, style="dim")
+        return Panel(body, title=hdr, title_align="left", width=w, border_style=color, padding=(0, 1))
+
+    def _hrow(*cells) -> Table:
+        tbl = Table.grid()
+        for _ in cells:
+            tbl.add_column(vertical="middle")
+        tbl.add_row(*cells)
+        return tbl
+
+    console.print()
+    console.print("  [bold white]Pipeline Plan[/bold white]  [dim]·  --show-plan[/dim]")
+    console.print()
+
+    W3 = 32
+    W2 = 49
+    W4 = 26
+    WM = 78
+
+    console.print(Align(_hrow(
+        _box("SchemaDiscovery", "discovery.py",
+             "Reads INFORMATION_SCHEMA via Snowpark.\n"
+             "Profiles columns; samples text/boolean.\n"
+             "Infers FK candidates by name + type.\n"
+             "[dim]→ SchemaProfile[/dim]", "cyan", W3),
+        _arrow_h(),
+        _box("YAMLWriter", "writer.py",
+             "Rule-based (no LLM). Classifies cols\n"
+             "into dimensions / measures /\n"
+             "time_dimensions. Builds Relationships.\n"
+             "[dim]→ SemanticModel[/dim]", "cyan", W3),
+        _arrow_h(),
+        _box("QueryHistoryMiner", "query_history.py",
+             "Mines QUERY_HISTORY (90-day, ≤1000).\n"
+             "Extracts column aliases from SQL\n"
+             "as business vocabulary terms.\n"
+             "[dim]→ QueryTerms[/dim]", "cyan", W3),
+    ), "center"))
+
+    _arrow_v()
+
+    console.print(Align(_hrow(
+        _box("SynonymEnricher", "enricher.py",
+             "Cortex COMPLETE() (mistral-large2) per table.\n"
+             "Descriptions + synonyms grounded by QueryTerms.\n"
+             "No structural changes to the model.\n"
+             "[dim]→ SemanticModel.enriched[/dim]", "cyan", W2),
+        _arrow_h(),
+        _box("ScenarioGenerator", "scenarios.py",
+             "Cortex COMPLETE() · 5 NL questions per table\n"
+             "(including joins). Ground-truth SQL executed\n"
+             "directly via Snowpark. Failed SQL dropped.\n"
+             "[dim]→ golden_set + questions[/dim]", "cyan", W2),
+    ), "center"))
+
+    _arrow_v()
+
+    pad = 46
+    console.print(
+        Align(
+            f"┌{'─' * pad}┐\n"
+            f"│  [yellow]loop[/yellow] [dim]· 1 of {iterations} iter(s) shown · stops when correctness ≥ 0.65[/dim]  │\n"
+            f"└{'─' * pad}┘",
+            "center",
+        ),
+        highlight=False,
+    )
+
+    _arrow_v()
+
+    console.print(Align(_hrow(
+        _box("CortexAnalystProbe", "probe.py",
+             "Fires NL questions at Cortex\n"
+             "Analyst REST API with current\n"
+             "YAML; executes returned SQL.\n"
+             "[dim]→ ProbeResult[/dim]", "yellow", W4),
+        _arrow_h("yellow"),
+        _box("Evaluator + TruLens", "evaluator.py",
+             "OTEL spans → Snowflake event\n"
+             "table. Computes answer_relevance\n"
+             "+ correctness server-side.\n"
+             "[dim]→ feedback_df[/dim]", "yellow", W4),
+        _arrow_h("yellow"),
+        _box("VerifiedQuery", "__main__.py",
+             "Correctness ≥ 0.80 questions\n"
+             "promoted to verified_queries\n"
+             "to anchor SQL generation.\n"
+             "[dim]→ SemanticModel[/dim]", "yellow", W4),
+        _arrow_h("yellow"),
+        _box("RefinementAgent", "refiner.py",
+             "Cortex COMPLETE() patches\n"
+             "synonyms + descriptions only.\n"
+             "None on convergence (≥ 0.65).\n"
+             "[dim]→ patched SemanticModel[/dim]", "yellow", W4),
+        Text(" ↺", style="bold yellow"),
+    ), "center"))
+
+    _arrow_v()
+
+    console.print(Align(
+        _box(
+            "manifest/{DATABASE}.{SCHEMA}/{timestamp}/", "__main__.py",
+            "model.yaml  ·  model.enriched.yaml  ·  model.iter{N}.yaml  ·  model.final.yaml\n"
+            "synonyms.json  ·  scenarios.json     [dim]resumable via  --resume <run_dir>[/dim]",
+            "green", WM,
+        ),
+    "center"))
+    console.print()
+
+
 def _run_pipeline(
     database: str,
     schema: str,
@@ -630,6 +755,7 @@ def main():
         prog="weaver",
         description="Semantic Model Weaver — Cortex Analyst semantic model generator and evaluator.",
     )
+    parser.add_argument("--show-plan", action="store_true", help="Print the pipeline execution plan and exit.")
     parser.add_argument("--setup", action="store_true", help="Create workspace DB, schema, and network policy. Safe to re-run.")
     parser.add_argument("--reset-workspace", action="store_true", help="Drop and recreate the TruLens schema. Clears all evaluation records.")
     parser.add_argument("--yes", action="store_true", help="Skip confirmation prompt for --reset-workspace.")
@@ -649,6 +775,10 @@ def main():
         ),
     )
     args = parser.parse_args()
+
+    if args.show_plan:
+        _show_plan(iterations=args.iterations)
+        return
 
     if args.setup:
         _setup()
