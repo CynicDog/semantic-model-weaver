@@ -175,6 +175,55 @@ WEAVER_MODEL_YAML=manifest/NEXTRADE_EQUITY_MARKET_DATA.FIN/<timestamp>/model.fin
   uv run --project examples/nextrade streamlit run examples/nextrade/app.py
 ```
 
+### Running in containers
+
+Pre-built images are published to GitHub Container Registry on every push to `main`.
+
+Pull and run any chat app (replace `<app>` with `nextrade`, `korean-population`, `seoul-floating-population`, or `telecom`):
+
+```bash
+docker run -p 8501:8501 \
+  -e WEAVER_SNOWFLAKE_ACCOUNT=<your_account> \
+  -e WEAVER_SNOWFLAKE_USER=<your_user> \
+  -e WEAVER_SNOWFLAKE_PASSWORD=<your_password> \
+  -e WEAVER_SNOWFLAKE_ROLE=ACCOUNTADMIN \
+  -e WEAVER_SNOWFLAKE_WAREHOUSE=COMPUTE_WH \
+  ghcr.io/cynicdog/semantic-model-weaver/<app>:latest
+```
+
+Then open `http://localhost:8501` in your browser.
+
+Run the weaver pipeline CLI from a container:
+
+```bash
+docker run --rm \
+  -e WEAVER_SNOWFLAKE_ACCOUNT=<your_account> \
+  -e WEAVER_SNOWFLAKE_USER=<your_user> \
+  -e WEAVER_SNOWFLAKE_PASSWORD=<your_password> \
+  -e WEAVER_SNOWFLAKE_ROLE=ACCOUNTADMIN \
+  -e WEAVER_SNOWFLAKE_WAREHOUSE=COMPUTE_WH \
+  -e WEAVER_SNOWFLAKE_DATABASE=semantic_model_weaver \
+  -e WEAVER_SNOWFLAKE_SCHEMA=trulens \
+  -v $(pwd)/manifest:/app/manifest \
+  ghcr.io/cynicdog/semantic-model-weaver/weaver-cli:latest \
+  --database NEXTRADE_EQUITY_MARKET_DATA --schema FIN
+```
+
+Mount `./manifest` so pipeline output (YAML snapshots, scenarios) is persisted to your host.
+
+Build images locally:
+
+```bash
+# Weaver CLI
+docker build -t weaver-cli .
+
+# Any chat app (build context is the example directory)
+docker build -t nextrade examples/nextrade
+docker build -t korean-population examples/korean_population
+docker build -t seoul-floating-population examples/seoul_floating_population
+docker build -t telecom examples/telecom
+```
+
 ## Testing
 
 Two layers — unit tests run anywhere, integration tests require a live Snowflake session.
