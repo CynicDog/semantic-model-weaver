@@ -134,7 +134,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🏘️ Richgo — 한국 아파트 시세 및 인구 이동 데이터 · Cortex Analyst")
-st.caption("Richgo — 한국 아파트 시세 및 인구 이동 데이터 · Ask questions in plain English or Korean. Powered by Snowflake Cortex Analyst.")
+st.caption(
+    "Richgo — 한국 아파트 시세 및 인구 이동 데이터 · Ask questions in plain English or Korean."
+    " Powered by Snowflake Cortex Analyst."
+)
 
 with st.sidebar:
     st.header("Model")
@@ -162,7 +165,10 @@ for msg in st.session_state.messages:
         if msg.get("results") is not None:
             _render_results(msg["results"])
 
-if prompt := st.chat_input("e.g. 서울 아파트 평균 매매가격은?  /  Which region had the most population inflow last year?"):
+_placeholder = (
+    "e.g. 서울 아파트 평균 매매가격은?  /  Which region had the most population inflow last year?"
+)
+if prompt := st.chat_input(_placeholder):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)

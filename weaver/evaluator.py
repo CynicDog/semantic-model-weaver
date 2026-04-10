@@ -170,7 +170,9 @@ def run_evaluation(
         logger.info("metrics computation complete for run %s (status: %s)", version, status)
 
 
-def get_results(tru_session: TruSession, snowpark_session: Any = None, version: str = "") -> tuple[Any, Any]:
+def get_results(
+    tru_session: TruSession, snowpark_session: Any = None, version: str = ""
+) -> tuple[Any, Any]:
     """Return (records_df, feedback_df) for the leaderboard.
 
     Primary path: direct SQL against GET_AI_OBSERVABILITY_EVENTS — returns
@@ -192,9 +194,11 @@ def get_results(tru_session: TruSession, snowpark_session: Any = None, version: 
                         RECORD_ATTRIBUTES:"ai.observability.span_type"::STRING AS span_type,
                         RECORD_ATTRIBUTES:"ai.observability.record_id"::STRING AS record_id,
                         RECORD_ATTRIBUTES:"ai.observability.record_root.input"::STRING AS input,
-                        RECORD_ATTRIBUTES:"ai.observability.eval.metric_name"::STRING AS metric_name,
+                        RECORD_ATTRIBUTES:"ai.observability.eval.metric_name"::STRING
+                            AS metric_name,
                         RECORD_ATTRIBUTES:"ai.observability.eval.score"::FLOAT AS score,
-                        RECORD_ATTRIBUTES:"ai.observability.eval.explanation"::STRING AS explanation,
+                        RECORD_ATTRIBUTES:"ai.observability.eval.explanation"::STRING
+                            AS explanation,
                         RECORD_ATTRIBUTES:"ai.observability.eval.criteria"::STRING AS criteria
                     FROM TABLE(SNOWFLAKE.LOCAL.GET_AI_OBSERVABILITY_EVENTS(?, ?, ?, ?))
                     WHERE RECORD_ATTRIBUTES:"ai.observability.run.name"::STRING = ?
@@ -243,7 +247,10 @@ def get_results(tru_session: TruSession, snowpark_session: Any = None, version: 
                 )
 
                 feedback_df = score_pivot.merge(expl_pivot, on="input", how="left")
-                if "answer_relevance" in feedback_df.columns and "correctness" not in feedback_df.columns:
+                if (
+                    "answer_relevance" in feedback_df.columns
+                    and "correctness" not in feedback_df.columns
+                ):
                     feedback_df["correctness"] = feedback_df["answer_relevance"]
 
                 logger.info("get_results: %d questions scored via direct SQL", len(feedback_df))
@@ -260,7 +267,10 @@ def get_results(tru_session: TruSession, snowpark_session: Any = None, version: 
         )
         if not records_df.empty and feedback_cols:
             feedback_df = records_df[["input"] + list(feedback_cols)].copy()
-            if "answer_relevance" in feedback_df.columns and "correctness" not in feedback_df.columns:
+            if (
+                "answer_relevance" in feedback_df.columns
+                and "correctness" not in feedback_df.columns
+            ):
                 feedback_df["correctness"] = feedback_df["answer_relevance"]
             logger.info("get_results: %d questions scored via TruLens fallback", len(feedback_df))
             return records_df, feedback_df

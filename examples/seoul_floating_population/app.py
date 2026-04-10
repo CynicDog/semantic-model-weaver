@@ -134,7 +134,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🗺️ SPH / GranData — 서울 생활인구·소비·자산 데이터 · Cortex Analyst")
-st.caption("SPH / GranData — 서울 생활인구·소비·자산 데이터 · Ask questions in plain English or Korean. Powered by Snowflake Cortex Analyst.")
+st.caption(
+    "SPH / GranData — 서울 생활인구·소비·자산 데이터 · Ask questions in plain English or Korean."
+    " Powered by Snowflake Cortex Analyst."
+)
 
 with st.sidebar:
     st.header("Model")
@@ -162,7 +165,11 @@ for msg in st.session_state.messages:
         if msg.get("results") is not None:
             _render_results(msg["results"])
 
-if prompt := st.chat_input("e.g. 강남구 유동인구가 가장 많은 시간대는?  /  Which district has the highest average household assets?"):
+_placeholder = (
+    "e.g. 강남구 유동인구가 가장 많은 시간대는?"
+    "  /  Which district has the highest average household assets?"
+)
+if prompt := st.chat_input(_placeholder):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)

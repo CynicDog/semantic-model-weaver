@@ -10,7 +10,7 @@ Unit tests for weaver.scenarios — no Snowflake connection required.
 """
 
 import json
-from unittest.mock import MagicMock, call
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -35,8 +35,6 @@ def _mock_session(cortex_response="", sql_rows=None):
         sql_rows = []
     cortex_result = [[cortex_response]]
     sql_result = sql_rows
-
-    call_count = {"n": 0}
 
     def sql_side_effect(query):
         mock_result = MagicMock()

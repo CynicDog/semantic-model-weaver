@@ -12,10 +12,6 @@ YAMLWriter is fully programmatic (no LLM calls). What is tested:
 
 from unittest.mock import MagicMock
 
-import pytest
-
-from weaver.dsl import DataType
-
 
 def _col(name, type_, nullable=True, comment="", sample_values=None):
     return {"name": name, "type": type_, "nullable": nullable,
@@ -157,8 +153,7 @@ class TestBuildTable:
 
 class TestBuildRelationships:
     def _run(self, profile):
-        from weaver.writer import _build_relationships
-        from weaver.writer import _collect_fk_columns, _build_table
+        from weaver.writer import _build_relationships, _build_table, _collect_fk_columns
         fk_columns = _collect_fk_columns(profile)
         tables = [_build_table(t, profile, fk_columns) for t in profile["tables"]]
         return _build_relationships(tables, profile), tables

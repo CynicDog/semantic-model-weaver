@@ -66,13 +66,20 @@ Checkpoint / resume
     model.yaml present              -> jump to enrichment
 """
 
+from __future__ import annotations
+
 import logging
 import os
+import pathlib
 import re
 import warnings
+from typing import TYPE_CHECKING, Any
 
 from dotenv import load_dotenv
 from rich.console import Console
+
+if TYPE_CHECKING:
+    from weaver.dsl import SemanticModel
 
 warnings.filterwarnings(
     "ignore",
@@ -97,7 +104,10 @@ def _print_banner():
     console.print()
     console.print(_BANNER, style="bold cyan", highlight=False)
     console.print()
-    console.print("  [bold white]Semantic Model Weaver[/bold white]  [dim]·  Snowflake Hackathon 2026 Seoul  ·  @CynicDog - Hypaspist[/dim]")
+    console.print(
+        "  [bold white]Semantic Model Weaver[/bold white]"
+        "  [dim]·  Snowflake Hackathon 2026 Seoul  ·  @CynicDog - Hypaspist[/dim]"
+    )
     console.rule(style="cyan")
     console.print()
 
@@ -151,6 +161,7 @@ class _PipelineDisplay:
 
     def __rich__(self) -> object:
         import time
+
         from rich.console import Group
         from rich.text import Text
 
@@ -158,7 +169,11 @@ class _PipelineDisplay:
         face = _PIPELINE_FACES[self._frame]
         pct = int(self._done / self._total * 100) if self._total else 0
         filled = round(pct / 100 * self._BAR_W)
-        bar = "━" * filled + ("╸" if filled < self._BAR_W else "") + "─" * max(0, self._BAR_W - filled - 1)
+        bar = (
+            "━" * filled
+            + ("╸" if filled < self._BAR_W else "")
+            + "─" * max(0, self._BAR_W - filled - 1)
+        )
 
         lines: list[Text] = [Text()]
         for key, label in self._steps:
@@ -207,7 +222,9 @@ def _setup():
     db = _DB()
     schema = _SCHEMA()
 
-    _info(f"connecting to Snowflake account [bold]{os.environ.get('WEAVER_SNOWFLAKE_ACCOUNT')}[/bold]")
+    _info(
+        f"connecting to Snowflake account [bold]{os.environ.get('WEAVER_SNOWFLAKE_ACCOUNT')}[/bold]"
+    )
     session = _session(with_database=False)
 
     session.sql(f"""
@@ -247,7 +264,10 @@ def _setup():
             COMMENT = 'Network policy for Semantic Model Weaver development'
     """).collect()
     session.sql(f"ALTER USER {user} SET NETWORK_POLICY = weaver_dev").collect()
-    _ok(f"network policy [bold]weaver_dev[/bold] → user [bold]{user}[/bold]  [dim](ip: {allowed_ip})[/dim]")
+    _ok(
+        f"network policy [bold]weaver_dev[/bold] → user [bold]{user}[/bold]"
+        f"  [dim](ip: {allowed_ip})[/dim]"
+    )
 
     console.print()
     console.print("  [bold green]Setup complete.[/bold green]  Workspace is ready.")
@@ -259,13 +279,16 @@ def _reset_workspace(yes: bool):
     schema = _SCHEMA()
 
     if not yes:
-        console.print(f"\n  [bold yellow]Warning:[/bold yellow] This will drop [bold]{db}.{schema}[/bold] and all TruLens records.")
+        console.print(
+            f"\n  [bold yellow]Warning:[/bold yellow] This will drop"
+            f" [bold]{db}.{schema}[/bold] and all TruLens records."
+        )
         answer = console.input("  Type [bold]yes[/bold] to confirm: ")
         if answer.strip().lower() != "yes":
             _info("aborted")
             return
 
-    _info(f"connecting to Snowflake …")
+    _info("connecting to Snowflake …")
     session = _session(with_database=False)
 
     session.sql(f"DROP SCHEMA IF EXISTS {db}.{schema} CASCADE").collect()
@@ -282,7 +305,7 @@ def _reset_workspace(yes: bool):
     console.print()
 
 
-def _run_dir(database: str, schema: str, timestamp: str) -> "pathlib.Path":
+def _run_dir(database: str, schema: str, timestamp: str) -> pathlib.Path:
     import pathlib
     d = pathlib.Path("manifest") / f"{database}.{schema}" / timestamp
     d.mkdir(parents=True, exist_ok=True)
@@ -299,7 +322,9 @@ def _dump_scenarios(run_dir, golden_set: list, questions: list) -> str:
     import json
     path = run_dir / "scenarios.json"
     path.write_text(
-        json.dumps({"golden_set": golden_set, "questions": questions}, ensure_ascii=False, indent=2),
+        json.dumps(
+            {"golden_set": golden_set, "questions": questions}, ensure_ascii=False, indent=2
+        ),
         encoding="utf-8",
     )
     return str(path)
@@ -321,12 +346,12 @@ def _dump_synonyms(run_dir, semantic_model, suffix: str = "") -> str:
 
 
 def _promote_verified_queries(
-    semantic_model: "SemanticModel",
-    feedback_df: "Any",
+    semantic_model: SemanticModel,
+    feedback_df: Any,
     probe_results: dict,
     version: str,
     threshold: float = 0.8,
-) -> "SemanticModel":
+) -> SemanticModel:
     """
     Promote high-correctness question+SQL pairs into SemanticModel.verified_queries.
 
@@ -338,7 +363,11 @@ def _promote_verified_queries(
 
     from weaver.dsl import VerifiedQuery
 
-    if feedback_df.empty or "correctness" not in feedback_df.columns or "input" not in feedback_df.columns:
+    if (
+        feedback_df.empty
+        or "correctness" not in feedback_df.columns
+        or "input" not in feedback_df.columns
+    ):
         return semantic_model, 0
 
     passing = feedback_df[feedback_df["correctness"] >= threshold]
@@ -371,9 +400,8 @@ def _promote_verified_queries(
     return semantic_model.model_copy(update={"verified_queries": new_vqs}), added
 
 
-def _best_model_yaml(run_dir: "pathlib.Path") -> "pathlib.Path | None":
+def _best_model_yaml(run_dir: pathlib.Path) -> pathlib.Path | None:
     """Return the most refined model YAML in run_dir (final > iter{N} > enriched > base)."""
-    import pathlib
     if (run_dir / "model.final.yaml").exists():
         return run_dir / "model.final.yaml"
     iter_models = sorted(
@@ -388,7 +416,7 @@ def _best_model_yaml(run_dir: "pathlib.Path") -> "pathlib.Path | None":
     return None
 
 
-def _detect_checkpoint(run_dir: "pathlib.Path") -> dict:
+def _detect_checkpoint(run_dir: pathlib.Path) -> dict:
     """
     Scan a run dir and return what stage to resume from.
 
@@ -413,7 +441,7 @@ def _detect_checkpoint(run_dir: "pathlib.Path") -> dict:
     raise ValueError(f"no checkpoint artifacts found in {run_dir}")
 
 
-def _load_scenarios(path: "pathlib.Path") -> "tuple[list, list]":
+def _load_scenarios(path: pathlib.Path) -> tuple[list, list]:
     import json
     data = json.loads(path.read_text(encoding="utf-8"))
     golden_set = data.get("golden_set", [])
@@ -447,7 +475,14 @@ def _show_plan(iterations: int = 3):
         return Text(" ──► ", style=f"bold {color}")
 
     def _box(title: str, body: str, color: str = "cyan", w: int = 30) -> Panel:
-        return Panel(body, title=Text(title, style=f"bold {color}"), title_align="left", width=w, border_style=color, padding=(0, 1))
+        return Panel(
+            body,
+            title=Text(title, style=f"bold {color}"),
+            title_align="left",
+            width=w,
+            border_style=color,
+            padding=(0, 1),
+        )
 
     def _hrow(*cells) -> Table:
         tbl = Table.grid()
@@ -457,7 +492,10 @@ def _show_plan(iterations: int = 3):
         return tbl
 
     console.print()
-    console.print("  [bold white]파이프라인 실행 계획[/bold white]  [dim]·  시맨틱 모델 작성을 자동화하고 확장합니다  ·  --show-plan[/dim]")
+    console.print(
+        "  [bold white]파이프라인 실행 계획[/bold white]"
+        "  [dim]·  시맨틱 모델 작성을 자동화하고 확장합니다  ·  --show-plan[/dim]"
+    )
     console.print()
 
     W3 = 32
@@ -556,14 +594,14 @@ def _run_pipeline(
     schema: str,
     iterations: int,
     version: str,
-    resume_dir: "pathlib.Path | None" = None,
+    resume_dir: pathlib.Path | None = None,
 ):
     import contextlib
     import datetime as _dt
     import io
-    import pathlib
 
     from rich.live import Live
+
     from weaver.dsl import SemanticModel
 
     if resume_dir:
@@ -580,11 +618,17 @@ def _run_pipeline(
         version = f"{version}.{timestamp}"
         run_dir = _run_dir(database, schema, timestamp)
 
-    console.print(f"  [dim]database[/dim]   [bold]{database}[/bold]  [dim]·[/dim]  [dim]schema[/dim]  [bold]{schema}[/bold]")
+    console.print(
+        f"  [dim]database[/dim]   [bold]{database}[/bold]"
+        f"  [dim]·[/dim]  [dim]schema[/dim]  [bold]{schema}[/bold]"
+    )
     console.print(f"  [dim]version[/dim]    [bold]{version}[/bold]")
     console.print(f"  [dim]manifest[/dim]   [dim]{run_dir}[/dim]")
     if resume_dir:
-        _info(f"resuming from [bold]{stage}[/bold] stage  ·  model: [bold]{ckpt['model_path'].name}[/bold]")
+        _info(
+            f"resuming from [bold]{stage}[/bold] stage"
+            f"  ·  model: [bold]{ckpt['model_path'].name}[/bold]"
+        )
     console.print()
 
     session = _session(with_database=True)
@@ -627,14 +671,20 @@ def _run_pipeline(
             from weaver.discovery import SchemaDiscovery
             schema_profile = SchemaDiscovery(session).run(database, schema)
             n_fk = sum(len(t["fk_candidates"]) for t in schema_profile["tables"])
-            display.complete("discovery", f"{len(schema_profile['tables'])} tables · {n_fk} FK candidates")
+            display.complete(
+                "discovery", f"{len(schema_profile['tables'])} tables · {n_fk} FK candidates"
+            )
 
         display.start("writer")
         if stage == "from_scratch":
             from weaver.writer import YAMLWriter
             semantic_model = YAMLWriter(session).generate(schema_profile)
             _dump_yaml(run_dir, semantic_model)
-            display.complete("writer", f"{len(semantic_model.tables)} tables · {len(semantic_model.relationships)} relationships")
+            display.complete(
+                "writer",
+                f"{len(semantic_model.tables)} tables"
+                f" · {len(semantic_model.relationships)} relationships",
+            )
         else:
             semantic_model = SemanticModel.from_yaml_file(str(ckpt["model_path"]))
             display.complete("writer", f"{len(semantic_model.tables)} tables from checkpoint")
@@ -651,8 +701,10 @@ def _run_pipeline(
 
             display.start("enrich")
             from weaver.enricher import SynonymEnricher
-            semantic_model = SynonymEnricher(session).enrich(semantic_model, query_terms=query_terms)
-            enriched_path = _dump_yaml(run_dir, semantic_model, suffix=".enriched")
+            semantic_model = SynonymEnricher(session).enrich(
+                semantic_model, query_terms=query_terms
+            )
+            _dump_yaml(run_dir, semantic_model, suffix=".enriched")
             _dump_synonyms(run_dir, semantic_model)
             display.complete("enrich", f"{len(semantic_model.tables)} tables enriched")
 
@@ -679,15 +731,26 @@ def _run_pipeline(
 
             display.start(pk)
             run_evaluation(tru_app, app, questions, metrics, version=iter_version)
-            records_df, feedback_df = get_results(tru_session, snowpark_session=session, version=iter_version)
+            records_df, feedback_df = get_results(
+                tru_session, snowpark_session=session, version=iter_version
+            )
 
-            mean_correctness = feedback_df["correctness"].mean() if "correctness" in feedback_df.columns else 0.0
-            mean_relevance = feedback_df["answer_relevance"].mean() if "answer_relevance" in feedback_df.columns else 0.0
+            mean_correctness = (
+                feedback_df["correctness"].mean()
+                if "correctness" in feedback_df.columns
+                else 0.0
+            )
+            mean_relevance = (
+                feedback_df["answer_relevance"].mean()
+                if "answer_relevance" in feedback_df.columns
+                else 0.0
+            )
             semantic_model, promoted = _promote_verified_queries(
                 semantic_model, feedback_df, app.results, iter_version
             )
             probe_result = (
-                f"{len(records_df)} scored · correctness {mean_correctness:.2f} · relevance {mean_relevance:.2f}"
+                f"{len(records_df)} scored"
+                f" · correctness {mean_correctness:.2f} · relevance {mean_relevance:.2f}"
                 + (f" · {promoted} verified" if promoted else "")
             )
             display.complete(pk, probe_result)
@@ -747,13 +810,27 @@ def main():
         prog="weaver",
         description="Semantic Model Weaver — Cortex Analyst 시맨틱 모델 자동 생성 및 평가 도구.",
     )
-    parser.add_argument("--show-plan", action="store_true", help="파이프라인 실행 계획을 출력하고 종료합니다.")
-    parser.add_argument("--setup", action="store_true", help="워크스페이스 DB, 스키마, 네트워크 정책을 생성합니다. 재실행해도 안전합니다.")
-    parser.add_argument("--reset-workspace", action="store_true", help="TruLens 스키마를 삭제 후 재생성합니다. 모든 평가 기록이 삭제됩니다.")
-    parser.add_argument("--yes", action="store_true", help="--reset-workspace 확인 프롬프트를 건너뜁니다.")
+    parser.add_argument(
+        "--show-plan", action="store_true", help="파이프라인 실행 계획을 출력하고 종료합니다."
+    )
+    parser.add_argument(
+        "--setup",
+        action="store_true",
+        help="워크스페이스 DB, 스키마, 네트워크 정책을 생성합니다. 재실행해도 안전합니다.",
+    )
+    parser.add_argument(
+        "--reset-workspace",
+        action="store_true",
+        help="TruLens 스키마를 삭제 후 재생성합니다. 모든 평가 기록이 삭제됩니다.",
+    )
+    parser.add_argument(
+        "--yes", action="store_true", help="--reset-workspace 확인 프롬프트를 건너뜁니다."
+    )
     parser.add_argument("--database", help="모델을 생성할 Snowflake 데이터베이스.")
     parser.add_argument("--schema", help="모델을 생성할 Snowflake 스키마.")
-    parser.add_argument("--iterations", type=int, default=3, help="최대 정제 반복 횟수 (기본값: 3).")
+    parser.add_argument(
+        "--iterations", type=int, default=3, help="최대 정제 반복 횟수 (기본값: 3)."
+    )
     parser.add_argument("--version", default="v1", help="TruLens 앱 버전 태그 (기본값: v1).")
     parser.add_argument(
         "--resume",
@@ -795,10 +872,15 @@ def main():
                 args.database = args.database or inferred_db
                 args.schema = args.schema or inferred_schema
             else:
-                parser.error("could not infer --database/--schema from resume path; provide them explicitly")
+                parser.error(
+                    "could not infer --database/--schema from resume path; provide them explicitly"
+                )
 
     if not args.resume and (not args.database or not args.schema):
-        parser.error("--database and --schema are required (or use --resume / --setup / --reset-workspace)")
+        parser.error(
+            "--database and --schema are required"
+            " (or use --resume / --setup / --reset-workspace)"
+        )
 
     _run_pipeline(args.database, args.schema, args.iterations, args.version, resume_dir=resume_dir)
 

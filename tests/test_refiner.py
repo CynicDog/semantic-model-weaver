@@ -22,7 +22,6 @@ from weaver.dsl import (
     Measure,
     SemanticModel,
     SemanticTable,
-    TimeDimension,
 )
 
 
@@ -128,7 +127,9 @@ class TestBuildPatchPrompt:
 class TestParsePatch:
     def test_extracts_patches_dict(self):
         from weaver.refiner import _parse_patch
-        raw = json.dumps({"patches": {"ISU_CD": {"description": "Issue code", "synonyms": ["ticker"]}}})
+        raw = json.dumps(
+            {"patches": {"ISU_CD": {"description": "Issue code", "synonyms": ["ticker"]}}}
+        )
         patches = _parse_patch(raw)
         assert "ISU_CD" in patches
         assert patches["ISU_CD"]["synonyms"] == ["ticker"]
@@ -212,7 +213,9 @@ class TestRefinementAgentRefine:
 
     def test_returns_model_when_below_threshold(self):
         from weaver.refiner import RefinementAgent
-        patch_response = json.dumps({"patches": {"ISU_CD": {"description": "d", "synonyms": ["s"]}}})
+        patch_response = json.dumps(
+            {"patches": {"ISU_CD": {"description": "d", "synonyms": ["s"]}}}
+        )
         model = _model(_table("T", dimensions=[_dim("ISU_CD")]))
         result = RefinementAgent(_mock_session(patch_response)).refine(model, self._good_feedback())
         assert isinstance(result, SemanticModel)
@@ -234,7 +237,9 @@ class TestRefinementAgentRefine:
 
     def test_does_not_mutate_original_model(self):
         from weaver.refiner import RefinementAgent
-        patch_response = json.dumps({"patches": {"ISU_CD": {"description": "d", "synonyms": ["s"]}}})
+        patch_response = json.dumps(
+            {"patches": {"ISU_CD": {"description": "d", "synonyms": ["s"]}}}
+        )
         model = _model(_table("T", dimensions=[_dim("ISU_CD")]))
         original_desc = model.tables[0].dimensions[0].description
         RefinementAgent(_mock_session(patch_response)).refine(model, self._good_feedback())

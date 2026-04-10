@@ -52,7 +52,8 @@ def _build_prompt(table: SemanticTable, query_terms: QueryTerms) -> str:
         "  - description: a concise business definition (1 sentence, in English)",
         "  - synonyms: 3-6 natural-language phrases an analyst would type to refer to this column",
         "              Include BOTH English phrases AND Korean (한국어) equivalents.",
-        "              Example for a trade volume column: ['trade volume', 'trading volume', '거래량', '거래대금']",
+        "              Example for a trade volume column: "
+        "['trade volume', 'trading volume', '거래량', '거래대금']",
         "",
         "RULES:",
         "  - Synonyms MUST be human-readable business phrases",

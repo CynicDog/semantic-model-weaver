@@ -76,7 +76,8 @@ def _build_prompt(table: dict, database: str, schema: str, related: list[dict]) 
         f"Write {_SCENARIOS_PER_TABLE} test questions an analyst might ask about this data.",
         "Rules:",
         "  - Each question must be answerable with a single SQL query.",
-        "  - Include a mix of aggregations, filters, time-based, and (if related tables exist) joins.",
+        "  - Include a mix of aggregations, filters, time-based,"
+        " and (if related tables exist) joins.",
         "  - SQL must reference fully-qualified table names.",
         "  - SQL must be valid Snowflake SQL.",
         "",

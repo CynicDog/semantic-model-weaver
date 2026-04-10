@@ -14,8 +14,6 @@ All Snowflake I/O (session.sql, session.table) is mocked. What is tested:
 
 from unittest.mock import MagicMock
 
-import pytest
-
 
 def _table_row(name, comment="", row_count=0):
     return {"TABLE_NAME": name, "COMMENT": comment, "ROW_COUNT": row_count}

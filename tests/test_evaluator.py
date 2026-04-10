@@ -11,10 +11,7 @@ All TruLens and Snowflake I/O is mocked via pytest-mock. What is tested:
   get_results       — delegates to tru_session.get_records_and_feedback
 """
 
-import time
-from unittest.mock import MagicMock, call, patch
-
-import pytest
+from unittest.mock import MagicMock, call
 
 from trulens.core.run import RunStatus
 
@@ -268,6 +265,7 @@ class TestRunEvaluation:
 
     def test_skips_compute_metrics_on_failed_run(self, caplog):
         import logging
+
         from weaver.evaluator import run_evaluation
 
         tru_app, live_run_ctx = self._make_tru_app(RunStatus.FAILED)
@@ -286,7 +284,11 @@ class TestRunEvaluation:
         app = MagicMock()
         mock_sleep = mocker.patch("weaver.evaluator.time.sleep")
 
-        statuses = [RunStatus.INVOCATION_IN_PROGRESS, RunStatus.INVOCATION_IN_PROGRESS, RunStatus.INVOCATION_COMPLETED]
+        statuses = [
+            RunStatus.INVOCATION_IN_PROGRESS,
+            RunStatus.INVOCATION_IN_PROGRESS,
+            RunStatus.INVOCATION_COMPLETED,
+        ]
         live_run_ctx.run.get_status.side_effect = statuses
 
         run_evaluation(tru_app, app, ["q1"], metrics=[], version="v1")

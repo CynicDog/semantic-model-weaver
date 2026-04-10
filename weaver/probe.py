@@ -24,11 +24,9 @@ Usage:
 
 from __future__ import annotations
 
-import json
 import logging
 
 import requests
-
 from snowflake.snowpark import Session
 
 log = logging.getLogger(__name__)

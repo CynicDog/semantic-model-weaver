@@ -110,7 +110,8 @@ def _render_results(df) -> None:
     st.dataframe(df, use_container_width=True)
 
     num_cols = df.select_dtypes("number").columns.tolist()
-    date_cols = [c for c in df.columns if re.search(r"date|yyyymm|ymd|time|period|month|year", c, re.I)]
+    _date_pat = r"date|yyyymm|ymd|time|period|month|year"
+    date_cols = [c for c in df.columns if re.search(_date_pat, c, re.I)]
     cat_cols = [c for c in df.columns if df[c].dtype == object and c not in date_cols]
 
     if len(df) > 1 and num_cols:
@@ -134,7 +135,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("📡 아정당 — 통신 계약·마케팅·콜센터 지역별 분석 데이터 · Cortex Analyst")
-st.caption("아정당 — 통신 계약·마케팅·콜센터 지역별 분석 데이터 · Ask questions in plain English or Korean. Powered by Snowflake Cortex Analyst.")
+st.caption(
+    "아정당 — 통신 계약·마케팅·콜센터 지역별 분석 데이터"
+    " · Ask questions in plain English or Korean."
+    " Powered by Snowflake Cortex Analyst."
+)
 
 with st.sidebar:
     st.header("Model")
@@ -162,7 +167,11 @@ for msg in st.session_state.messages:
         if msg.get("results") is not None:
             _render_results(msg["results"])
 
-if prompt := st.chat_input("e.g. 지역별 신규 계약 건수가 가장 많은 곳은?  /  Which region had the highest churn rate last quarter?"):
+_placeholder = (
+    "e.g. 지역별 신규 계약 건수가 가장 많은 곳은?"
+    "  /  Which region had the highest churn rate last quarter?"
+)
+if prompt := st.chat_input(_placeholder):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)

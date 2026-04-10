@@ -11,7 +11,7 @@ to fill in description and synonyms fields. What is tested:
 """
 
 import json
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -116,20 +116,28 @@ class TestApplyEnrichment:
     def test_applies_column_description(self):
         from weaver.enricher import _apply_enrichment
         t = _table("T", dimensions=[_dim("ISU_CD")])
-        data = {"table_description": "", "columns": {"ISU_CD": {"description": "Issue code", "synonyms": []}}}
+        data = {
+            "table_description": "",
+            "columns": {"ISU_CD": {"description": "Issue code", "synonyms": []}},
+        }
         result = _apply_enrichment(t, data)
         assert result.dimensions[0].description == "Issue code"
 
     def test_applies_column_synonyms(self):
         from weaver.enricher import _apply_enrichment
         t = _table("T", dimensions=[_dim("ISU_CD")])
-        data = {"table_description": "", "columns": {"ISU_CD": {"description": "", "synonyms": ["ticker", "stock code"]}}}
+        data = {
+            "table_description": "",
+            "columns": {"ISU_CD": {"description": "", "synonyms": ["ticker", "stock code"]}},
+        }
         result = _apply_enrichment(t, data)
         assert result.dimensions[0].synonyms == ["ticker", "stock code"]
 
     def test_preserves_existing_description_when_cortex_returns_empty(self):
         from weaver.enricher import _apply_enrichment
-        dim = Dimension(name="ISU_CD", expr="ISU_CD", data_type=DataType.VARCHAR, description="existing")
+        dim = Dimension(
+            name="ISU_CD", expr="ISU_CD", data_type=DataType.VARCHAR, description="existing"
+        )
         t = _table("T", dimensions=[dim])
         data = {"table_description": "", "columns": {"ISU_CD": {"description": "", "synonyms": []}}}
         result = _apply_enrichment(t, data)
@@ -138,7 +146,10 @@ class TestApplyEnrichment:
     def test_enriches_time_dimensions(self):
         from weaver.enricher import _apply_enrichment
         t = _table("T", time_dimensions=[_time_dim("TRD_DT")])
-        data = {"table_description": "", "columns": {"TRD_DT": {"description": "Trade date", "synonyms": ["date"]}}}
+        data = {
+            "table_description": "",
+            "columns": {"TRD_DT": {"description": "Trade date", "synonyms": ["date"]}},
+        }
         result = _apply_enrichment(t, data)
         assert result.time_dimensions[0].description == "Trade date"
         assert "date" in result.time_dimensions[0].synonyms
@@ -146,14 +157,20 @@ class TestApplyEnrichment:
     def test_enriches_measures(self):
         from weaver.enricher import _apply_enrichment
         t = _table("T", measures=[_measure("TRD_AMT")])
-        data = {"table_description": "", "columns": {"TRD_AMT": {"description": "Trade amount", "synonyms": ["volume"]}}}
+        data = {
+            "table_description": "",
+            "columns": {"TRD_AMT": {"description": "Trade amount", "synonyms": ["volume"]}},
+        }
         result = _apply_enrichment(t, data)
         assert result.measures[0].description == "Trade amount"
 
     def test_unknown_column_in_cortex_response_ignored(self):
         from weaver.enricher import _apply_enrichment
         t = _table("T", dimensions=[_dim("ISU_CD")])
-        data = {"table_description": "", "columns": {"GHOST_COL": {"description": "does not exist", "synonyms": []}}}
+        data = {
+            "table_description": "",
+            "columns": {"GHOST_COL": {"description": "does not exist", "synonyms": []}},
+        }
         result = _apply_enrichment(t, data)
         assert result.dimensions[0].description == ""
 
@@ -161,7 +178,10 @@ class TestApplyEnrichment:
         from weaver.enricher import _apply_enrichment
         t = _table("T", dimensions=[_dim("ISU_CD")])
         original_desc = t.dimensions[0].description
-        data = {"table_description": "new", "columns": {"ISU_CD": {"description": "new desc", "synonyms": []}}}
+        data = {
+            "table_description": "new",
+            "columns": {"ISU_CD": {"description": "new desc", "synonyms": []}},
+        }
         _apply_enrichment(t, data)
         assert t.dimensions[0].description == original_desc
 

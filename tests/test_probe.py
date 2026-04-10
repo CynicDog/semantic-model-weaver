@@ -5,10 +5,8 @@ Unit tests for weaver.probe — no live Snowflake connection required.
   CortexAnalystProbe.query  — HTTP success, HTTP error, network failure
 """
 
-import json
 from unittest.mock import MagicMock, patch
 
-import pytest
 import requests
 
 

@@ -95,7 +95,6 @@ def _to_api_messages(history: list[dict]) -> list[dict]:
 
 def _run_sql(session: Session, sql: str):
     """Execute SQL (strips comments and trailing semicolon) and return a DataFrame."""
-    import pandas as pd
     try:
         clean = re.sub(r"--[^\n]*", "", sql).strip().rstrip(";")
         return session.sql(clean).to_pandas()
@@ -137,7 +136,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("📈 넥스트레이드 — 한국 주식시장 데이터 · Cortex Analyst")
-st.caption("넥스트레이드 — 한국 주식시장 데이터 · Ask questions in plain English or Korean. Powered by Snowflake Cortex Analyst.")
+st.caption(
+    "넥스트레이드 — 한국 주식시장 데이터 · Ask questions in plain English or Korean."
+    " Powered by Snowflake Cortex Analyst."
+)
 
 with st.sidebar:
     st.header("Model")
@@ -165,7 +167,8 @@ for msg in st.session_state.messages:
         if msg.get("results") is not None:
             _render_results(msg["results"])
 
-if prompt := st.chat_input("e.g. 이번 달 거래량 상위 종목은?  /  What stocks hit the upper limit today?"):
+_placeholder = "e.g. 이번 달 거래량 상위 종목은?  /  What stocks hit the upper limit today?"
+if prompt := st.chat_input(_placeholder):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)

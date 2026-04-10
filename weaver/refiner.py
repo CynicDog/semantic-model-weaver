@@ -56,7 +56,7 @@ def _score_summary(feedback_df: pd.DataFrame) -> dict:
 
 
 def _failed_questions(
-    feedback_df: "pd.DataFrame", threshold: float = 0.5
+    feedback_df: pd.DataFrame, threshold: float = 0.5
 ) -> list[dict]:
     """Return list of {question, explanation} for questions below threshold."""
     if feedback_df.empty or "input" not in feedback_df.columns:
@@ -81,7 +81,9 @@ def _failed_questions(
 def _build_patch_prompt(table: SemanticTable, failed: list[dict]) -> str:
     col_lines = []
     for col in [*table.dimensions, *table.time_dimensions, *table.measures]:
-        col_lines.append(f"  {col.name} ({col.data_type}) desc={col.description!r} synonyms={col.synonyms}")
+        col_lines.append(
+            f"  {col.name} ({col.data_type}) desc={col.description!r} synonyms={col.synonyms}"
+        )
 
     schema_hint = {
         "table_name": table.name,
@@ -200,7 +202,11 @@ class RefinementAgent:
             log.info("RefinementAgent: no failed questions to refine on")
             return None
         n_with_expl = sum(1 for f in failed if f.get("explanation"))
-        log.info("RefinementAgent: %d failed questions (%d with explanations)", len(failed), n_with_expl)
+        log.info(
+            "RefinementAgent: %d failed questions (%d with explanations)",
+            len(failed),
+            n_with_expl,
+        )
 
         patched_tables = []
         for table in model.tables:
